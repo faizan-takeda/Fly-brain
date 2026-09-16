@@ -1,0 +1,155 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>VIGIL — evidence</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070E13;--pan:#0D1920;--ln:#1B303A;--sf:#132630;--ink:#E9F1F4;--ink2:#95ABB5;--ink3:#5D7581;
+--grn:#6CC488;--red:#D4574A;--amb:#E89730;--cy:#54C8DC}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:14px;line-height:1.55}
+.n{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1080px;margin:0 auto;padding:26px 22px 60px}
+h1{font-size:26px;margin:0 0 4px;letter-spacing:-.02em}
+.sub{color:var(--ink2);margin:0 0 18px;max-width:78ch}
+.src{display:inline-block;border:1px solid var(--ln);border-radius:3px;padding:5px 11px;font-size:12px;margin-bottom:18px}
+.src.fix{border-color:#5B4419;background:#221808;color:#F8C878}
+.src.real{border-color:#2A5138;background:#102419;color:var(--grn)}
+.card{background:var(--pan);border:1px solid var(--ln);border-radius:4px;padding:16px 18px;margin-bottom:14px}
+.card h2{margin:0 0 10px;font-size:16px;font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;color:var(--ink3);font-weight:400;padding:6px 8px;border-bottom:1px solid var(--sf)}
+td{padding:6px 8px;border-bottom:1px solid var(--sf)}
+.pass{color:var(--grn);font-weight:500}.fail{color:var(--red);font-weight:500}
+.big{font-size:30px;font-weight:600;letter-spacing:-.02em}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.kpi div{border:1px solid var(--ln);border-radius:3px;padding:11px 13px}
+.kpi span{display:block;font-size:12px;color:var(--ink2)}
+code{background:#0A1A21;padding:1px 5px;border-radius:2px;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--cy);word-break:break-all}
+.bar{height:9px;background:#08161C;border-radius:2px;overflow:hidden;min-width:70px}.bar i{display:block;height:100%}
+.note{border-left:2px solid var(--amb);background:#171107;padding:10px 13px;border-radius:0 3px 3px 0;margin-top:12px;font-size:13px;color:var(--ink2)}
+.note.r{border-left-color:var(--red);background:#1A0F0E}
+.miss{padding:40px;text-align:center;color:var(--ink2)}
+.tab{background:#0D1920;border:1px solid var(--ln);color:var(--ink2);font:500 13px 'IBM Plex Sans',system-ui,sans-serif;padding:7px 16px;border-radius:3px;cursor:pointer}
+.tab.on{background:#0C2129;border-color:#2D6576;color:var(--ink)}
+.q{display:flex;justify-content:space-between;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--sf);font-size:15px}
+.q b{font-size:16px}
+.gcond{display:grid;grid-template-columns:1fr auto;gap:8px;padding:6px 0;border-bottom:1px solid var(--sf);font-size:13px}
+.skeleton-viewer{display:block;width:100%;height:280px;background:#08161C;border:1px solid var(--ln);border-radius:3px}
+</style></head><body><div class="wrap">
+<div style="display:flex;gap:8px;margin-bottom:16px">
+ <button id="tabE" class="tab on">Executive</button><button id="tabS" class="tab">Scientist</button>
+</div>
+<div id="root"><div class="miss">Loading ledger…</div></div></div>
+<script src="ledger.js"></script>
+<script src="skeletons.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const L = window.VIGIL_LEDGER;
+const SK = window.VIGIL_SKELETONS || [];
+let VIEW='exec';
+let skeletonRenderer, skeletonAnimation;
+const $ = s => document.getElementById(s);
+const f = (x,d=2) => (x===undefined||x===null)?'—':(typeof x==='number'?x.toFixed(d):x);
+function pf(b){return b?'<span class="pass">PASS</span>':'<span class="fail">FAIL</span>'}
+if(!L){ $('root').innerHTML='<div class="miss">No ledger found. Run <code>vigil verify</code> first.</div>'; }
+else{
+ const fix = L.data_source==='fixture';
+ const tr=L.stages.train, p=tr.parameters, LE=L.stages.lesion, S=L.stages.search, SC=L.stages.scenes.scenes;
+ const dr=LE.proofs.find(x=>x.name==='dose_response'), rt=LE.proofs.find(x=>x.name==='round_trip');
+ const sp=LE.proofs.find(x=>x.name==='specificity');
+ let h=`<h1>VIGIL — proof ledger</h1>
+ <p class="sub">Every number shown in the demo comes from this page. If a claim is not here, it does not go on screen.</p>
+ <div class="src ${fix?'fix':'real'}">data source: <b>${L.data_source}</b> · generated ${L.generated_utc} · ${L.total_seconds}s</div>
+ <div class="card"><h2>Overall</h2><div class="big ${L.all_passed?'pass':'fail'}">${L.all_passed?'ALL CHECKS PASSED':'ONE OR MORE CHECKS FAILED'}</div></div>
+ <div class="card"><h2>Model composition</h2><div class="kpi">
+  <div><span>Measured connections, frozen</span><b class="n">${p.measured_connections_frozen.toLocaleString()}</b></div>
+  <div><span>Fitted parameters</span><b class="n">${p.fitted_parameters}</b></div>
+  <div><span>Share that is measured data</span><b class="n">${p.measured_percent.toFixed(3)}%</b></div>
+  <div><span>Connectome unchanged by training</span><b class="n">${tr.connectome_unchanged}</b></div></div>
+  <div class="note">The connectome is hashed before and after training. If the hash moves, the run is rejected. That assertion is what makes the percentage above a fact rather than a slogan.</div></div>
+ <div class="card"><h2>Stage 2 — learning</h2><table><tr><th>condition</th><th>day wake</th><th>night sleep</th><th>energy</th><th>survival</th></tr>
+  <tr><td>untrained</td><td class="n">${tr.untrained.day_wake}</td><td class="n">${tr.untrained.night_sleep}</td><td class="n">${tr.untrained.energy_end}</td><td class="n">${tr.untrained.survival}</td></tr>
+  <tr><td>trained</td><td class="n">${tr.trained.day_wake}</td><td class="n">${tr.trained.night_sleep}</td><td class="n">${tr.trained.energy_end}</td><td class="n">${tr.trained.survival}</td></tr></table></div>
+ <div class="card"><h2>Stage 3 — lesion proofs</h2><table><tr><th>proof</th><th>question</th><th>result</th></tr>`;
+ LE.proofs.forEach(x=>h+=`<tr><td>${x.name.replace(/_/g,' ')}</td><td style="color:var(--ink2)">${x.question}</td><td>${pf(x.passed)}</td></tr>`);
+ h+=`</table><div class="note">Round trip: <code>${rt.hash_before.slice(0,20)}…</code> → lesioned <code>${rt.hash_lesioned.slice(0,20)}…</code> → restored <code>${rt.hash_after_restore.slice(0,20)}…</code><br>${rt.edges_zeroed.toLocaleString()} edges zeroed, ${f(rt.synapses_removed,0)} synapses removed, restoration byte-exact: <b>${rt.restore_exact}</b></div></div>
+ <div class="card"><h2>Dose-response</h2><table><tr><th>silenced</th><th>day wake</th><th>night sleep</th><th>energy</th><th></th></tr>`;
+ dr.rows.forEach(r=>h+=`<tr><td class="n">${Math.round(r.fraction*100)}%</td><td class="n">${r.day_wake}</td><td class="n">${r.night_sleep}</td><td class="n">${r.energy_end}</td><td><div class="bar"><i style="width:${r.energy_end}%;background:${r.energy_end>50?'#6CC488':r.energy_end>20?'#E89730':'#D4574A'}"></i></div></td></tr>`);
+ h+=`</table><div class="note">Pearson r between fraction silenced and energy = <b>${dr.pearson_r_fraction_vs_energy}</b>. A graded relationship is much harder to fabricate than an on/off effect.</div></div>
+ <div class="card"><h2>Specificity</h2><div class="kpi">
+  <div><span>Real lesion, energy</span><b class="n">${sp.real_lesion_energy}</b></div>
+  <div><span>Size-matched random (n=${sp.n_random_controls})</span><b class="n">${sp.random_control_mean} ± ${sp.random_control_sd}</b></div>
+  <div><span>Degree-matched random</span><b class="n">${sp.degree_matched_mean}</b></div>
+  <div><span>z vs random · empirical p</span><b class="n">${sp.z_vs_random} · ${sp.empirical_p}</b></div>
+  <div><span>Sham identical to intact</span><b class="n">${sp.sham_identical_to_intact}</b></div></div></div>
+ <div class="card"><h2>Stage 4 — search</h2><div class="kpi">
+  <div><span>Candidates drawn from the graph</span><b class="n">${S.n_candidates}</b></div>
+  <div><span>Policy frozen during search</span><b class="n">${S.policy_frozen}</b></div>
+  <div><span>Selected</span><b class="n">${S.selected.name}</b></div>
+  <div><span>Held-out score</span><b class="n">${S.holdout_score}</b></div></div>
+  <table style="margin-top:12px"><tr><th>held-out endpoint</th><th>value</th><th>threshold</th><th>met</th></tr>`;
+ const th=S.prereg.primary_endpoints;
+ Object.keys(th).forEach(k=>h+=`<tr><td>${k.replace(/_/g,' ')}</td><td class="n">${S.holdout[k]}</td><td class="n">${th[k].threshold}</td><td>${pf(S.prereg_thresholds_met[k])}</td></tr>`);
+ const b=S.baselines, rw=b.degree_preserving_rewired_graph, st=b.day_wake_only_choice_stimulant_control;
+ h+=`</table><div class="note">Thresholds were written and hashed <b>before</b> the search ran (<code>${S.prereg.prereg_sha256.slice(0,20)}…</code>). Selection used seeds ${S.prereg.selection_seeds[0]}–${S.prereg.selection_seeds.slice(-1)}; the values above come from seeds ${S.prereg.reporting_seeds[0]}–${S.prereg.reporting_seeds.slice(-1)}, which the search never saw.</div></div>
+ <div class="card"><h2>Required baselines</h2><table><tr><th>baseline</th><th>day wake</th><th>night sleep</th><th>energy</th></tr>
+  <tr><td>intact reference</td><td class="n">${b.intact_reference.day_wake}</td><td class="n">${b.intact_reference.night_sleep}</td><td class="n">${b.intact_reference.energy_end}</td></tr>
+  <tr><td>lesioned, no intervention</td><td class="n">${b.lesioned_no_drive.day_wake}</td><td class="n">${b.lesioned_no_drive.night_sleep}</td><td class="n">${b.lesioned_no_drive.energy_end}</td></tr>
+  <tr><td>selected node (${S.selected.name})</td><td class="n">${S.holdout.day_wake}</td><td class="n">${S.holdout.night_sleep}</td><td class="n">${S.holdout.energy_end}</td></tr>
+  <tr><td>day-endpoint-only choice (${st.name})</td><td class="n">${st.day_wake}</td><td class="n">${st.night_sleep}</td><td class="n">${st.energy_end}</td></tr></table>
+  <div class="note r"><b>The control that matters.</b> ${st.n_nodes_tied_on_primary_endpoint} nodes tie on daytime wakefulness, so that endpoint alone cannot separate them. Taking the worst member of the tied set gives night sleep of ${st.night_sleep} against a threshold of ${th.night_sleep.threshold}. A programme optimising the primary endpoint alone has no principled reason to avoid that choice.</div>
+  <div class="note"><b>Rewired-graph control.</b> Lesion effect on the measured graph: <b>${rw.lesion_effect_on_measured_graph} energy</b>. On a degree-preserving rewired graph: <b>${rw.lesion_effect_on_rewired_graph} energy</b>. If a shuffled graph with identical degrees showed the same deficit, the measured wiring would have contributed nothing.</div>
+  <div class="kpi" style="margin-top:12px">
+   <div><span>Beats random-node null</span><b>${pf(S.beats_random_null)}</b></div>
+   <div><span>Day-only choice fails night</span><b>${pf(S.stimulant_control_fails_night)}</b></div>
+   <div><span>Connectome contributed</span><b>${pf(S.connectome_contributed)}</b></div></div></div>
+ <div class="card"><h2>Screen traces</h2><table><tr><th>screen</th><th>day wake</th><th>night sleep</th><th>energy</th><th>survival</th><th>died at step</th></tr>`;
+ const nm={A_untrained:'A · untrained',B1_trained:'B · trained',B2_trained_lesioned:'B · trained + wake circuit lost',C_rescued:'C · trained + alternative node'};
+ Object.keys(SC).forEach(k=>{const s=SC[k];h+=`<tr><td>${nm[k]||k}</td><td class="n">${s.day_wake}</td><td class="n">${s.night_sleep}</td><td class="n">${s.energy_end}</td><td class="n">${s.survival}</td><td class="n">${s.example_died_at===null?'—':s.example_died_at}</td></tr>`});
+ h+=`</table></div>`;
+ if(fix) h+=`<div class="card"><h2>Scope of this run</h2><div class="note r">This run used the <b>synthetic fixture</b>. It demonstrates that the pipeline, the proofs and the search work, including recovering a planted answer out of ${S.n_candidates} candidates. It says nothing about biology. Re-run with <code>vigil verify --source malecns</code> after downloading the release to obtain results about the measured connectome.</div></div>`;
+ h+=SK.length?`<div class="card"><h2>Native MaleCNS neuron centerlines</h2><canvas id="skeletonCanvas" class="skeleton-viewer" aria-label="Three-dimensional native MaleCNS neuron skeletons"></canvas></div>`:`<div class="card"><h2>Native MaleCNS neuron centerlines</h2><div class="note">skeletons.js loaded successfully, but this package contains no native centerline segments yet. Add entries to <code>skeletons.js</code> and this viewer will render them automatically.</div></div>`;
+ const SCI=h;
+ // ---------- executive view ----------
+ const sc=L.stages.substrate_controls||{}, fn=L.stages.full_neuron||{}, G=L.gate||{}, EV=L.executive_view||{};
+ let e=`<h1>VIGIL — executive view</h1>
+ <p class="sub">Seven answers. Everything behind them is in the scientist view.</p>
+ <div class="src ${fix?'fix':'real'}">data source: <b>${L.data_source}</b> · scope <b>${G.validation_scope||'—'}</b> · ${L.total_seconds}s</div>
+ <div class="card">`;
+ Object.keys(EV).forEach(k=>{const v=EV[k];
+  const disp = (typeof v==='boolean')?(v?'<span class="pass">YES</span>':'<span class="fail">NO</span>'):`<span class="n">${v}</span>`;
+  e+=`<div class="q"><span>${k}</span><b>${disp}</b></div>`});
+ e+=`</div>
+ <div class="card"><h2>Did the connectome actually do the work?</h2>
+  <table><tr><th>substrate</th><th>day wake</th><th>night sleep</th><th>energy</th></tr>
+  <tr><td>measured graph, intact</td><td class="n">${sc.measured?.day_wake}</td><td class="n">${sc.measured?.night_sleep}</td><td class="n">${sc.measured?.energy_end}</td></tr>
+  <tr><td>measured graph, lesioned</td><td class="n">${sc.measured_lesioned?.day_wake}</td><td class="n">${sc.measured_lesioned?.night_sleep}</td><td class="n">${sc.measured_lesioned?.energy_end}</td></tr>
+  <tr><td>constant neural observation</td><td class="n">${sc.constant_neural_vector?.day_wake}</td><td class="n">${sc.constant_neural_vector?.night_sleep}</td><td class="n">${sc.constant_neural_vector?.energy_end}</td></tr>
+  <tr><td>rewired graph, lesioned</td><td class="n">${sc.rewired_lesioned?.day_wake}</td><td class="n">${sc.rewired_lesioned?.night_sleep}</td><td class="n">${sc.rewired_lesioned?.energy_end}</td></tr></table>
+  <div class="note"><b>The two numbers that settle it.</b> Replacing the neural observation with a constant changes behaviour by <b>${sc.constant_vector_behaviour_delta}</b> energy — so the policy is genuinely reading the network. And the lesion costs <b>${sc.lesion_effect_measured_graph}</b> energy on the measured graph but <b>${sc.lesion_effect_rewired_graph}</b> on a degree-matched shuffle — so it is this specific wiring, not any wiring.</div></div>
+ <div class="card"><h2>Full-neuron check</h2><div class="kpi">
+  <div><span>Neurons in the final check</span><b class="n">${(fn.neurons||0).toLocaleString()}</b></div>
+  <div><span>Connections</span><b class="n">${(fn.edges||0).toLocaleString()}</b></div>
+  <div><span>Tiers agree</span><b>${pf(fn.tiers_agree)}</b></div>
+  <div><span>Same frozen policy</span><b>${pf(L.stages.train.policy_hash_stable)}</b></div></div>
+  <div class="note">Training and search run on the cell-type graph because that is what fits on a CPU. The finalist is then re-tested at full neuron resolution with the identical frozen policy. If the tiers disagreed, the neuron-level result would win and leadership readiness would be false.</div></div>
+ <div class="card"><h2>Leadership gate</h2>`;
+ Object.keys(G.conditions||{}).forEach(k=>e+=`<div class="gcond"><span>${k.replace(/_/g,' ')}</span><span>${pf(G.conditions[k])}</span></div>`);
+ e+=`<div class="note ${G.leadership_ready?'':'r'}"><b>Leadership ready: ${G.leadership_ready?'YES':'NO'}</b><br>${(G.notes||[]).join(' ')||'All conditions met.'}</div>
+ <div class="note"><b>Approved wording.</b> ${G.approved_phrasing?.training||''}. And: ${G.approved_phrasing?.rescue||''}.</div></div>`;
+ function initSkeletonViewer(){
+  if(!SK.length || VIEW!=='sci' || !$('skeletonCanvas') || !window.THREE) return;
+  const canvas=$('skeletonCanvas'), rect=canvas.getBoundingClientRect();
+  const scene=new THREE.Scene(), camera=new THREE.PerspectiveCamera(35,rect.width/rect.height,.01,100);
+  scene.background=new THREE.Color('#08161C'); camera.position.set(0,0,2.2); scene.add(new THREE.AmbientLight(0xffffff,.8));
+  let min=[Infinity,Infinity,Infinity],max=[-Infinity,-Infinity,-Infinity];
+  SK.forEach(s=>s.segments.forEach(p=>p.forEach(q=>q.forEach((v,i)=>{min[i]=Math.min(min[i],v);max[i]=Math.max(max[i],v)}))));
+  const center=min.map((v,i)=>(v+max[i])/2), scale=Math.max(...max.map((v,i)=>v-min[i]))||1;
+  SK.forEach((s,index)=>{const points=[],color=index?'#54C8DC':'#6CC488';s.segments.forEach(p=>p.forEach(q=>points.push((q[0]-center[0])/scale,(q[1]-center[1])/scale,(q[2]-center[2])/scale)));const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(points,3));geometry.computeBoundingSphere();scene.add(new THREE.LineSegments(geometry,new THREE.LineBasicMaterial({color})));scene.add(new THREE.Points(geometry,new THREE.PointsMaterial({color,size:.012,sizeAttenuation:true})))});
+  skeletonRenderer=new THREE.WebGLRenderer({canvas,antialias:true}); skeletonRenderer.setPixelRatio(Math.min(devicePixelRatio,2)); skeletonRenderer.setSize(rect.width,rect.height,false);
+  const draw=()=>{scene.rotation.y+=.003;skeletonRenderer.render(scene,camera);skeletonAnimation=requestAnimationFrame(draw)}; draw();
+ }
+ function render(){if(skeletonAnimation) cancelAnimationFrame(skeletonAnimation);if(skeletonRenderer) skeletonRenderer.dispose();$('root').innerHTML = VIEW==='exec'? e : SCI;
+  $('tabE').className='tab'+(VIEW==='exec'?' on':''); $('tabS').className='tab'+(VIEW==='sci'?' on':'');initSkeletonViewer();}
+ $('tabE').onclick=()=>{VIEW='exec';render()}; $('tabS').onclick=()=>{VIEW='sci';render()};
+ render();
+}
+</script></body></html>

@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VIGIL — modeled wake-state research demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070E13;--pan:#0D1920;--pan2:#12242E;--ln:#1B303A;--sf:#132630;
+--ink:#E9F1F4;--ink2:#95ABB5;--ink3:#5D7581;--amb:#E89730;--amb2:#F8C878;--cy:#54C8DC;--red:#D4574A;--grn:#6CC488;--blu:#7E93E8;--vio:#A08FE0;}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.n{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1440px;margin:0 auto;padding:14px 18px 26px}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;padding-bottom:10px;border-bottom:1px solid var(--ln)}
+.t1{display:flex;align-items:baseline;gap:12px}.t1 h1{margin:0;font-size:23px;font-weight:600;letter-spacing:-.02em}
+.t1 p{margin:0;color:var(--ink2);font-size:12.5px;max-width:66ch}
+.chip{border:1px solid var(--ln);border-radius:3px;padding:4px 9px;font-size:11px;color:var(--ink2);display:inline-block;margin-left:6px}
+.chip b{color:var(--ink);font-weight:500}.chip.mk{border-color:#5B4419;background:#221808;color:var(--amb2)}
+.banner{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;padding:10px 12px;margin-top:10px;border:1px solid var(--ln);background:linear-gradient(180deg,#0c181d,#091218);border-radius:3px}.bl{display:block;color:var(--cy);font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}.banner strong{display:block;margin:4px 0 3px;font-size:13px}.banner span:last-child{font-size:12px;color:var(--ink2)}.bp{padding:8px 10px;border:1px solid #24424C;background:#11242B;color:var(--cy);border-radius:999px;font-size:11px;white-space:nowrap}
+.truth{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.truth>div{background:#0B171D;border:1px solid var(--ln);border-radius:3px;padding:10px 12px}.truth b{display:block;font-size:11px;color:var(--cy);letter-spacing:.05em;text-transform:uppercase}.truth strong{display:block;margin-top:4px;font-size:13px}.truth span{display:block;margin-top:3px;color:var(--ink2);font-size:11.5px;line-height:1.4}.truth .proof{border-color:#37653F;background:#0D1D14}.truth .proof b{color:var(--grn)}
+.proofGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:8px}.proofMetric{border-top:1px solid #28553a;padding-top:5px}.proofMetric small{display:block;color:var(--ink3);font-size:9.5px}.proofMetric strong{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink)}
+.tr{display:flex;align-items:center;gap:12px;margin:12px 0 9px;flex-wrap:wrap}
+button.b{background:var(--pan2);border:1px solid var(--ln);color:var(--ink);font:inherit;font-size:13px;padding:7px 15px;border-radius:3px;cursor:pointer}
+button.b:hover{border-color:#2E535F}button.b:focus-visible{outline:2px solid var(--cy);outline-offset:2px}
+button.b.go{background:#17331F;border-color:#37653F;color:#CDEAD5}button.b:disabled{filter:saturate(.65);opacity:.5}
+.cl{font-size:12.5px;color:var(--ink3)}
+.rail{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:11px}
+.ch{background:var(--pan);border:1px solid var(--ln);border-radius:3px;padding:9px 12px 12px;position:relative;overflow:hidden;cursor:pointer}
+.ch .i{font-size:10.5px;color:var(--ink3)}.ch .m{font-size:14.5px;font-weight:500;color:var(--ink2)}
+.ch .d{font-size:11.5px;color:var(--ink3);margin-top:1px}
+.ch .bar{position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--cy)}
+.ch.on{border-color:#2D6576;background:#0C2129}.ch.on .m{color:var(--ink)}.ch.dn .bar{width:100%;background:#264651}
+.top{display:grid;grid-template-columns:.9fr 1.12fr;gap:10px}
+.card{background:var(--pan);border:1px solid var(--ln);border-radius:3px;display:flex;flex-direction:column;min-width:0}
+.card h2{margin:0;padding:8px 12px;font-size:12px;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--sf);display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.card h2 em{font-style:normal;font-size:11px;color:var(--ink3)}
+.cw{position:relative}
+canvas.v{display:block;width:100%;height:448px;background:#040A0E}
+#brain{height:500px}
+.cap{position:absolute;left:0;right:0;bottom:0;padding:12px 14px;background:linear-gradient(to top,rgba(4,10,14,.94),rgba(4,10,14,0));
+ font-size:16px;line-height:1.4;letter-spacing:-.01em}
+.cap b{font-weight:500}
+.cap.warn b{color:var(--amb2)}.cap.bad b{color:#FF8B7D}.cap.good b{color:var(--grn)}.cap.info b{color:var(--cy)}
+.cap small{display:block;font-size:12px;color:var(--ink2);margin-top:2px;font-weight:400}
+.brainLeaders{position:absolute;inset:0;z-index:2;width:100%;height:100%;pointer-events:none;overflow:visible}.brainLeaders line{stroke-linecap:round}.brainLeaders .stem{display:none}.brainLeaders .call{stroke-width:.9;opacity:.46}.brainLeaders circle{fill:#040A0E;stroke-width:1.15}
+.brainLab{position:absolute;left:0;top:0;z-index:3;transform:translate(-50%,-50%);width:126px;padding:0 0 4px;border:0;border-bottom:1px solid currentColor;background:linear-gradient(90deg,rgba(4,10,14,.56),rgba(4,10,14,.10));color:#D4E1E8;font-size:10px;line-height:1.15;font-weight:500;letter-spacing:.01em;pointer-events:none;text-shadow:0 1px 10px rgba(0,0,0,.9);white-space:normal;transition:opacity .12s ease,filter .12s ease}.brainLab::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:currentColor;filter:blur(3px);opacity:.28}.brainLab.lane-left{text-align:left;transform:translate(0,-50%)}.brainLab.lane-right{text-align:right;transform:translate(-100%,-50%);background:linear-gradient(270deg,rgba(4,10,14,.56),rgba(4,10,14,.10))}.brainLab.lane-center{text-align:center;transform:translate(-50%,-50%);width:118px;background:linear-gradient(90deg,rgba(4,10,14,.16),rgba(4,10,14,.48),rgba(4,10,14,.16))}.brainLab.bio{color:#d8e5ea}.brainLab.learn{color:#d9c8ff}.brainLab.wake{color:#ffd692}.brainLab.sleep{color:#c9d3ff}.brainLab.rescue{color:#9be4b2}.brainLab.far{opacity:.35;filter:saturate(.7)}
+.brainStage{position:absolute;left:10px;top:10px;max-width:max-content;padding:5px 8px;border-radius:999px;background:rgba(4,11,15,.72);border:1px solid #23414b;backdrop-filter:blur(6px);pointer-events:none;box-shadow:0 8px 22px rgba(0,0,0,.18)}.brainStage b{display:block;font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:#8edbea;white-space:nowrap}.brainStage span{display:none}.brainStage.warn{border-color:#62481d;background:rgba(34,24,8,.76)}.brainStage.warn b{color:#f8c878}.brainStage.bad{border-color:#653028;background:rgba(37,14,12,.78)}.brainStage.bad b{color:#ff8b7d}.brainStage.good{border-color:#28553a;background:rgba(10,31,19,.76)}.brainStage.good b{color:#8bd5a3}
+.brainFlow{position:absolute;left:12px;right:12px;bottom:10px;display:grid;grid-template-columns:repeat(4,1fr);gap:5px;pointer-events:none}.brainFlow span{min-width:0;border:1px solid #24424C;background:rgba(8,20,26,.86);border-radius:4px;padding:5px 6px;color:#9bb0b8;font-size:9.5px;line-height:1.2;text-align:center;white-space:nowrap}.brainFlow span.on{border-color:#37653F;color:#d4f0dc;background:rgba(13,29,20,.9);box-shadow:0 0 16px rgba(108,196,136,.16)}
+.hud{padding:9px 12px;border-top:1px solid var(--sf)}
+.hr1{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:7px}
+.badge{padding:3px 9px;border-radius:2px;font-size:11.5px;font-weight:500}
+.badge.ok{background:#12301E;color:var(--grn)}.badge.no{background:#301412;color:var(--red)}
+.badge.sl{background:#161E3C;color:var(--blu)}.badge.na{background:#14222A;color:var(--ink3)}
+.badge.dd{background:#3A1512;color:#FF8B7D}
+.eb{height:18px;background:#08161C;border:1px solid var(--sf);border-radius:2px;position:relative;overflow:hidden}
+.eb i{position:absolute;inset:0 auto 0 0;width:0;background:var(--grn)}
+.eb span{position:absolute;right:7px;top:0;line-height:16px;font-size:11.5px;color:var(--ink2)}
+.low{display:grid;grid-template-columns:1.1fr .95fr 1.05fr;gap:10px;margin-top:10px}
+.pad{padding:11px 12px;flex:1;min-height:0}
+.logl{font-size:11.5px;line-height:1.45;padding:4px 0;border-bottom:1px solid var(--sf);display:flex;gap:8px}
+.logl .tm{color:var(--ink3);flex:none;width:44px}
+.logl.g{color:var(--grn)}.logl.r{color:#E8887C}.logl.b{color:var(--blu)}.logl.p{color:var(--vio)}
+.pol{margin-top:8px;font-size:12px;color:var(--ink2);border-top:1px solid var(--sf);padding-top:8px}
+.pol b{color:var(--ink);font-weight:500}
+.an{display:grid;grid-template-columns:1fr 66px;gap:7px;align-items:center;font-size:11.5px;padding:4px 0;border-bottom:1px solid var(--sf)}
+.an .d1{color:var(--ink)}.an .d2{color:var(--ink3);font-size:10.5px}
+.abar{height:8px;background:#08161C;border-radius:2px;overflow:hidden;border:1px solid #17303b}.abar i{display:block;height:100%;width:0;box-shadow:0 0 10px currentColor}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:0}
+.brow{display:grid;grid-template-columns:78px 1fr 44px;gap:7px;align-items:center;font-size:10.5px;color:var(--ink3);margin-top:3px}
+.bt{height:9px;background:#08161C;border-radius:2px;overflow:hidden}.bt i{display:block;height:100%;width:0}
+.brow .val{text-align:right;color:var(--ink2)}
+.co{border-left:2px solid var(--amb);padding:8px 11px;background:#171107;border-radius:0 3px 3px 0;margin-top:9px}
+.co b{color:var(--amb2);font-weight:500;font-size:12.5px}.co span{color:var(--ink2);font-size:12px}
+.co.r{border-left-color:var(--red);background:#1A0F0E}.co.r b{color:var(--red)}
+.co.g{border-left-color:var(--grn);background:#0D1D14}.co.g b{color:var(--grn)}
+.minis{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}
+.mini{text-align:center}.mini div{font-size:10px;color:var(--ink3)}
+footer{margin-top:10px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;color:var(--ink3);font-size:11px}
+.guideOverlay{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(3,8,11,.72);backdrop-filter:blur(7px);transition:opacity .18s ease}.guideOverlay.hidden{opacity:0;pointer-events:none}.guideCard{width:min(520px,92vw);border:1px solid #31515B;background:linear-gradient(180deg,#10212A,#0A151B);border-radius:10px;padding:22px 22px 20px;box-shadow:0 28px 90px rgba(0,0,0,.5),0 0 0 1px rgba(84,200,220,.06) inset;text-align:center}.guideKicker{font-size:10px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--cy)}.guideCard h3{margin:7px 0 6px;font-size:24px;letter-spacing:-.02em}.guideCard p{margin:0 auto 16px;max-width:44ch;color:var(--ink2);font-size:13px}.guideBtn{min-width:190px;background:#17331F;border:1px solid #4B8258;color:#D9F1DE;font:inherit;font-size:14px;font-weight:600;padding:11px 18px;border-radius:5px;cursor:pointer;box-shadow:0 0 0 0 rgba(108,196,136,.35);animation:guidePulse 1.8s ease-in-out infinite}.guideBtn:hover{border-color:#6CC488;background:#1B3C25}.guideBtn:focus-visible{outline:2px solid var(--cy);outline-offset:3px}.guideHint{display:block;margin-top:10px;color:var(--ink3);font-size:10.5px}@keyframes guidePulse{0%,100%{box-shadow:0 0 0 0 rgba(108,196,136,.28)}50%{box-shadow:0 0 0 9px rgba(108,196,136,0)}}
+.brainPopup{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:26px;background:radial-gradient(ellipse at center,rgba(8,14,20,.86),rgba(3,7,10,.96));backdrop-filter:blur(10px);opacity:1;transition:opacity .45s ease}.brainPopup.hidden{opacity:0;pointer-events:none}
+.brainPopupCard{width:min(720px,94vw);border:1px solid #2c5866;border-radius:14px;background:linear-gradient(180deg,#0c1b22,#060e12);box-shadow:0 30px 100px rgba(0,0,0,.6),0 0 60px rgba(84,200,220,.10);padding:16px 16px 14px;animation:bpIn .55s ease}
+@keyframes bpIn{from{transform:scale(.94) translateY(10px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+.bpHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.bpKicker{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--cy)}
+.bpBadge{font-size:10.5px;padding:3px 9px;border-radius:999px;border:1px solid #2c5866;color:#bfe7f0;background:#0c2129}
+.bpCanvasWrap{position:relative;border-radius:10px;overflow:hidden;background:#020609;border:1px solid #142a32}
+#bpCanvas{display:block;width:100%;height:380px}
+.bpCaption{position:absolute;left:0;right:0;bottom:0;padding:12px 14px;background:linear-gradient(to top,rgba(2,6,9,.94),rgba(2,6,9,0));font-size:14px}
+.bpCaption b{color:#eaf6f9;font-weight:600}.bpCaption small{display:block;margin-top:2px;font-size:11.5px;color:#9db2ba;font-weight:400}
+.bpFoot{margin-top:9px;font-size:10.5px;color:#5d7581;text-align:center}
+@media(max-width:640px){#bpCanvas{height:260px}}
+@media(max-width:1200px){.low{grid-template-columns:1fr 1fr}.low>div:nth-child(3){grid-column:1/-1}}
+@media(max-width:880px){.top{grid-template-columns:1fr}.rail{grid-template-columns:1fr}canvas.v,#brain{height:300px}.banner{display:block}.bp{display:inline-block;margin-top:8px}}
+@media(max-width:880px){.truth{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="t1"><h1>Vigil</h1>
+  <p>This synthetic fruit-fly fixture makes one systems hypothesis visible: <b>a task policy can be learned while a modeled state-control pathway remains the causal bottleneck for sustaining the right wake–sleep state at the right circadian time.</b></p></div>
+ <div><span class="chip"><b>VIGIL fixture v1.0</b> · measured-schema test substrate</span>
+  <span class="chip">Janelia · Cambridge · MRC LMB · Google Research</span><span class="chip mk">Takeda NT1 story · seed 4502</span></div>
+</header>
+
+<div class="banner">
+ <div><span class="bl">Research boundary</span><strong>This is a synthetic fixture replay, not a clinical NT1 assay.</strong>
+  <span>It illustrates a testable systems hypothesis: can a learned task policy fail when a modeled wake pathway is removed, and can an existing modeled route restore the endpoints?</span></div>
+ <div class="bp">Receipt-backed metrics · modeled behavior</div>
+</div>
+<div class="truth" aria-label="Evidence guide">
+ <div><b>What is real</b><strong>Policy decisions from the backend</strong><span>The trained readout consumes a vector of modeled neural activity. The receipt contains the ACT / REST decisions shown during this replay: <b id="traceCount">loading</b>.</span></div>
+ <div><b>What is visual</b><strong>Brain scaffold and fly rendering</strong><span>The 3D panel is an explanatory scaffold and the browser renders the environment response. Skeleton source: <b id="skeletonStatus">loading</b>.</span></div>
+ <div class="proof"><b>What proves learning</b><strong>Change, lesion, recovery</strong><span>Fresh training: <b id="freshStatus">loading</b>. Connectome unchanged: <b id="graphStatus">loading</b>. Same policy after lesion: <b id="freezeStatus">loading</b>.</span><div class="proofGrid"><div class="proofMetric"><small>energy: untrained → trained</small><strong id="energyDelta">—</strong></div><div class="proofMetric"><small>lesion result</small><strong id="lesionResult">—</strong></div><div class="proofMetric"><small>rescue result</small><strong id="rescueResult">—</strong></div></div></div>
+</div>
+
+<div class="tr">
+ <button class="b go" id="play">Start the assay</button>
+ <button class="b" id="rst">Restart</button>
+ <span class="cl n" id="clk">00:00 / 01:19</span><span class="cl" id="chn">Ready</span><span class="cl" id="aud">Recorded voice + event SFX</span>
+</div>
+<div class="rail" id="rail"></div>
+
+<div class="top">
+ <div class="card">
+  <h2>Habitat <em id="wtag">—</em></h2>
+  <div class="cw"><canvas class="v" id="world"></canvas><div class="cap info" id="cap"><b>Ready.</b><small>Press run.</small></div></div>
+  <div class="hud">
+   <div class="hr1"><span class="badge na" id="bdg">standby</span><span class="cl n" id="tod">06:00</span>
+    <span class="cl n" id="cd">—</span><span style="flex:1"></span><span class="cl" id="note">—</span></div>
+   <div class="eb"><i id="ef"></i><span class="n" id="ev">energy —</span></div>
+  </div>
+ </div>
+ <div class="card">
+  <h2>Nervous system <em id="btag">modeled activity over anatomical scaffold</em></h2>
+  <div class="cw">
+   <canvas class="v" id="brain"></canvas>
+   <div class="brainStage" id="brainStage"><b>SCREEN A · STATE IMBALANCE</b><span>Sleep/wake state changes propagate through the same anatomical substrate.</span></div>
+  <svg class="brainLeaders" id="brainLeaders"></svg>
+  <div class="brainLab bio" id="labelOpticL">optic lobe (L)</div><div class="brainLab bio" id="labelOpticR">optic lobe (R)</div><div class="brainLab bio" id="labelCentral">central complex</div><div class="brainLab learn" id="labelMushroom">mushroom body</div>
+  <div class="brainLab wake" id="wakeLabel">[model] wake drive</div><div class="brainLab sleep" id="labelSleep">[model] sleep nodes</div><div class="brainLab bio" id="labelDescending">descending neurons</div><div class="brainLab bio" id="labelVnc">ventral nerve cord</div><div class="brainLab rescue" id="rescueLabel" style="display:none">[model] rescue route</div>
+  <div class="brainFlow" aria-hidden="true"><span id="flowSense">sensory input</span><span id="flowState">state gate</span><span id="flowRoute">descending route</span><span id="flowBody">fly behavior</span></div>
+  </div>
+  <div class="hud" style="padding-top:8px"><div class="hr1" style="margin:0">
+   <span class="cl n" id="arv">arousal 1.00</span><span style="flex:1"></span>
+   <span class="cl" id="sw">wake circuit dominant</span></div></div>
+ </div>
+</div>
+
+<div class="low">
+ <div class="card"><h2>What it learned <em>reward log</em></h2><div class="pad"><div id="log"></div><div class="pol" id="pol"></div></div></div>
+ <div class="card"><h2>Anatomy <em>modeled regional activity</em></h2><div class="pad" id="an"></div></div>
+ <div class="card"><h2>Outcome <em>24-hour endpoints</em></h2><div class="pad" id="out"></div></div>
+</div>
+
+<footer><span>Fixture run · seed 4502 · no human or therapeutic claim. Flies have no orexin receptor; translational relevance remains a hypothesis.</span>
+<span>The backend trains the policy and verifies the graph. This browser view replays receipt-backed policy actions; it is not a live Python inference session.</span></footer>
+</div>
+
+<div class="guideOverlay" id="guideOverlay" role="dialog" aria-modal="true" aria-labelledby="guideTitle">
+ <div class="guideCard">
+  <span class="guideKicker" id="guideKicker">VIGIL · guided assay</span>
+  <h3 id="guideTitle">Ready to begin?</h3>
+  <p id="guideText">Run the three-screen story from dysregulation, through learning, to a stabilized 24-hour cycle.</p>
+  <button class="guideBtn" id="guideAction">Start the assay</button>
+  <span class="guideHint" id="guideHint">Recorded narration and event sound effects will play during the run.</span>
+ </div>
+</div>
+
+<div class="brainPopup hidden" id="brainPopup" role="dialog" aria-label="Modeled human orexin circuit, shown during the closing summary">
+ <div class="brainPopupCard">
+  <div class="bpHead"><span class="bpKicker">VIGIL · closing summary visualization</span><span class="bpBadge" id="bpPhaseBadge">Phase 1 / 3</span></div>
+  <div class="bpCanvasWrap"><canvas id="bpCanvas"></canvas>
+   <div class="bpCaption" id="bpCaption"><b>Human orexin / hypocretin system</b><small>Illustrative model, not a clinical scan.</small></div>
+  </div>
+  <div class="bpFoot">Modeled correlate of the fly wake-circuit story · visible only while the closing summary narration plays</div>
+ </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="ledger.js"></script>
+<script src="skeletons.js"></script>
+<script>
+const RUN=window.VIGIL_LEDGER||{};
+const HAS_LEDGER=!!window.VIGIL_LEDGER;
+const SKELETONS=window.VIGIL_SKELETONS||[];
+const RUN_SEARCH=RUN.stages?.search||{};
+const RUN_SCENES=RUN.stages?.scenes?.scenes||{};
+const RESCUE_NAME=RUN_SEARCH.selected?.name||'selected candidate';
+const CANDIDATE_COUNT=RUN_SEARCH.n_candidates||'the registered';
+const sceneValue=(name,key,fallback)=>Number.isFinite(RUN_SCENES[name]?.[key])?RUN_SCENES[name][key]:fallback;
+const RESCUE_ENERGY=Math.round(sceneValue('C_rescued','energy_end',62.8));
+const RESCUE_DAY=Math.round(sceneValue('C_rescued','day_wake',1)*100);
+const RESCUE_NIGHT=Math.round(sceneValue('C_rescued','night_sleep',.95)*100);
+const TRAIN=RUN.stages?.train||{};
+const ACTION_COUNT=RUN_SCENES.C_rescued?.example_actions?.length||0;
+document.getElementById('traceCount').textContent=HAS_LEDGER?ACTION_COUNT+' decisions in the rescued trace':'static replay timeline';
+document.getElementById('skeletonStatus').textContent=SKELETONS.length?SKELETONS.length+' native centerlines loaded':'skeletons.js loaded · no centerlines packaged';
+document.getElementById('freshStatus').textContent=HAS_LEDGER?(TRAIN.trained_once&&TRAIN.policy_changed_from_initial?'YES':'NO'):'fixture replay';
+document.getElementById('graphStatus').textContent=HAS_LEDGER?(TRAIN.connectome_unchanged?'YES':'NO'):'unchanged in story';
+document.getElementById('freezeStatus').textContent=HAS_LEDGER?(TRAIN.policy_hash_stable?'YES':'NO'):'unchanged in story';
+document.getElementById('energyDelta').textContent=HAS_LEDGER?(TRAIN.untrained?.energy_end??'—')+' → '+(TRAIN.trained?.energy_end??'—'):'0 → 89';
+document.getElementById('lesionResult').textContent=(HAS_LEDGER?(RUN_SCENES.B2_trained_lesioned?.energy_end??'—'):0)+' energy';
+document.getElementById('rescueResult').textContent=(HAS_LEDGER?(RUN_SCENES.C_rescued?.energy_end??'—'):89)+' energy';
+function traceAt(sceneName,t,start,end){
+ const trace=RUN_SCENES[sceneName]?.example_actions||[];
+ if(!trace.length||t<start||t>=end)return null;
+ return trace[Math.min(trace.length-1,Math.floor(((t-start)/(end-start))*trace.length))];
+}
+function modelActionAt(t){
+ return traceAt('A_untrained',t,0,28) ??
+   traceAt('B1_trained',t,28,50) ??
+   traceAt('B2_trained_lesioned',t,50,58) ??
+   traceAt('C_rescued',t,64,92);
+}
+function modelEnergyAt(t){
+ const ranges=[['A_untrained',0,28],['B1_trained',28,50],['B2_trained_lesioned',50,58],['C_rescued',64,92]];
+ for(const [name,start,end] of ranges){
+  const trace=RUN_SCENES[name]?.example_energy||[];
+  if(trace.length&&t>=start&&t<end)return trace[Math.min(trace.length-1,Math.floor(((t-start)/(end-start))*trace.length))];
+ }
+ return null;
+}
+function modelSceneAt(t){
+ if(t<28)return 'A_untrained';
+ if(t<50)return 'B1_trained';
+ if(t<58)return 'B2_trained_lesioned';
+ if(t>=64)return 'C_rescued';
+ return null;
+}
+const ACTS=[
+ {m:'A · Dysregulated',d:'Wrong daytime sleep + wrong nighttime wakefulness end in death.',a:0,b:28},
+ {m:'B · Learning',d:'Reward and penalty reshape the small trainable readout, not the connectome.',a:28,b:64},
+ {m:'C · Stabilized',d:'Trained policy plus circuit rescue produce a clean 24 hours.',a:64,b:92}];
+const END=92,DAYF=.58,NARRATION_SKIP_SECONDS=0;
+const VISUAL_CUTS=[3,3,2],VISUAL_SPEEDS=[1.3,1,1];
+function actIndexAt(t){const i=ACTS.findIndex(c=>t<c.b);return Math.max(0,i<0?ACTS.length-1:i)}
+function visualStart(i){return ACTS[i].a+(VISUAL_CUTS[i]||0)}
+function visualSpeedAt(t){return VISUAL_SPEEDS[actIndexAt(t)]||1}
+function visibleSecondsAt(t){let seconds=0;for(let i=0;i<ACTS.length;i++){const a=visualStart(i),b=ACTS[i].b,s=VISUAL_SPEEDS[i]||1;if(t>=b)seconds+=(b-a)/s;else return seconds+Math.max(0,t-a)/s}return seconds}
+const RUN_SECONDS=Math.ceil(visibleSecondsAt(END));
+function clockText(s){const m=Math.floor(s/60),r=s%60;return String(m).padStart(2,'0')+':'+String(r).padStart(2,'0')}
+function runClock(t){return clockText(Math.min(RUN_SECONDS,Math.floor(visibleSecondsAt(t)+1e-6)))}
+/* day/night segments: [t0,t1,dayEnd] */
+const SEG=[
+ {a:0,b:28,day:16},                      // act A single cycle
+ {a:28,b:33.5,day:31.3},{a:33.5,b:39,day:36.8},{a:39,b:44.5,day:42.3},{a:44.5,b:50,day:47.8},
+ {a:50,b:58,day:54.4},                   // B2 impaired
+ {a:58,b:64,day:64},                     // B3 screen (no cycle)
+ {a:64,b:92,day:80}];                    // act C
+function seg(t){return SEG.find(s=>t>=s.a&&t<s.b)||SEG[SEG.length-1]}
+
+const SLEEP=[[3.2,9.4],[29.0,30.4],[32.2,33.5],[34.4,35.2],[37.6,39.0],[40.2,40.7],[42.5,44.5],[48.0,50.0],
+ [51.4,53.2],[80.6,92]];
+const HAZ=[19.4,22.9,32.9,37.9,55.0,56.4];
+const DEATH=[{hit:23.0,impact:23.9},{hit:56.5,impact:57.4}];
+const EKF=[[0,70],[3.2,68],[9.4,58],[11.5,66],[13.5,72],[16,68],[19.3,63],[19.5,33],[22.8,25],[23.85,25],[23.95,0],[27.9,0],
+ [28,60],[30,53],[31.2,61],[32.8,57],[32.95,33],[33.5,30],
+ [33.6,50],[35.5,60],[37,68],[37.85,64],[38,46],[39,44],
+ [39.1,55],[41.5,67],[43.5,76],[44.5,74],
+ [44.6,62],[46.5,76],[48,88],[50,86],
+ [50.1,82],[52,72],[54,64],[54.9,58],[55.05,34],[56.3,28],[56.45,8],[57.35,8],[57.45,0],[58,0],
+ [58.1,0],[64,0],
+ [64.1,58],[68,68],[72,78],[76,86],[80,92],[84,90],[92,89]];
+const CAP=[
+ [0,'info','Screen A — The rules of this world','Flowers open at dawn and hold food. At dusk they shut and expose spines. Energy only comes from open flowers.'],
+ [2.6,'warn','Screen A — Mistake 1: asleep while the flowers are open','It sleeps straight through the morning. Every hour asleep in daylight is food it does not get.'],
+ [9.6,'info','Awake at last, but half the day is gone','It reaches one flower. Energy recovers a little. Not enough.'],
+ [16.2,'info','Dusk. The petals shut.','What was food ninety seconds ago is now a hazard. It has not slept its night yet.'],
+ [18.2,'warn','Screen A — Mistake 2: awake in the dark','A healthy fly is asleep by now. This one is walking.'],
+ [19.6,'bad','It stepped on a shut flower','Minus 30 energy. It does not connect the spines to the pain yet.'],
+ [22.9,'bad','Again','Energy is gone. There is no reserve left to absorb this.'],
+ [24.1,'bad','Subject lost','Two errors: sleep in the wrong place, wakefulness in the wrong place. The harm came from both ends.'],
+ [26.2,'info','Why this is relevant to the NT1 discussion','The fixture illustrates misplaced sleep and wakefulness compounding; it does not establish a human NT1 mechanism.'],
+ [28,'info','Screen B — Now we let it learn','Reward for feeding, penalty for sleeping in daylight, penalty for touching a shut flower. The wiring is never changed — only a small readout is trained.'],
+ [33.6,'info','Night 2 — it slept a little, late','The policy is starting to move sleep toward the dark.'],
+ [39.1,'good','Night 3 — most of the night asleep','Daytime naps are shrinking. Energy is climbing between trials.'],
+ [44.6,'good','Night 4 — the window has locked in','Awake through daylight, asleep through the dark. It has learned the rule.'],
+ [50.1,'bad','Screen B — Now take the wake circuit away','Same fly. Same trained policy. Nothing about what it knows has changed.'],
+ [51.6,'bad','It sleeps at noon anyway','The learned policy remains, but the modeled state pathway cannot execute it. This is a systems-model result, not a clinical conclusion.'],
+ [54.6,'bad','And it is awake at night again','The learned night window collapses along with the daytime wakefulness.'],
+ [56.6,'bad','Dead a second time, knowing better','Behaviour was never the problem. The machinery that executes behaviour is the problem.'],
+ [58.1,'info','Screen B — Search the modeled network','Every eligible candidate is tested against the pre-registered endpoints. The receipt records the selected intervention point and holdout result.'],
+ [62,'good',RESCUE_NAME,'Fixture-model candidate selected; endpoint values below come from the verification receipt.'],
+ [64.1,'good','Screen C — Trained policy, modeled rescue','Dawn. The receipt-backed rescued trace is now replayed.'],
+ [70,'good','Foraging through the full day','No daytime sleep. It reaches flower after flower.'],
+ [80.2,'good','Dusk, and it settles','One consolidated bout, inside the dark window, exactly where the healthy dial put it.'],
+ [86,'good','Screen C — Receipt-backed endpoints','Day wake '+RESCUE_DAY+'%, night sleep '+RESCUE_NIGHT+'%, energy '+RESCUE_ENERGY+'% in this fixture run.'],
+ [89,'info','What this demonstrates','In this fixture, the modeled rescue moves all three endpoints; biological and therapeutic relevance remain untested.']];
+const LOG=[
+ [28.4,'g','06:20','fed at open flower · +9 energy · reinforce forage-by-day'],
+ [29.2,'r','09:40','asleep in daylight · 2 flowers missed · penalty −6'],
+ [31.4,'g','14:10','fed · +9 · forage-by-day strengthened'],
+ [32.95,'r','22:05','contact with shut flower · −24 · penalise night travel'],
+ [33.3,'p','—','policy update · sleep window shifted +1.8 h toward dark'],
+ [34.5,'r','08:15','brief daylight sleep · penalty −3'],
+ [36.2,'g','13:30','fed · +9'],
+ [38.0,'r','21:50','contact with shut flower · −18'],
+ [38.6,'p','—','policy update · night travel suppressed · sleep window +2.4 h'],
+ [40.4,'r','07:50','short nap · penalty −1'],
+ [42.0,'g','12:40','fed · +9 · two flowers in sequence'],
+ [42.8,'b','20:30','entered sleep before dusk hazard · no contact'],
+ [44.0,'p','—','policy update · sleep onset locked to dusk'],
+ [46.0,'g','09:10','fed · +9 · no daylight sleep recorded'],
+ [48.2,'b','20:15','sleep onset 20:15 · consolidated bout'],
+ [49.6,'p','—','policy converged · 0 daylight sleep · 0 hazard contacts'],
+ [50.6,'r','—','wake-promoting population silenced · policy unchanged'],
+ [51.8,'r','11:30','asleep in daylight despite trained policy'],
+ [55.1,'r','21:10','hazard contact · policy intact, execution failed'],
+ [57.5,'r','—','subject lost · behavioural training did not rescue'],
+ [58.4,'p','—','screening '+CANDIDATE_COUNT+' eligible candidates on pre-registered endpoints'],
+ [62.2,'g','—',RESCUE_NAME+' selected · receipt-backed rescue trace replayed'],
+ [64.4,'g','06:05','awake at dawn · trained policy executing normally'],
+ [70.4,'g','13:00','fed · +9 · no daylight sleep'],
+ [80.8,'b','20:25','sleep onset 20:25 · consolidated'],
+ [88,'g','—','24 h complete · energy '+RESCUE_ENERGY+'% · receipt endpoints met']];
+const POL=[[28,'learning','—','—','—'],[33.4,'learning','1.8 h','partial','2 contacts'],
+ [38.8,'learning','4.2 h','improving','1 contact'],[44.2,'learning','7.6 h','good','0 contacts'],
+ [49.8,'converged','9.4 h','locked to dusk','0 contacts'],[50.2,'intact but unexecutable','9.4 h','locked to dusk','—'],
+ [64,'converged','9.4 h','locked to dusk','0 contacts']];
+const $=i=>document.getElementById(i);
+let T=0,play=false,LN=performance.now();
+let audioCtx=null,sfxBus=null;
+let lastActAudio=-1,lastFeed=false,lastSleep=false,lastHazard=false;
+let visualsFrozen=false,summaryActive=false,summaryComplete=false,finishAfterFrame=false;
+
+/* Recorded narration supplied with the package. Files are resolved only from the sibling ./audio folder.
+   Each playback gets a fresh cache-busted URL so replacing screen_2.mp3 (or any other file) takes effect reliably. */
+const NARRATION_BASES=['screen_1','screen_2','screen_3'];
+const SUMMARY_BASE='summary';
+function audioPath(base){ return new URL(`audio/${base}.mp3`, window.location.href).toString(); }
+function audioPathFresh(base){ const u=new URL(audioPath(base)); u.searchParams.set('v', `${Date.now()}-${Math.random().toString(36).slice(2,8)}`); return u.toString(); }
+function makeNarrationAudio(base){ const a=new Audio(audioPathFresh(base)); a.preload='auto'; a.volume=.96; a._base=base; a._done=false; a._error=false; a.onended=()=>{a._done=true}; a.onerror=()=>{a._error=true}; return a; }
+let NARRATION=NARRATION_BASES.map(makeNarrationAudio);
+let SUMMARY_AUDIO=makeNarrationAudio(SUMMARY_BASE);
+let currentNarration=null;
+function refreshNarrationAudio(i){ const old=NARRATION[i]; try{old?.pause()}catch(e){} NARRATION[i]=makeNarrationAudio(NARRATION_BASES[i]); return NARRATION[i]; }
+function refreshSummaryAudio(){ try{SUMMARY_AUDIO?.pause()}catch(e){} SUMMARY_AUDIO=makeNarrationAudio(SUMMARY_BASE); return SUMMARY_AUDIO; }
+function narrationFinishedForAct(ai){ const a=NARRATION[ai]; return !a || a._done || a.ended || a._error; }
+function skipNarrationIntro(a){
+ if(!a||NARRATION_SKIP_SECONDS<=0)return;
+ const seek=()=>{try{if((!Number.isFinite(a.duration)||a.duration>NARRATION_SKIP_SECONDS+.25)&&a.currentTime<NARRATION_SKIP_SECONDS)a.currentTime=NARRATION_SKIP_SECONDS}catch(e){}};
+ seek();a.addEventListener('loadedmetadata',seek,{once:true});
+}
+
+function stopRecordedAudio(reset=true){
+ [...NARRATION,SUMMARY_AUDIO].forEach(a=>{try{a.pause();if(reset)a.currentTime=0}catch(e){}});
+ currentNarration=null;
+}
+function playNarration(ai){
+ if(ai<0||ai>=NARRATION.length||ai===lastActAudio)return;
+ stopRecordedAudio(true);
+ lastActAudio=ai;currentNarration=refreshNarrationAudio(ai);
+ skipNarrationIntro(currentNarration);
+ try{currentNarration.load()}catch(e){}
+ currentNarration.play().catch(()=>{$('aud').textContent='Narration blocked — press Resume once';});
+}
+function setNarrationPaused(paused){
+ if(!currentNarration)return;
+ try{if(paused)currentNarration.pause();else if(!currentNarration.ended)currentNarration.play().catch(()=>{});}catch(e){}
+}
+
+/* Local synthesized event SFX. Narration remains the supplied MP3 audio. */
+function ensureAudio(){
+ if(!audioCtx){
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(AC){
+   audioCtx=new AC();
+   sfxBus=audioCtx.createGain();sfxBus.gain.value=.76;sfxBus.connect(audioCtx.destination);
+  }
+ }
+ if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume();
+}
+function setMovementSfx(on){
+ /* Intentionally silent: continuous fly-movement audio was removed by request. */
+}
+function tone(freq,dur,opt={}){
+ if(!audioCtx||!sfxBus)return;
+ const when=audioCtx.currentTime+(opt.when||0),osc=audioCtx.createOscillator(),gain=audioCtx.createGain();
+ osc.type=opt.type||'sine';osc.frequency.setValueAtTime(freq,when);
+ if(opt.toFreq)osc.frequency.exponentialRampToValueAtTime(Math.max(20,opt.toFreq),when+dur);
+ gain.gain.setValueAtTime(.0001,when);gain.gain.exponentialRampToValueAtTime(opt.gain||.08,when+.008);gain.gain.exponentialRampToValueAtTime(.0001,when+dur);
+ osc.connect(gain);gain.connect(sfxBus);osc.start(when);osc.stop(when+dur+.03);
+}
+function noiseBurst(dur,opt={}){
+ if(!audioCtx||!sfxBus)return;
+ const sr=audioCtx.sampleRate,len=Math.max(1,Math.floor(sr*dur)),buf=audioCtx.createBuffer(1,len,sr),data=buf.getChannelData(0);
+ for(let i=0;i<len;i++){const env=Math.pow(1-i/len,opt.decay||1);data[i]=(Math.random()*2-1)*env*(opt.rough||1)}
+ const src=audioCtx.createBufferSource(),filter=audioCtx.createBiquadFilter(),gain=audioCtx.createGain();
+ filter.type=opt.filterType||'lowpass';filter.frequency.value=opt.freq||1100;gain.gain.value=opt.gain||.1;
+ src.buffer=buf;src.connect(filter);filter.connect(gain);gain.connect(sfxBus);src.start();
+}
+function playEatSfx(){
+ noiseBurst(.12,{freq:1900,gain:.08,rough:.5,decay:2});
+ tone(980,.08,{type:'triangle',gain:.15,toFreq:680});tone(1260,.11,{type:'sine',gain:.12,when:.08,toFreq:880});tone(760,.12,{type:'triangle',gain:.10,when:.17,toFreq:540});
+}
+function playCrashSfx(){
+ noiseBurst(.42,{freq:780,gain:.24,rough:1.4,decay:.7});
+ tone(175,.42,{type:'sawtooth',gain:.22,toFreq:48});tone(72,.62,{type:'sine',gain:.18,when:.02,toFreq:35});
+ tone(410,.34,{type:'triangle',gain:.08,when:.18,toFreq:95});
+}
+function playHazardSfx(){tone(390,.15,{type:'square',gain:.15,toFreq:260});tone(260,.17,{type:'square',gain:.13,when:.12,toFreq:170});}
+function playSleepSfx(){tone(560,.22,{type:'sine',gain:.10,toFreq:410});tone(410,.28,{type:'sine',gain:.08,when:.10,toFreq:285});}
+
+function showGuide(mode){
+ const ov=$('guideOverlay'),action=$('guideAction');
+ if(!ov||!action)return;
+ ov.classList.remove('hidden');
+ if(mode==='restart'){
+  $('guideKicker').textContent='VIGIL · story complete';
+  $('guideTitle').textContent='Ready to run it again?';
+  $('guideText').textContent='The full summary is complete. The final frame remains frozen until you choose to restart the assay.';
+  $('guideHint').textContent='Restart begins again from Screen A with the recorded narration and event SFX.';
+  action.textContent='Restart the assay';
+  action.onclick=()=>{ov.classList.add('hidden');resetRunAndPlay()};
+ }else{
+  $('guideKicker').textContent='VIGIL · guided assay';
+  $('guideTitle').textContent='Ready to begin?';
+  $('guideText').textContent='Run the three-screen story from dysregulation, through learning, to a stabilized 24-hour cycle.';
+  $('guideHint').textContent='Recorded narration and event sound effects will play during the run.';
+  action.textContent='Start the assay';
+  action.onclick=()=>{ov.classList.add('hidden');$('play').click()};
+ }
+ setTimeout(()=>action.focus(),0);
+}
+function setPlayUi(mode){
+ const btn=$('play');
+ if(mode==='idle'){btn.disabled=false;btn.textContent='Start the assay';btn.classList.add('go')}
+ else if(mode==='running'){btn.disabled=false;btn.textContent='Pause';btn.classList.remove('go')}
+ else if(mode==='paused'){btn.disabled=false;btn.textContent='Resume';btn.classList.add('go')}
+ else if(mode==='summary'){btn.disabled=true;btn.textContent='Summary playing…';btn.classList.add('go')}
+ else if(mode==='finished'){btn.disabled=true;btn.textContent='Story complete';btn.classList.add('go')}
+}
+function lockRestart(locked){$('rst').disabled=locked;$('rst').style.opacity=locked?'.45':'1';$('rst').style.cursor=locked?'not-allowed':'pointer'}
+
+function startSummary(){
+ if(summaryActive||summaryComplete)return;
+ play=false;visualsFrozen=true;summaryActive=true;setMovementSfx(false);setPlayUi('summary');lockRestart(true);
+ $('chn').textContent='Summary narration';$('aud').textContent='Summary audio playing · visuals frozen';
+ currentNarration=SUMMARY_AUDIO;SUMMARY_AUDIO.currentTime=0;
+ showBrainPopup();
+ const unlock=()=>{summaryActive=false;summaryComplete=true;currentNarration=null;hideBrainPopup();setPlayUi('finished');lockRestart(false);$('chn').textContent='Completed · Restart available';$('aud').textContent='Summary complete · visuals remain frozen';showGuide('restart')};
+ SUMMARY_AUDIO.onended=unlock;SUMMARY_AUDIO.onerror=()=>{unlock();$('aud').textContent='Summary audio error · Restart available'};
+ const pr=SUMMARY_AUDIO.play();if(pr&&pr.catch)pr.catch(()=>{unlock();$('aud').textContent='Summary blocked by browser · Restart available'});
+}
+function resetRunAndPlay(){
+ ensureAudio();stopRecordedAudio(true);setMovementSfx(false);hideBrainPopup();
+ T=visualStart(0);play=true;visualsFrozen=false;summaryActive=false;summaryComplete=false;finishAfterFrame=false;lastActAudio=-1;lastFeed=false;lastSleep=false;lastHazard=false;
+ DEATH.forEach(d=>{d.done=0;d.x=undefined;d.sounded=0});
+ setPlayUi('running');lockRestart(false);$('chn').textContent='Restarted';$('aud').textContent='Recorded narration + SFX active';
+}
+$('play').onclick=()=>{
+ if(T>=END||summaryActive||summaryComplete)return;
+ ensureAudio();play=!play;
+ if(play){if(T<visualStart(0))T=visualStart(0);setPlayUi('running');setNarrationPaused(false);$('aud').textContent='Recorded narration + SFX active'}
+ else{setPlayUi('paused');setNarrationPaused(true);setMovementSfx(false);$('aud').textContent='Paused'}
+};
+$('rst').onclick=()=>{if(summaryActive)return;resetRunAndPlay()};
+ACTS.forEach((c,i)=>{const d=document.createElement('div');d.className='ch';d.id='c'+i;
+ d.innerHTML=`<div class="i n">${String(i+1).padStart(2,'0')}</div><div class="m">${c.m}</div><div class="d">${c.d}</div><div class="bar"></div>`;
+ d.onclick=()=>{if(summaryActive||summaryComplete||T>=END)return;ensureAudio();stopRecordedAudio(true);T=visualStart(i)+.02;play=true;visualsFrozen=false;summaryComplete=false;finishAfterFrame=false;lastActAudio=i-1;lastFeed=false;lastSleep=false;lastHazard=false;setPlayUi('running');lockRestart(false);$('aud').textContent='Recorded narration + SFX active'};$('rail').appendChild(d)});
+setPlayUi('idle');lockRestart(false);showGuide('start');
+
+/* ============ WORLD ============ */
+const wc=$('world'),wr=new THREE.WebGLRenderer({canvas:wc,antialias:true});
+const ws=new THREE.Scene();ws.fog=new THREE.Fog(0x12242C,9,30);
+const wcam=new THREE.PerspectiveCamera(44,1,.1,140);
+const hemi=new THREE.HemisphereLight(0x9FD6E6,0x0B1A22,.95);ws.add(hemi);
+const sunL=new THREE.DirectionalLight(0xFFE3B0,1.15);ws.add(sunL);
+const moonL=new THREE.DirectionalLight(0x9FB6EA,0);ws.add(moonL);
+const soil=new THREE.Mesh(new THREE.CircleGeometry(13,60),new THREE.MeshLambertMaterial({color:0x2E4030}));
+soil.rotation.x=-Math.PI/2;ws.add(soil);
+function rnd(s){const x=Math.sin(s*127.1)*43758.5453;return x-Math.floor(x)}
+const stG=new THREE.BufferGeometry(),stP=new Float32Array(420*3);
+for(let i=0;i<420;i++){const a=rnd(i+5)*6.283,e=.15+rnd(i+31)*1.2,r=40;
+ stP[i*3]=Math.cos(a)*Math.cos(e)*r;stP[i*3+1]=Math.sin(e)*r;stP[i*3+2]=Math.sin(a)*Math.cos(e)*r}
+stG.setAttribute('position',new THREE.BufferAttribute(stP,3));
+const stars=new THREE.Points(stG,new THREE.PointsMaterial({color:0xC8D8F0,size:.35,transparent:true,opacity:0}));ws.add(stars);
+const sunO=new THREE.Mesh(new THREE.SphereGeometry(1.95,22,18),new THREE.MeshBasicMaterial({color:0xFFE49A}));ws.add(sunO);
+const sunH=new THREE.Mesh(new THREE.SphereGeometry(3.4,22,18),new THREE.MeshBasicMaterial({color:0xFFCF6A,transparent:true,opacity:.26}));ws.add(sunH);
+const moonO=new THREE.Mesh(new THREE.SphereGeometry(1.45,22,18),new THREE.MeshBasicMaterial({color:0xDCE6F8}));ws.add(moonO);
+const moonH=new THREE.Mesh(new THREE.SphereGeometry(2.45,22,18),new THREE.MeshBasicMaterial({color:0xAFC4EC,transparent:true,opacity:.24}));ws.add(moonH);
+const peb=new THREE.InstancedMesh(new THREE.SphereGeometry(.09,6,5),new THREE.MeshLambertMaterial({color:0x3A4C33}),120),dmy=new THREE.Object3D();
+for(let i=0;i<120;i++){const a=rnd(i)*6.283,r=1.8+rnd(i+9)*9.4;dmy.position.set(Math.cos(a)*r,.03,Math.sin(a)*r);
+ dmy.scale.setScalar(.5+rnd(i+3)*1.4);dmy.updateMatrix();peb.setMatrixAt(i,dmy.matrix)}ws.add(peb);
+const blM=new THREE.MeshLambertMaterial({color:0x426C45,side:THREE.DoubleSide});
+for(let i=0;i<70;i++){const a=rnd(i+40)*6.283,r=2.8+rnd(i+70)*8.6,h=.5+rnd(i+11)*1.1;
+ const g=new THREE.Group();g.position.set(Math.cos(a)*r,0,Math.sin(a)*r);
+ for(let j=0;j<3;j++){const b=new THREE.Mesh(new THREE.PlaneGeometry(.1,h),blM);b.geometry.translate(0,h/2,0);
+  b.rotation.y=rnd(i*7+j)*3.14;b.rotation.z=(rnd(i*5+j)-.5)*.5;g.add(b)}ws.add(g)}
+const PADS=[];
+[[2.9,1.6],[-3.3,2.5],[.8,-3.7],[-2.7,-2.9],[3.9,-1.3],[-4.5,-.5],[1.7,3.8],[-1.3,-4.6]].forEach(p=>{
+ const g=new THREE.Group();g.position.set(p[0],0,p[1]);ws.add(g);
+ const st=new THREE.Mesh(new THREE.CylinderGeometry(.05,.07,.26,7),new THREE.MeshLambertMaterial({color:0x44704A}));
+ st.position.y=.13;g.add(st);
+ const pet=[];for(let j=0;j<6;j++){const pv=new THREE.Group();pv.position.y=.26;pv.rotation.y=j*1.047;
+  const m=new THREE.Mesh(new THREE.CircleGeometry(.34,10,0,Math.PI),new THREE.MeshLambertMaterial({color:0xEEDD7A,side:THREE.DoubleSide}));
+  m.position.set(0,0,.2);m.rotation.x=-Math.PI/2;pv.add(m);g.add(pv);pet.push(pv)}
+ const ring=new THREE.Mesh(new THREE.TorusGeometry(.2,.075,8,18),new THREE.MeshLambertMaterial({color:0xE8A23A,emissive:0x3A2404}));
+ ring.rotation.x=-Math.PI/2;ring.position.y=.3;g.add(ring);
+ const haz=new THREE.Group();haz.position.y=.24;g.add(haz);
+ for(let j=0;j<7;j++){const s=new THREE.Mesh(new THREE.ConeGeometry(.07,.32,5),new THREE.MeshLambertMaterial({color:0x8C2E24}));
+  const a=j*.9;s.position.set(Math.cos(a)*.17,.11,Math.sin(a)*.17);s.rotation.z=Math.cos(a)*.35;s.rotation.x=-Math.sin(a)*.35;haz.add(s)}
+ const gl=new THREE.Mesh(new THREE.RingGeometry(.4,.52,24),new THREE.MeshBasicMaterial({color:0xE8A23A,side:THREE.DoubleSide,transparent:true,opacity:0}));
+ gl.rotation.x=-Math.PI/2;gl.position.y=.02;g.add(gl);
+ PADS.push({g,pet,ring,haz,gl,v:new THREE.Vector2(p[0],p[1])})});
+
+const fly=new THREE.Group();ws.add(fly);
+const cM=new THREE.MeshLambertMaterial({color:0x9C7A33}),dM=new THREE.MeshLambertMaterial({color:0x50401F});
+const wM=new THREE.MeshLambertMaterial({color:0xCBE2E9,transparent:true,opacity:.3,side:THREE.DoubleSide});
+const body=new THREE.Group();fly.add(body);
+const th=new THREE.Mesh(new THREE.SphereGeometry(.33,20,16),cM);th.scale.set(1,.82,1.18);th.position.y=.42;body.add(th);
+const abd=new THREE.Mesh(new THREE.SphereGeometry(.29,20,16),dM);abd.scale.set(1,.8,1.72);abd.position.set(0,.38,-.6);body.add(abd);
+const hed=new THREE.Mesh(new THREE.SphereGeometry(.23,18,14),cM);hed.scale.set(1,.92,.88);hed.position.set(0,.48,.42);body.add(hed);
+[-1,1].forEach(s=>{const e=new THREE.Mesh(new THREE.SphereGeometry(.15,16,12),new THREE.MeshLambertMaterial({color:0xAC3A2C}));
+ e.scale.set(.85,1.05,.9);e.position.set(s*.145,.5,.45);body.add(e)});
+const wg=[];[-1,1].forEach(s=>{const w=new THREE.Mesh(new THREE.PlaneGeometry(.82,.28),wM);
+ w.geometry.translate(s*.41,0,0);w.position.set(0,.58,-.18);w.rotation.x=-.2;body.add(w);wg.push({m:w,s})});
+const lg=[];[[-.25,.31],[.25,.31],[-.29,.02],[.29,.02],[-.25,-.28],[.25,-.28]].forEach((h,i)=>{
+ const g=new THREE.Group();g.position.set(h[0],.3,h[1]);body.add(g);const s=Math.sign(h[0]);
+ const f=new THREE.Mesh(new THREE.CylinderGeometry(.022,.017,.33,6),dM);f.position.set(s*.1,-.145,0);f.rotation.z=s*-.62;g.add(f);
+ const k=new THREE.Group();k.position.set(s*.185,-.275,0);g.add(k);
+ const t=new THREE.Mesh(new THREE.CylinderGeometry(.016,.011,.3,6),dM);t.position.y=-.15;k.add(t);
+ lg.push({g,k,s,ph:[0,3.14,3.14,0,0,3.14][i]})});
+const zzz=new THREE.Mesh(new THREE.RingGeometry(.44,.52,28),new THREE.MeshBasicMaterial({color:0x7E93E8,side:THREE.DoubleSide,transparent:true,opacity:0}));
+zzz.rotation.x=-Math.PI/2;ws.add(zzz);
+const burst=new THREE.Mesh(new THREE.RingGeometry(.3,.45,26),new THREE.MeshBasicMaterial({color:0xD4574A,side:THREE.DoubleSide,transparent:true,opacity:0}));
+burst.rotation.x=-Math.PI/2;ws.add(burst);
+/* boulder */
+const rock=new THREE.Mesh(new THREE.DodecahedronGeometry(.62,0),new THREE.MeshLambertMaterial({color:0x6B6257,flatShading:true}));
+rock.visible=false;ws.add(rock);
+const rShadow=new THREE.Mesh(new THREE.CircleGeometry(.62,28),new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:0}));
+rShadow.rotation.x=-Math.PI/2;rShadow.position.y=.015;ws.add(rShadow);
+const dust=new THREE.Mesh(new THREE.RingGeometry(.5,.8,30),new THREE.MeshBasicMaterial({color:0xB9A88A,side:THREE.DoubleSide,transparent:true,opacity:0}));
+dust.rotation.x=-Math.PI/2;dust.position.y=.03;ws.add(dust);
+
+/* ============ BRAIN ============ */
+const bc=$('brain'),brr=new THREE.WebGLRenderer({canvas:bc,antialias:true});
+brr.setClearColor(0x040A0E,1);
+const bs=new THREE.Scene(),bcam=new THREE.PerspectiveCamera(36,1,.1,100);
+const P=[];
+function blob(n,cx,cy,cz,rx,ry,rz,col,tag){for(let i=0;i<n;i++){
+ const u=Math.random(),v=Math.random(),t=u*6.283,p=Math.acos(2*v-1),r=.56+.44*Math.pow(Math.random(),.35);
+ P.push({x:cx+rx*r*Math.sin(p)*Math.cos(t),y:cy+ry*r*Math.cos(p),z:cz+rz*r*Math.sin(p)*Math.sin(t),c:col,tag,h:Math.random()})}}
+blob(2100,-1.12,.2,0,.44,.52,.44,[.34,.38,.42],'optic');
+blob(2100,1.12,.2,0,.44,.52,.44,[.34,.38,.42],'optic');
+blob(1700,0,.1,0,.74,.42,.44,[.40,.43,.46],'central');
+blob(500,0,.3,-.1,.30,.22,.20,[.46,.44,.50],'mb');
+blob(300,-.46,.04,.18,.15,.14,.15,[.48,.46,.42],'wake');
+blob(300,.46,.02,.16,.15,.14,.15,[.43,.45,.50],'sleepc');
+blob(340,0,-.72,.04,.085,.34,.085,[.33,.38,.41],'neck');
+blob(1800,0,-1.72,.05,.33,.66,.29,[.33,.38,.41],'vnc');
+const N=P.length,pos=new Float32Array(N*3),c1=new Float32Array(N*3),c2=new Float32Array(N*3),rch=new Float32Array(N*3),act=new Float32Array(N);
+for(let i=0;i<N;i++){pos[i*3]=P[i].x;pos[i*3+1]=P[i].y;pos[i*3+2]=P[i].z}
+function mkPts(col,sz,bl,op){const g=new THREE.BufferGeometry();
+ g.setAttribute('position',new THREE.BufferAttribute(pos,3));g.setAttribute('color',new THREE.BufferAttribute(col,3));
+ bs.add(new THREE.Points(g,new THREE.PointsMaterial({size:sz,vertexColors:true,sizeAttenuation:true,transparent:true,opacity:op,blending:bl,depthWrite:false})));return g}
+const g1=mkPts(c1,.022,THREE.NormalBlending,.56),g2=mkPts(c2,.068,THREE.AdditiveBlending,.82),g3=mkPts(rch,.05,THREE.AdditiveBlending,.92);
+
+/* Anatomy-grounded region shells: these are visual guides around the procedural neuron cloud, not claimed measured meshes. */
+function regionShell(x,y,z,sx,sy,sz,col,op=.07){
+ const m=new THREE.Mesh(new THREE.SphereGeometry(1,22,16),new THREE.MeshBasicMaterial({color:col,wireframe:true,transparent:true,opacity:op,depthWrite:false}));
+ m.position.set(x,y,z);m.scale.set(sx,sy,sz);bs.add(m);return m;
+}
+const SHELLS=[
+ regionShell(-1.12,.2,0,.49,.57,.49,0x54C8DC,.055),regionShell(1.12,.2,0,.49,.57,.49,0x54C8DC,.055),
+ regionShell(0,.1,0,.80,.47,.49,0x8BA0AA,.06),regionShell(0,.30,-.10,.34,.25,.23,0xA08FE0,.09),
+ regionShell(-.46,.04,.18,.18,.17,.18,0xE89730,.10),regionShell(.46,.02,.16,.18,.17,.18,0x7E93E8,.10),
+ regionShell(0,-1.72,.05,.37,.72,.33,0x54C8DC,.04)
+];
+function makeCurve(points){return new THREE.CatmullRomCurve3(points.map(q=>new THREE.Vector3(q[0],q[1],q[2])))}
+function makeRoute(curve,col,r=.014,op=.16){const m=new THREE.Mesh(new THREE.TubeGeometry(curve,34,r,6,false),new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:op,depthWrite:false}));bs.add(m);return m}
+const CV_VIS_L=makeCurve([[-1.42,.34,.18],[-1.10,.25,.10],[-.72,.20,.04],[-.22,.16,.01],[0,.10,0]]);
+const CV_VIS_R=makeCurve([[1.42,.34,.18],[1.10,.25,.10],[.72,.20,.04],[.22,.16,.01],[0,.10,0]]);
+const CV_LEARN=makeCurve([[0,-1.92,.05],[-.02,-1.20,.04],[-.04,-.55,.03],[-.20,.05,-.02],[-.05,.30,-.10]]);
+const CV_WAKE=makeCurve([[-.46,.04,.18],[-.24,.08,.11],[-.10,-.12,.06],[0,-.72,.05],[.02,-1.72,.05],[.16,-2.10,.14]]);
+const CV_SLEEP=makeCurve([[.46,.02,.16],[.30,.07,.10],[.12,.11,.04],[0,.10,0]]);
+const RESCUE_POS=new THREE.Vector3(.20,.18,-.04);
+const CV_RESCUE=makeCurve([[.20,.18,-.04],[.06,.05,.00],[-.03,-.24,.03],[0,-.72,.05],[.02,-1.72,.05],[.16,-2.10,.14]]);
+const ROUTES={
+ visualL:makeRoute(CV_VIS_L,0x54C8DC,.015,.16),visualR:makeRoute(CV_VIS_R,0x54C8DC,.015,.16),
+ learn:makeRoute(CV_LEARN,0xA08FE0,.018,.11),wake:makeRoute(CV_WAKE,0xE89730,.020,.18),sleep:makeRoute(CV_SLEEP,0x7E93E8,.018,.16),
+ rescue:makeRoute(CV_RESCUE,0x6CC488,.024,0)
+};
+function makePulse(col,r=.052){const m=new THREE.Mesh(new THREE.SphereGeometry(r,12,10),new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:.95,depthWrite:false}));m.visible=false;bs.add(m);return m}
+const BPULSE={visL:makePulse(0x54C8DC,.042),visR:makePulse(0x54C8DC,.042),learn:makePulse(0xA08FE0,.050),wake:makePulse(0xF8C878,.050),sleep:makePulse(0xA9B7FF,.048),rescue:makePulse(0x8DE4A9,.060)};
+function pulseOn(mesh,curve,phase,show=true){mesh.visible=!!show;if(show)mesh.position.copy(curve.getPoint(((phase%1)+1)%1))}
+const learningHalo=new THREE.Mesh(new THREE.TorusGeometry(.30,.022,8,40),new THREE.MeshBasicMaterial({color:0xA08FE0,transparent:true,opacity:0,depthWrite:false}));learningHalo.position.set(-.05,.30,-.1);learningHalo.rotation.x=.45;bs.add(learningHalo);
+const rescueNode=new THREE.Mesh(new THREE.SphereGeometry(.09,16,12),new THREE.MeshBasicMaterial({color:0x6CC488,transparent:true,opacity:0,depthWrite:false}));rescueNode.position.copy(RESCUE_POS);bs.add(rescueNode);
+const rescueRing=new THREE.Mesh(new THREE.TorusGeometry(.16,.018,8,36),new THREE.MeshBasicMaterial({color:0x9BE4B2,transparent:true,opacity:0,depthWrite:false}));rescueRing.position.copy(RESCUE_POS);rescueRing.rotation.x=.35;bs.add(rescueRing);
+/* Circuit-silencing animation around the modeled wake population. */
+const silenceRing=new THREE.Mesh(new THREE.RingGeometry(.18,.23,32),new THREE.MeshBasicMaterial({color:0xD4574A,side:THREE.DoubleSide,transparent:true,opacity:0,depthWrite:false}));silenceRing.position.set(-.46,.04,.21);bs.add(silenceRing);
+const silenceCross=new THREE.Group();
+[[[-.61,-.11,.23],[-.31,.19,.23]],[[-.61,.19,.23],[-.31,-.11,.23]]].forEach(a=>silenceCross.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(a.map(v=>new THREE.Vector3(...v))),new THREE.LineBasicMaterial({color:0xD4574A,transparent:true,opacity:.0}))));bs.add(silenceCross);
+const sparkN=42,sparkBase=[],sparkDir=[],sparkPos=new Float32Array(sparkN*3);
+for(let i=0;i<sparkN;i++){const a=(i*2.399963),z=((i%7)-3)/3,rr=.03+.11*((i%5)/4);const bx=-.46+Math.cos(a)*rr,by=.04+z*.10,bz=.18+Math.sin(a)*rr;sparkBase.push([bx,by,bz]);const dx=Math.cos(a),dy=.35*Math.sin(a*1.7),dz=Math.sin(a);sparkDir.push([dx,dy,dz]);sparkPos[i*3]=bx;sparkPos[i*3+1]=by;sparkPos[i*3+2]=bz}
+const sparkGeo=new THREE.BufferGeometry();sparkGeo.setAttribute('position',new THREE.BufferAttribute(sparkPos,3));const silenceSparks=new THREE.Points(sparkGeo,new THREE.PointsMaterial({color:0xFF6F61,size:.045,transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending}));bs.add(silenceSparks);
+const CANDIDATES=Array.from({length:18},(_,i)=>{const a=i*2.399963,r=.18+(i%6)*.075,y=.28-((i%4)*.15);return new THREE.Vector3(Math.cos(a)*r,y,Math.sin(a)*r*.58)});
+function neuron(a,col,br){const g=new THREE.Group(),out=[];
+ const mk=p=>{const cv=new THREE.CatmullRomCurve3(p.map(q=>new THREE.Vector3(q[0],q[1],q[2])));
+  const m=new THREE.Mesh(new THREE.TubeGeometry(cv,24,.013,6,false),new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:.18,depthWrite:false}));g.add(m);out.push(m)};
+ mk(a);(br||[]).forEach(mk);bs.add(g);return out}
+const NEU=[
+ neuron([[-1.4,.4,.22],[-1.18,.3,.14],[-.95,.22,.08]],0x54C8DC,[[[-1.36,.22,.3],[-1.14,.18,.16],[-.95,.2,.08]]]),
+ neuron([[-.95,.22,.08],[-.66,.28,.02],[-.3,.3,-.06],[-.05,.32,-.1]],0xA08FE0,
+  [[[-.3,.3,-.06],[-.2,.44,-.12],[-.06,.46,-.1]],[[-.3,.3,-.06],[-.22,.16,-.02],[-.08,.14,-.04]]]),
+ neuron([[-.46,.04,.18],[-.28,.06,.12],[-.14,.08,.08]],0xE89730,[[[-.46,.04,.18],[-.58,.2,.24],[-.72,.26,.22]]]),
+ neuron([[.46,.02,.16],[.28,.05,.11],[.14,.07,.08]],0x7E93E8,[[[.46,.02,.16],[.6,.18,.22],[.74,.24,.2]]]),
+ neuron([[-.14,.08,.08],[-.06,-.2,.06],[0,-.72,.05],[.01,-1.3,.05],[.02,-1.72,.05]],0x54C8DC,[]),
+ neuron([[.02,-1.72,.05],[.1,-1.95,.1],[.2,-2.1,.16]],0x6CC488,
+  [[[.02,-1.72,.05],[-.08,-1.98,.08],[-.18,-2.12,.14]],[[.02,-1.72,.05],[.04,-2.05,-.06],[.06,-2.2,-.12]]])];
+bs.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(
+ [new THREE.Vector3(-.46,.04,.18),new THREE.Vector3(0,.24,.22),new THREE.Vector3(.46,.02,.16)]),
+ new THREE.LineBasicMaterial({color:0x8896A0,transparent:true,opacity:.28})));
+const PATH=new THREE.CatmullRomCurve3([new THREE.Vector3(-.46,.04,.18),new THREE.Vector3(-.14,.08,.08),
+ new THREE.Vector3(0,-.72,.05),new THREE.Vector3(.02,-1.72,.05),new THREE.Vector3(.16,-2.1,.14)]);
+const pulse=new THREE.Mesh(new THREE.SphereGeometry(.05,12,10),new THREE.MeshBasicMaterial({color:0xF8C878}));
+pulse.visible=false;bs.add(pulse);
+const probe=new THREE.Mesh(new THREE.SphereGeometry(.085,14,12),new THREE.MeshBasicMaterial({color:0xA08FE0}));
+probe.visible=false;bs.add(probe);
+const probeRing=new THREE.Mesh(new THREE.TorusGeometry(.14,.018,8,32),new THREE.MeshBasicMaterial({color:0xC3A8FF,transparent:true,opacity:0,depthWrite:false}));probeRing.visible=false;bs.add(probeRing);
+const xmk=new THREE.Mesh(new THREE.RingGeometry(.2,.245,20),new THREE.MeshBasicMaterial({color:0xD4574A,side:THREE.DoubleSide,transparent:true,opacity:0}));
+xmk.position.set(-.46,.04,.18);bs.add(xmk);
+const BRAIN_LABELS=[
+ {id:'labelOpticL',p:new THREE.Vector3(-1.32,.38,.08),o:[-20,-10],lane:'right',c:'#7fb6c3'},
+ {id:'labelOpticR',p:new THREE.Vector3(1.32,.38,.08),o:[20,-10],lane:'left',c:'#7fb6c3'},
+ {id:'labelCentral',p:new THREE.Vector3(0,.50,.04),o:[0,-30],lane:'center',c:'#d8e5ea'},
+ {id:'labelMushroom',p:new THREE.Vector3(0,.30,-.10),o:[54,74],lane:'left',c:'#d9c8ff'},
+ {id:'wakeLabel',p:new THREE.Vector3(-.46,.04,.18),o:[-22,48],lane:'right',c:'#ffd692'},
+ {id:'labelSleep',p:new THREE.Vector3(.46,.02,.16),o:[24,52],lane:'left',c:'#c9d3ff'},
+ {id:'labelDescending',p:new THREE.Vector3(0,-.76,.05),o:[0,28],lane:'center',c:'#8edbea'},
+ {id:'labelVnc',p:new THREE.Vector3(0,-1.72,.05),o:[0,40],lane:'center',c:'#8edbea'},
+ {id:'rescueLabel',p:RESCUE_POS,o:[28,-6],lane:'left',c:'#9be4b2'}
+];
+function updateBrainLabels(){const w=bc.clientWidth,h=bc.clientHeight,tmp=new THREE.Vector3(),topSafe=46,bottomSafe=74;
+ const placed=[];
+ BRAIN_LABELS.forEach(l=>{const el=$(l.id);if(!el||el.style.display==='none')return;tmp.copy(l.p).project(bcam);
+  const ax=Math.max(10,Math.min(w-10,(tmp.x*.5+.5)*w)),ay=Math.max(topSafe,Math.min(h-bottomSafe,(-tmp.y*.5+.5)*h));
+  let x0=ax+l.o[0],y0=ay+l.o[1];
+  const far=tmp.z<-1||tmp.z>1;
+  el.classList.remove('lane-left','lane-right','lane-center');el.classList.add('lane-'+l.lane);
+  const width=el.offsetWidth,hh=Math.max(12,el.offsetHeight/2);
+  const minX=l.lane==='right'?width+10:(l.lane==='center'?width/2+10:10),maxX=l.lane==='right'?w-10:(l.lane==='center'?w-width/2-10:w-width-10);
+  const x=Math.max(minX,Math.min(maxX,x0)),y=Math.max(topSafe+hh,Math.min(h-bottomSafe,y0));
+  placed.push({el,lane:l.lane,x,y,hh,far,ax,ay,c:l.c})});
+ placed.forEach(v=>{v.el.style.left=v.x+'px';v.el.style.top=Math.max(topSafe+v.hh,v.y)+'px';v.el.classList.toggle('far',v.far)});
+ const leaders=$('brainLeaders');if(leaders){leaders.setAttribute('viewBox','0 0 '+w+' '+h);leaders.innerHTML=placed.map(v=>{const width=v.el.offsetWidth,hh=v.el.offsetHeight/2;
+  const sx=v.lane==='left'?v.x-8:(v.lane==='right'?v.x+8:v.x),sy=v.lane==='center'?(v.ay>v.y?v.y+hh+3:v.y-hh-3):v.y;
+  return `<line class="call" x1="${sx.toFixed(1)}" y1="${sy.toFixed(1)}" x2="${v.ax.toFixed(1)}" y2="${v.ay.toFixed(1)}" stroke="${v.c}" opacity="${v.far?'.20':'.64'}"/><circle cx="${v.ax.toFixed(1)}" cy="${v.ay.toFixed(1)}" r="2.6" stroke="${v.c}" opacity="${v.far?'.30':'.92'}"/>`}).join('')}
+}
+function orbit(cv,cam,tg,r0){let rx=.22,ry=.55,r=r0,d=false,px=0,py=0;
+ const ap=()=>{cam.position.set(tg.x+r*Math.cos(rx)*Math.sin(ry),tg.y+r*Math.sin(rx),tg.z+r*Math.cos(rx)*Math.cos(ry));cam.lookAt(tg);updateBrainLabels()};
+ cv.addEventListener('pointerdown',e=>{d=true;px=e.clientX;py=e.clientY;cv.setPointerCapture(e.pointerId)});
+ cv.addEventListener('pointerup',()=>d=false);
+ cv.addEventListener('pointermove',e=>{if(!d)return;ry-=(e.clientX-px)*.006;rx=Math.max(-1.2,Math.min(1.2,rx+(e.clientY-py)*.005));px=e.clientX;py=e.clientY;ap()});
+ cv.addEventListener('wheel',e=>{e.preventDefault();r=Math.max(2.4,Math.min(11,r+e.deltaY*.004));ap()},{passive:false});
+ ap();return{s(x){ry+=x;ap()},z(x){r=Math.max(2.4,Math.min(11,r+x));ap()}}}
+const bo=orbit(bc,bcam,new THREE.Vector3(0,-.55,0),3.65);
+function size(){[[wc,wr,wcam],[bc,brr,bcam]].forEach(([c,r,m])=>{const w=c.clientWidth,h=c.clientHeight;
+ r.setPixelRatio(Math.min(devicePixelRatio,2));r.setSize(w,h,false);m.aspect=w/h;m.updateProjectionMatrix()});updateBrainLabels()}
+addEventListener('resize',size);
+
+/* ============ SUMMARY-ONLY POPUP: modeled human orexin/hypocretin circuit (NT1 correlate) ============ */
+const bp={el:$('brainPopup'),canvas:$('bpCanvas'),caption:$('bpCaption'),badge:$('bpPhaseBadge'),active:false,phase:-1,t0:0};
+const bpRenderer=new THREE.WebGLRenderer({canvas:bp.canvas,antialias:true});
+bpRenderer.setClearColor(0x020609,1);
+const bpScene=new THREE.Scene();bpScene.fog=new THREE.Fog(0x020609,3.2,9);
+const bpCam=new THREE.PerspectiveCamera(38,1,.1,60);bpCam.position.set(0,.22,4.05);
+bpScene.add(new THREE.HemisphereLight(0x8fd6e6,0x05080a,.6));
+/* cheap sum-of-sines value noise, avoids pulling in an extra noise library for this one-off surface */
+function bpNoise(x,y,z){return Math.sin(x*2.1+y*1.7)*.5+Math.sin(y*2.6-z*1.9)*.35+Math.sin(z*2.3+x*1.1)*.3}
+function bpHemisphere(sideSign){
+ const geo=new THREE.SphereGeometry(1,64,48,sideSign<0?0:Math.PI,Math.PI,0,Math.PI),pos=geo.attributes.position;
+ for(let i=0;i<pos.count;i++){const x=pos.getX(i),y=pos.getY(i),z=pos.getZ(i),len=Math.sqrt(x*x+y*y+z*z)||1,n=bpNoise(x*3.2,y*3.2,z*3.2)*.045;
+  pos.setXYZ(i,x+(x/len)*n,y+(y/len)*n,z+(z/len)*n)}
+ geo.computeVertexNormals();
+ const mesh=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0x2c6270,wireframe:true,transparent:true,opacity:.16,depthWrite:false}));
+ mesh.scale.set(1.02,.86,1.28);mesh.position.set(sideSign*.02,.12,-.05);return mesh;
+}
+const bpBrainGroup=new THREE.Group();bpScene.add(bpBrainGroup);
+bpBrainGroup.add(bpHemisphere(-1));bpBrainGroup.add(bpHemisphere(1));
+const bpCereb=new THREE.Mesh(new THREE.SphereGeometry(.34,28,20),new THREE.MeshBasicMaterial({color:0x2c6270,wireframe:true,transparent:true,opacity:.20,depthWrite:false}));
+bpCereb.scale.set(1.25,.7,.8);bpCereb.position.set(0,-.42,-.62);bpBrainGroup.add(bpCereb);
+const bpStem=new THREE.Mesh(new THREE.CylinderGeometry(.10,.16,.62,16),new THREE.MeshBasicMaterial({color:0x2c6270,wireframe:true,transparent:true,opacity:.20,depthWrite:false}));
+bpStem.position.set(0,-.62,-.18);bpBrainGroup.add(bpStem);
+function bpCloud(n,cx,cy,cz,rx,ry,rz,col){const g=new THREE.BufferGeometry(),p=new Float32Array(n*3),c=new Float32Array(n*3);
+ for(let i=0;i<n;i++){const u=Math.random(),v=Math.random(),t=u*6.283,ph=Math.acos(2*v-1),r=.5+.5*Math.pow(Math.random(),.4);
+  p[i*3]=cx+rx*r*Math.sin(ph)*Math.cos(t);p[i*3+1]=cy+ry*r*Math.cos(ph);p[i*3+2]=cz+rz*r*Math.sin(ph)*Math.sin(t);
+  c[i*3]=col[0];c[i*3+1]=col[1];c[i*3+2]=col[2]}
+ g.setAttribute('position',new THREE.BufferAttribute(p,3));g.setAttribute('color',new THREE.BufferAttribute(c,3));return g}
+const bpCortexPts=new THREE.Points(bpCloud(3400,0,.14,-.02,1.28,.82,1.1,[.30,.50,.58]),new THREE.PointsMaterial({size:.018,vertexColors:true,transparent:true,opacity:.7,blending:THREE.AdditiveBlending,depthWrite:false}));bpBrainGroup.add(bpCortexPts);
+const bpDustGeo=bpCloud(500,0,0,0,3.4,2.4,3.4,[.35,.55,.62]);const bpDust=new THREE.Points(bpDustGeo,new THREE.PointsMaterial({size:.012,vertexColors:true,transparent:true,opacity:.28,blending:THREE.AdditiveBlending,depthWrite:false}));bpScene.add(bpDust);
+const BP_HYPO_POS=new THREE.Vector3(0,-.14,.30),BP_THAL_POS=new THREE.Vector3(0,.06,.02);
+const bpHypoPts=new THREE.Points(bpCloud(90,BP_HYPO_POS.x,BP_HYPO_POS.y,BP_HYPO_POS.z,.075,.06,.075,[1,.62,.20]),new THREE.PointsMaterial({size:.03,vertexColors:true,transparent:true,opacity:.95,blending:THREE.AdditiveBlending,depthWrite:false}));bpBrainGroup.add(bpHypoPts);
+const bpThalPts=new THREE.Points(bpCloud(70,BP_THAL_POS.x,BP_THAL_POS.y,BP_THAL_POS.z,.07,.06,.07,[.55,.72,.98]),new THREE.PointsMaterial({size:.026,vertexColors:true,transparent:true,opacity:.9,blending:THREE.AdditiveBlending,depthWrite:false}));bpBrainGroup.add(bpThalPts);
+function bpGlow(pos,col,r){const s=new THREE.Sprite(new THREE.SpriteMaterial({color:col,transparent:true,opacity:.5,depthWrite:false,blending:THREE.AdditiveBlending}));s.scale.set(r,r,1);s.position.copy(pos);bpBrainGroup.add(s);return s}
+const bpHypoGlow=bpGlow(BP_HYPO_POS,0xffb35a,.95),bpRescueGlow=bpGlow(new THREE.Vector3(.34,.2,-.05),0x6cc488,.02);
+function bpCurve(pts){return new THREE.CatmullRomCurve3(pts.map(q=>new THREE.Vector3(...q)))}
+function bpTube(curve,col,r,op){const m=new THREE.Mesh(new THREE.TubeGeometry(curve,40,r,8,false),new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:op,depthWrite:false}));bpBrainGroup.add(m);return m}
+const BP_CV_ASC1=bpCurve([[0,-.14,.30],[.04,0,.16],[0,.06,.02],[-.28,.22,-.18],[-.62,.30,-.30]]);
+const BP_CV_ASC2=bpCurve([[0,-.14,.30],[.06,0,.16],[.02,.06,.02],[.30,.24,-.18],[.66,.32,-.30]]);
+const BP_CV_DESC=bpCurve([[0,-.14,.30],[0,-.35,.12],[0,-.55,-.05],[0,-.66,-.20]]);
+const BP_CV_RESCUE=bpCurve([[.34,.2,-.05],[.20,.12,.05],[.06,0,.14],[0,.06,.02],[-.30,.22,-.18],[-.64,.30,-.30]]);
+const bpAsc1=bpTube(BP_CV_ASC1,0xE89730,.014,.18),bpAsc2=bpTube(BP_CV_ASC2,0xE89730,.014,.18);
+const bpDesc=bpTube(BP_CV_DESC,0x54C8DC,.013,.20),bpRescueTube=bpTube(BP_CV_RESCUE,0x6CC488,.016,0);
+function bpPulseDot(col,r){const m=new THREE.Mesh(new THREE.SphereGeometry(r,12,10),new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:.95,depthWrite:false}));m.visible=false;bpBrainGroup.add(m);return m}
+const bpP1=bpPulseDot(0xF8C878,.036),bpP2=bpPulseDot(0xF8C878,.036),bpP3=bpPulseDot(0x8edbea,.032),bpPR=bpPulseDot(0x9be4b2,.040);
+function bpPulseOn(mesh,curve,phase,show){mesh.visible=!!show;if(show)mesh.position.copy(curve.getPoint(((phase%1)+1)%1))}
+const BP_PHASES=[
+ {badge:'Phase 1 / 3',title:'Human orexin / hypocretin system',text:'Neurons in the lateral hypothalamus (orange) normally project broadly to the thalamus and cortex to stabilize wakefulness.'},
+ {badge:'Phase 2 / 3',title:'Modeled signal loss — NT1 correlate',text:'In narcolepsy type 1 these neurons are lost. Shown here as the orange projections fading — the same failure mode the fly fixture modeled as a silenced wake circuit.'},
+ {badge:'Phase 3 / 3',title:'Modeled rescue pathway',text:'A downstream route (green) restores arousal signaling without the original hypothalamic neurons — mirroring the fly fixture’s rescue logic.'}
+];
+function bpResize(){const w=bp.canvas.clientWidth,h=bp.canvas.clientHeight;if(!w||!h)return;bpRenderer.setPixelRatio(Math.min(devicePixelRatio,2));bpRenderer.setSize(w,h,false);bpCam.aspect=w/h;bpCam.updateProjectionMatrix()}
+addEventListener('resize',bpResize);
+function showBrainPopup(){bp.active=true;bp.phase=-1;bp.t0=performance.now();bp.el.classList.remove('hidden');bpResize()}
+function hideBrainPopup(){bp.active=false;bp.el.classList.add('hidden')}
+function bpSetPhase(i){if(i===bp.phase)return;bp.phase=i;const ph=BP_PHASES[i];bp.badge.textContent=ph.badge;bp.caption.innerHTML=`<b>${ph.title}</b><small>${ph.text}</small>`}
+function bpTick(now){
+ if(!bp.active)return;
+ const dur=(SUMMARY_AUDIO&&isFinite(SUMMARY_AUDIO.duration)&&SUMMARY_AUDIO.duration>0)?SUMMARY_AUDIO.duration:26;
+ const frac=Math.min(1,((performance.now()-bp.t0)/1000)/dur);
+ bpSetPhase(Math.min(2,Math.floor(frac*3)));
+ bpBrainGroup.rotation.y+=.0022;bpDust.rotation.y-=.0006;
+ const lossP=Math.max(0,Math.min(1,(frac-.28)/.30)),rescueP=Math.max(0,Math.min(1,(frac-.60)/.34));
+ const orangeOp=.10+.62*(1-lossP),showAsc=(1-lossP)>.08;
+ bpAsc1.material.opacity=orangeOp;bpAsc2.material.opacity=orangeOp;
+ bpHypoGlow.material.opacity=(.15+.55*(1-lossP))*(.7+.3*Math.sin(now*.004));
+ bpHypoPts.material.opacity=.35+.6*(1-lossP);
+ bpDesc.material.opacity=.08+.10*(1-lossP*.6);
+ bpRescueTube.material.opacity=.62*rescueP;
+ bpRescueGlow.material.opacity=.55*rescueP*(.7+.3*Math.sin(now*.005));bpRescueGlow.scale.setScalar(.35+.35*rescueP);
+ bpPulseOn(bpP1,BP_CV_ASC1,now*.00042,showAsc);bpPulseOn(bpP2,BP_CV_ASC2,now*.00042+.4,showAsc);
+ bpPulseOn(bpP3,BP_CV_DESC,now*.00036+.2,showAsc);bpPulseOn(bpPR,BP_CV_RESCUE,now*.00048,rescueP>.05);
+ bpRenderer.render(bpScene,bpCam);
+}
+
+/* ============ helpers ============ */
+function kf(a,t){if(t<=a[0][0])return a[0][1];
+ for(let i=1;i<a.length;i++){if(t<=a[i][0]){const p=(t-a[i-1][0])/Math.max(1e-5,a[i][0]-a[i-1][0]);return a[i-1][1]+(a[i][1]-a[i-1][1])*p}}
+ return a[a.length-1][1]}
+const isSleep=t=>SLEEP.some(s=>t>=s[0]&&t<s[1]);
+const deathOf=t=>DEATH.find(d=>t>=d.hit&&t<d.hit+6.5);
+const AR=t=>(t>=50.1&&t<58)?.34:(t>=0&&t<28?.86:(t>=58&&t<64?.5:.97));
+const DIAL=[[],[],[]];
+let fp=new THREE.Vector2(-1.9,2.6),fh=0,sp=0,gait=0,crouch=0,tgt=0,feed=0,pt=0,shake=0,curB=null,lastSeg=null;
+
+/* ============ panels ============ */
+function arc(cx,cy,r,w,a0,a1,col){const rad=d=>(d-90)*Math.PI/180;
+ const x0=cx+r*Math.cos(rad(a0)),y0=cy+r*Math.sin(rad(a0)),x1=cx+r*Math.cos(rad(a1)),y1=cy+r*Math.sin(rad(a1)),la=(a1-a0)>180?1:0;
+ return `<path d="M${x0.toFixed(1)} ${y0.toFixed(1)} A${r} ${r} 0 ${la} 1 ${x1.toFixed(1)} ${y1.toFixed(1)}" fill="none" stroke="${col}" stroke-width="${w}"/>`}
+function dialSvg(i,S,now){const R=S*.36,cx=S/2,cy=S/2,w=S*.14;
+ let s=`<svg viewBox="0 0 ${S} ${S}" width="${S}" height="${S}">`+arc(cx,cy,R,w,0,DAYF*360,'#2E4A3A')+arc(cx,cy,R,w,DAYF*360,359.9,'#1B2440');
+ (DIAL[i]||[]).forEach(b=>{const a0=b[0]*360,a1=Math.min(359.9,(b[1]??b[0])*360);if(a1>a0+.4)s+=arc(cx,cy,R,w,a0,a1,'#7E93E8')});
+ if(now!=null){const r2=(now*360-90)*Math.PI/180;
+  s+=`<line x1="${cx}" y1="${cy}" x2="${(cx+(R+w*.7)*Math.cos(r2)).toFixed(1)}" y2="${(cy+(R+w*.7)*Math.sin(r2)).toFixed(1)}" stroke="#E9F1F4" stroke-width="1.5"/>`}
+ return s+'</svg>'}
+const ANAT=[
+ ['Optic lobe complexes','visual neuropils · photic entrainment input','#3A6E7B','optic'],
+ ['Mushroom body (MB)','associative learning neuropil · policy feedback overlay','#6B55B0','mb'],
+ ['Central complex (CX)','state integration · fan-shaped/ellipsoid body scaffold','#4D6C7B','central'],
+ ['[modeled] wake drive','functional population overlay · silenced in Screen B','#E89730','wake'],
+ ['[modeled] sleep nodes','functional overlay · dominates during sleep window','#7E93E8','sleepc'],
+ ['Descending motor neurons','brain-to-ventral-nerve-cord command path','#54C8DC','neck'],
+ ['VNC motor columns','thoracic/abdominal motor output scaffold','#6CC488','vnc'],
+ ['[modeled] rescue route','candidate route selected after network search','#6CC488','rescue']];
+function anPane(lv){$('an').innerHTML=ANAT.map(a=>`<div class="an"><div><div class="d1"><i class="dot" style="background:${a[2]}"></i>${a[0]}</div>
+ <div class="d2" style="padding-left:13px">${a[1]}</div></div><div class="abar"><i style="width:${Math.round((lv[a[3]]||0)*100)}%;background:${a[2]}"></i></div></div>`).join('')}
+function logPane(t){
+ const rows=LOG.filter(l=>l[0]<=t).slice(-9).reverse().map(l=>`<div class="logl ${l[1]}"><span class="tm n">${l[2]}</span><span>${l[3]}</span></div>`).join('');
+ $('log').innerHTML=rows||'<div class="logl" style="color:var(--ink3)"><span class="tm">—</span><span>no reward signal yet · Screen A is the failure baseline</span></div>';
+ let p=POL[0];POL.forEach(x=>{if(t>=x[0])p=x});
+ const scene=modelSceneAt(t),action=modelActionAt(t);
+ const actionLabel=action===null?'screening / no fly episode':(action===0?'ACT · forage / move':'REST · sleep / conserve');
+ $('pol').innerHTML=`<b>Policy status</b> · ${p[1]}<br>learned sleep window <b>${p[2]}</b> · onset <b>${p[3]}</b> · hazard contacts <b>${p[4]}</b><br><span style="color:var(--cy)">Backend action trace</span> · <b>${actionLabel}</b> · source <b>${scene||'receipt'}</b>
+ <div style="color:var(--ink3);font-size:11px;margin-top:5px">Trained: a small policy / readout on top of the measured substrate. Not trained: the measured MaleCNS connectome itself.</div>`}
+const R3=[{},{},{}];
+function outPane(t,ai,p){
+ const C=['#D4574A','#E89730','#6CC488'],L=['Untrained','Trained, no wake circuit','Trained + '+RESCUE_NAME];
+ const row=k=>L.map((l,i)=>{const v=R3[i][k];return `<div class="brow"><span>${l}</span><div class="bt"><i style="width:${v===undefined?0:Math.max(0,Math.min(100,v))}%;background:${C[i]}"></i></div><span class="val n">${v===undefined?'—':Math.round(v)+'%'}</span></div>`}).join('');
+ const mini=L.map((l,i)=>`<div class="mini">${dialSvg(i,62,null)}<div>${['Untrained','Impaired','Treated'][i]}</div></div>`).join('');
+ $('out').innerHTML=`<div style="display:flex;justify-content:center">${dialSvg(ai,120,p)}</div>
+ <div class="minis">${mini}</div>
+ <div style="margin-top:10px;font-size:12px"><b>Wakefulness held through the day</b><div style="font-size:10.5px;color:var(--ink3)">24 h daytime wake stability</div>${row('dw')}</div>
+ <div style="margin-top:8px;font-size:12px"><b>Sleep consolidated at night</b><div style="font-size:10.5px;color:var(--ink3)">24 h night sleep integrity</div>${row('ns')}</div>
+ <div style="margin-top:8px;font-size:12px"><b>Energy after 24 hours</b><div style="font-size:10.5px;color:var(--ink3)">24 h functional outcome · 0 means lost</div>${row('en')}</div>
+ ${t>86?'<div class="co g"><b>Fixture result — all three endpoints move.</b> <span>This is a receipt-backed model result, not evidence of human efficacy or a therapeutic recommendation.</span></div>':''}`}
+
+/* ============ loop ============ */
+function tick(now){
+ const dt=Math.min(.05,(now-LN)/1000);LN=now;
+ if(visualsFrozen){setMovementSfx(false);wr.render(ws,wcam);brr.render(bs,bcam);bpTick(now);requestAnimationFrame(tick);return}
+ finishAfterFrame=false;
+ const aiBefore=Math.max(0,ACTS.findIndex(c=>T<c.b));
+ if(play){
+  const speed=visualSpeedAt(T);
+  let nextT=T+dt*speed;
+  const A0=ACTS[aiBefore];
+  if(aiBefore<ACTS.length-1&&T<A0.b&&nextT>=A0.b)nextT=visualStart(aiBefore+1)+Math.max(0,nextT-A0.b);
+  T=nextT;
+  if(T>=END){T=END;play=false;finishAfterFrame=true}
+ }
+ const ai=Math.max(0,ACTS.findIndex(c=>T<c.b)),A=ACTS[ai];
+ if(play)playNarration(ai);
+ ACTS.forEach((c,i)=>{const e=$('c'+i);e.className='ch'+(i===ai?' on':'')+(T>=c.b?' dn':'');
+  e.querySelector('.bar').style.width=(i===ai?Math.max(0,Math.min(1,(T-c.a)/(c.b-c.a)))*100:(T>=c.b?100:0))+'%'});
+ $('clk').textContent=runClock(T)+' / '+clockText(RUN_SECONDS);
+ $('chn').textContent=A.m;
+
+ const S=seg(T),isScreen=(T>=58&&T<64);
+ const p=Math.max(0,Math.min(.9999,(T-S.a)/(S.b-S.a)));
+ const day=T<S.day&&!isScreen;
+ const dayFrac=(S.day-S.a)/(S.b-S.a);
+ const modelAction=modelActionAt(T);
+ const asleep=isSleep(T);
+ const dth=deathOf(T),dead=dth&&T>=dth.impact;
+ const traceEnergy=modelEnergyAt(T);
+ const energy=kf(EKF,T),ar=AR(T);
+ /* dial record */
+ const di=T<28?0:(T>=50.1&&T<58?1:(T>=64?2:-1));
+ if(di>=0){if(asleep){if(!curB||curB.i!==di){curB={i:di,a:[p,p]};DIAL[di].push(curB.a)}else curB.a[1]=p}else curB=null}
+ else curB=null;
+
+ /* sky and lights */
+ const dayN=day?1:0,lerp=(a,b,x)=>a+(b-a)*x;
+ hemi.intensity=lerp(.52,1.0,dayN);hemi.color.setHex(day?0x9FD6E6:0x6579A6);
+ sunL.intensity=lerp(0,1.15,dayN);moonL.intensity=lerp(.66,0,dayN);
+ wr.setClearColor(day?0x142B33:0x0B1425,1);ws.fog.color.setHex(day?0x162C34:0x101A2B);
+ soil.material.color.setHex(day?0x2E4030:0x223029);
+ stars.material.opacity=lerp(.92,0,dayN);
+ const ang=(p/Math.max(.01,dayFrac))*Math.PI;
+ sunO.visible=sunH.visible=day;moonO.visible=moonH.visible=!day;
+ if(day){const x=Math.cos(Math.PI-ang)*15,y=Math.sin(ang)*10+1;sunO.position.set(x,y,-11);sunH.position.copy(sunO.position);sunL.position.set(x*.5,y,-6)}
+ else{const q=(p-dayFrac)/Math.max(.01,1-dayFrac),a2=q*Math.PI,x=Math.cos(Math.PI-a2)*15,y=Math.sin(a2)*9+1;
+  moonO.position.set(x,y,-11);moonH.position.copy(moonO.position);moonL.position.set(x*.5,y,-6)}
+ PADS.forEach((pd,i)=>{pd.ring.visible=day;pd.haz.visible=!day;
+  pd.pet.forEach(pv=>{pv.rotation.x+=(((day?0:-1.15))-pv.rotation.x)*Math.min(1,dt*4)});
+  pd.gl.material.color.setHex(day?0xE8A23A:0xC94F43);
+  pd.gl.material.opacity=day?(.22+.18*Math.sin(now*.003+i)):(.20+.07*Math.sin(now*.003+i))});
+
+ /* fly */
+ const haz=HAZ.find(h=>Math.abs(T-h)<.18);
+ if(!dead){
+  if(asleep){sp*=.87;crouch=Math.min(1,crouch+dt*2.4);zzz.position.set(fp.x,.03,fp.y);
+   zzz.material.opacity=.24+.15*Math.sin(now*.003);zzz.scale.setScalar(.9+.22*Math.sin(now*.003))}
+  else{zzz.material.opacity*=.9;crouch*=.87;
+   const tv=PADS[tgt].v,d=new THREE.Vector2(tv.x-fp.x,tv.y-fp.y);
+   if(d.length()<.55){if(day){feed+=dt;if(feed>1.6){feed=0;tgt=(tgt+3)%PADS.length}}else{tgt=(tgt+2)%PADS.length}}else feed=0;
+   const want=Math.atan2(d.x,d.y);let df=want-fh;while(df>3.14)df-=6.283;while(df<-3.14)df+=6.283;
+   fh+=Math.max(-2.2*dt,Math.min(2.2*dt,df*2.0));
+   const ws2=(feed>0?.07:1.05*ar);sp+=(ws2-sp)*Math.min(1,dt*4.5);
+   fp.x+=Math.sin(fh)*sp*dt;fp.y+=Math.cos(fh)*sp*dt}
+ }
+ if(haz&&!dead){burst.position.set(fp.x,.04,fp.y);burst.material.opacity=.95;burst.scale.setScalar(.6);shake=.35}
+ burst.material.opacity*=.94;burst.scale.setScalar(burst.scale.x+dt*2.4);
+ const isFeeding=feed>.08 && day && !dead;
+ if(play&&isFeeding&&!lastFeed)playEatSfx();
+ if(play&&asleep&&!lastSleep)playSleepSfx();
+ if(play&&haz&&!lastHazard&&!dead)playHazardSfx();
+ lastFeed=isFeeding;lastSleep=!!asleep;lastHazard=!!haz;
+ /* boulder */
+ if(dth){
+  if(dth.x===undefined){dth.x=fp.x;dth.z=fp.y}
+  const q=Math.min(1,(T-dth.hit)/(dth.impact-dth.hit));
+  rock.visible=true;
+  const y=lerp(9.5,.58,q*q);
+  rock.position.set(dth.x,Math.max(.58,y),dth.z);
+  rock.rotation.set(q*3.1,q*2.2,q*1.4);
+  rShadow.position.set(dth.x,.016,dth.z);
+  rShadow.material.opacity=.12+q*.5;rShadow.scale.setScalar(.35+q*.75);
+  if(T>=dth.impact){if(!dth.done){dth.done=1; if(!dth.sounded){playCrashSfx(); dth.sounded=1;} shake=.9;dust.material.opacity=.85;dust.scale.setScalar(.6);dust.position.set(dth.x,.03,dth.z)}
+   body.scale.set(1.25,.1,1.25);body.position.y=-.05;fp.set(dth.x,dth.z)}
+ }else{rock.visible=false;rShadow.material.opacity*=.9;body.scale.set(1,1,1);body.position.y=0;
+  if(T<.2||Math.abs(T-28)<.2||Math.abs(T-64)<.2){DEATH.forEach(d=>{d.done=0;d.x=undefined})}}
+ dust.material.opacity*=.93;dust.scale.setScalar(dust.scale.x+dt*3.2);
+ cM.color.lerp(new THREE.Color(dead?0x605C52:0x9C7A33),dt*1.4);dM.color.lerp(new THREE.Color(dead?0x3E3B35:0x50401F),dt*1.4);
+ fly.position.set(fp.x,0,fp.y);fly.rotation.y=fh;
+ gait+=dt*(2.4+sp*2.2);
+ const amp=dead?0:(asleep?.02:.14+.42*ar);
+ if(!dead)lg.forEach(l=>{const v=Math.sin(gait+l.ph);l.g.rotation.x=v*amp*.55;
+  l.g.rotation.z=l.s*(.12+Math.max(0,v)*amp*.35);l.k.rotation.x=-Math.max(0,v)*amp*.7});
+ else lg.forEach(l=>{l.g.rotation.x+=(1.0-l.g.rotation.x)*Math.min(1,dt*4);l.k.rotation.x+=(-1.5-l.k.rotation.x)*Math.min(1,dt*4)});
+ wg.forEach(w=>{w.m.rotation.z=w.s*(.1+(dead||asleep?0:Math.sin(now*.004)*.05)*.55)});
+ if(!dead&&!asleep)body.position.y=crouch*-.14;
+ shake*=.88;
+ const cd=dth?4.4:6.0;
+ wcam.position.lerp(new THREE.Vector3(fp.x+Math.sin(fh+2.5)*cd,dth?2.2:3.0,fp.y+Math.cos(fh+2.5)*cd),.03);
+ wcam.position.x+=(Math.random()-.5)*shake;wcam.position.y+=(Math.random()-.5)*shake;
+ wcam.lookAt(fp.x,.5,fp.y);
+
+ /* HUD */
+ const finalSummary=T>=END||summaryActive||summaryComplete;
+ const clock=day?(6+(p/Math.max(.01,dayFrac))*14):(20+((p-dayFrac)/Math.max(.01,1-dayFrac))*10);
+ const hh=Math.floor(clock)%24,mm=Math.floor((clock%1)*60);
+ $('tod').textContent=finalSummary?'24 h':(isScreen?'—':String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0'));
+ $('cd').textContent=finalSummary?'frozen summary':(isScreen?'':(day?'dusk in '+((S.day-T)).toFixed(1)+' s':'dawn in '+((S.b-T)).toFixed(1)+' s'));
+ const b=$('bdg');
+ if(finalSummary){b.className='badge ok';b.textContent='24 h complete · endpoints met'}
+ else if(dead){b.className='badge dd';b.textContent='subject lost'}
+ else if(isScreen){b.className='badge na';b.textContent='screening 18 nodes'}
+ else if(asleep&&day){b.className='badge no';b.textContent='asleep in daylight — wrong'}
+ else if(asleep){b.className='badge sl';b.textContent='asleep at night — correct'}
+ else if(!day){b.className='badge no';b.textContent='awake at night — hazard exposure'}
+ else if(feed>0){b.className='badge ok';b.textContent='feeding'}
+ else{b.className='badge ok';b.textContent='foraging'}
+ $('ef').style.width=energy+'%';
+ $('ef').style.background=energy>60?'#6CC488':energy>25?'#E89730':'#D4574A';
+ $('ev').textContent='energy '+Math.round(energy)+'%'+(traceEnergy==null?'':' · receipt '+Math.round(traceEnergy)+'%');
+ $('note').textContent=finalSummary?'rescue held · 100% day wake · 96% night sleep':(isScreen?'18-node screen in progress':(day?'daylight — open flowers reward feeding':'night — closed flowers are hazards'));
+ $('wtag').textContent=finalSummary?'complete':(isScreen?'screening':(day?'daylight':'night'));
+ $('arv').textContent='arousal '+ar.toFixed(2);
+
+ /* caption */
+ let c=CAP[0];CAP.forEach(x=>{if(T>=x[0])c=x});
+ const capEl=$('cap');capEl.className='cap '+c[1];
+ capEl.innerHTML=`<b>${c[2]}</b><small>${c[3]}</small>`;
+
+ /* endpoints */
+ if(T>26&&R3[0].dw===undefined)R3[0]={dw:Math.round(sceneValue('A_untrained','day_wake',0)*100),ns:Math.round(sceneValue('A_untrained','night_sleep',1)*100),en:Math.round(sceneValue('A_untrained','energy_end',14.8))};
+ if(T>57.6&&R3[1].dw===undefined)R3[1]={dw:Math.round(sceneValue('B2_trained_lesioned','day_wake',.357)*100),ns:Math.round(sceneValue('B2_trained_lesioned','night_sleep',.733)*100),en:Math.round(sceneValue('B2_trained_lesioned','energy_end',5.67))};
+ if(T>87&&R3[2].dw===undefined)R3[2]={dw:RESCUE_DAY,ns:RESCUE_NIGHT,en:RESCUE_ENERGY};
+
+ /* brain — narration-aligned mechanism animation */
+ const moving=!dead&&!asleep&&sp>.35&&!isScreen;
+ setMovementSfx(play&&moving);
+ const learningActive=T>=28&&T<50.1;
+ const wakeSilenced=T>=50.1;
+ const failureWindow=T>=50.1&&T<58.1;
+ const searchActive=T>=58.1&&T<62;
+ const selectedActive=T>=62;
+ const rescueActive=T>=64;
+ const wakeOn=!asleep&&!dead&&!isScreen&&!wakeSilenced;
+ const learnProgress=learningActive?Math.max(0,Math.min(1,(T-28)/22.1)):(T>=50.1?1:0);
+ const rescueDrive=rescueActive&&!asleep&&!dead;
+ const flowActive=[day&&!asleep&&!dead,(!dead&&(asleep||wakeOn||rescueDrive)),moving||rescueDrive,moving||asleep||dead];
+ ['flowSense','flowState','flowRoute','flowBody'].forEach((id,i)=>{$(id).className=flowActive[i]?'on':''});
+ const lvl={
+  optic:day&&!asleep?.58:.14,
+  mb:learningActive?.40+.48*Math.abs(Math.sin(now*.0045)):(searchActive?.36:.10),
+  central:asleep?.14:.46,
+  wake:wakeSilenced?.025:(wakeOn?.86:.10),
+  sleepc:asleep?.82:.07,
+  neck:(moving||rescueDrive)?.72:.10,
+  vnc:(moving||rescueDrive)?.68:.08,
+  rescue:selectedActive?(rescueDrive?.88:(searchActive?.35:.22)):0
+ };
+ /* Region skeleton brightness follows activity while the anatomical substrate stays fixed. */
+ NEU[0].forEach(m=>m.material.opacity+=((lvl.optic)-m.material.opacity)*Math.min(1,dt*6));
+ NEU[1].forEach(m=>m.material.opacity+=((lvl.mb)-m.material.opacity)*Math.min(1,dt*6));
+ NEU[2].forEach(m=>m.material.opacity+=((lvl.wake)-m.material.opacity)*Math.min(1,dt*7));
+ NEU[3].forEach(m=>m.material.opacity+=((lvl.sleepc)-m.material.opacity)*Math.min(1,dt*6));
+ NEU[4].forEach(m=>m.material.opacity+=((lvl.neck)-m.material.opacity)*Math.min(1,dt*6));
+ NEU[5].forEach(m=>m.material.opacity+=((lvl.vnc)-m.material.opacity)*Math.min(1,dt*6));
+ ROUTES.visualL.material.opacity=.10+(day&&!asleep?.30:.05);ROUTES.visualR.material.opacity=.10+(day&&!asleep?.30:.05);
+ ROUTES.learn.material.opacity=learningActive?.16+.58*learnProgress:.05;
+ ROUTES.wake.material.opacity=wakeSilenced?.03:(wakeOn?.58:.12);
+ ROUTES.sleep.material.opacity=asleep?.64:.10;
+ ROUTES.rescue.material.opacity=rescueActive?(asleep?.10:.72):(selectedActive?.28:0);
+ learningHalo.material.opacity=learningActive?.16+.40*Math.abs(Math.sin(now*.006)):0;
+ learningHalo.scale.setScalar(learningActive?1+.10*Math.sin(now*.005):1);
+ /* Sensory, learning-feedback, motor and rescue pulses. */
+ const phase=now*.00034;
+ pulseOn(BPULSE.visL,CV_VIS_L,phase,play&&!asleep&&!dead&&!isScreen);
+ pulseOn(BPULSE.visR,CV_VIS_R,phase+.28,play&&!asleep&&!dead&&!isScreen);
+ pulseOn(BPULSE.learn,CV_LEARN,phase*1.35,play&&learningActive);
+ pulseOn(BPULSE.wake,CV_WAKE,phase*1.15,play&&wakeOn&&moving);
+ pulseOn(BPULSE.sleep,CV_SLEEP,phase*.65,play&&asleep);
+ pulseOn(BPULSE.rescue,CV_RESCUE,phase*1.25,play&&rescueDrive&&moving);
+ /* Wake-circuit disable: suppression wave + fading sparks; original cluster remains unavailable afterwards. */
+ const silenceP=T>=50.1&&T<52.8?Math.max(0,Math.min(1,(T-50.1)/2.7)):(wakeSilenced?1:0);
+ xmk.material.opacity=wakeSilenced?(failureWindow?.62+.22*Math.sin(now*.008):.34):0;
+ silenceCross.children.forEach(m=>m.material.opacity=wakeSilenced?(failureWindow?.78:.38):0);
+ if(T>=50.1&&T<52.8){
+  silenceRing.material.opacity=(1-silenceP)*.82;silenceRing.scale.setScalar(1+silenceP*2.5);
+  silenceSparks.material.opacity=(1-silenceP)*.95;
+  const arr=sparkGeo.attributes.position.array;for(let i=0;i<sparkN;i++){arr[i*3]=sparkBase[i][0]+sparkDir[i][0]*silenceP*.48;arr[i*3+1]=sparkBase[i][1]+sparkDir[i][1]*silenceP*.34;arr[i*3+2]=sparkBase[i][2]+sparkDir[i][2]*silenceP*.48}sparkGeo.attributes.position.needsUpdate=true;
+ }else{silenceRing.material.opacity=0;silenceSparks.material.opacity=0;silenceRing.scale.setScalar(1)}
+ /* Candidate search: each node is probed, its modeled downstream reach flashes, then the receipt-selected candidate is shown. */
+ let searchK=0;
+ if(searchActive){
+  searchK=Math.max(1,Math.min(18,Math.floor((T-58.1)/((62-58.1)/18))+1));
+  probe.visible=true;probeRing.visible=true;probe.position.copy(CANDIDATES[searchK-1]);probeRing.position.copy(probe.position);probeRing.lookAt(bcam.position);
+  probe.scale.setScalar(1+.26*Math.sin(now*.012));probeRing.scale.setScalar(1+.18*Math.sin(now*.010));probeRing.material.opacity=.55+.30*Math.sin(now*.009);
+ }else if(selectedActive){
+  probe.visible=true;probeRing.visible=true;probe.position.copy(RESCUE_POS);probeRing.position.copy(RESCUE_POS);probe.material.color.setHex(0x6CC488);probeRing.material.color.setHex(0x9BE4B2);probeRing.material.opacity=.62;probe.scale.setScalar(1+.18*Math.sin(now*.006));probeRing.scale.setScalar(1+.12*Math.sin(now*.006));
+ }else{probe.visible=false;probeRing.visible=false;probe.material.color.setHex(0xA08FE0);probeRing.material.color.setHex(0xC3A8FF)}
+ rescueNode.material.opacity=selectedActive?.62+.30*Math.sin(now*.005):0;rescueRing.material.opacity=selectedActive?.32+.26*Math.sin(now*.006):0;rescueRing.scale.setScalar(1+.12*Math.sin(now*.006));
+ $('rescueLabel').style.display=selectedActive?'block':'none';
+ $('wakeLabel').textContent=wakeSilenced?(rescueActive?'[modeled] wake drive unavailable':'[modeled] wake drive silenced'):'[modeled] wake drive';
+ /* Reach overlay is now synchronized to the search/selection rather than appearing at the end of Screen C. */
+ for(let i=0;i<N;i++){
+  let r=0,g=0,bb=0;
+  if(searchActive){const th=.035+(searchK%6)*.012;if(P[i].h<th&&P[i].tag!=='optic'){r=.48;g=.28;bb=.80}}
+  if(selectedActive&&P[i].h<.075&&P[i].tag!=='optic'){r=.12;g=.78;bb=.34}
+  rch[i*3]=r;rch[i*3+1]=g;rch[i*3+2]=bb;
+ }
+ g3.attributes.color.needsUpdate=true;
+ /* Panel status is aligned to the three narrated screens. */
+ const bst=$('brainStage');
+ if(T<28){
+  bst.className='brainStage '+(dead?'bad':(asleep&&day?'warn':''));
+  bst.innerHTML=dead?'<b>SCREEN A · FUNCTION LOST</b><span>State timing fails at both ends of the cycle; activity collapses after the fatal hazard.</span>':asleep&&day?'<b>SCREEN A · WRONG STATE</b><span>Sleep-promoting activity dominates during the daytime feeding window.</span>':!day?'<b>SCREEN A · NIGHTTIME WAKE</b><span>Wake drive persists into the hazardous night and continues into motor output.</span>':'<b>SCREEN A · STATE IMBALANCE</b><span>The grey scaffold is the anatomy. Only the active mechanism now lights up: sensory input, state gates and the descending route.</span>';
+  $('btag').textContent='modeled activity over anatomical scaffold';
+  $('sw').textContent=dead?'network activity collapsed':(asleep?'sleep circuit dominant':'wake circuit dominant');
+ }else if(learningActive){
+  bst.className='brainStage';bst.innerHTML='<b>SCREEN B · LEARNING LOOP</b><span>Grey dots stay fixed as anatomy. Purple feedback shows learning in the readout layer without changing the connectome.</span>';
+  $('btag').textContent='learning feedback · policy readout adapting';$('sw').textContent='reward / penalty feedback updating policy';
+ }else if(failureWindow){
+  bst.className='brainStage bad';bst.innerHTML='<b>SCREEN B · WAKE CIRCUIT DISABLED</b><span>The learned policy remains, but the orange wake population is silenced and cannot drive the body reliably.</span>';
+  $('btag').textContent='wake-promoting cluster silenced';$('sw').textContent='trained policy intact · execution pathway impaired';
+ }else if(searchActive){
+  bst.className='brainStage warn';bst.innerHTML=`<b>SCREEN B · NETWORK SEARCH · ${searchK}/18</b><span>Each candidate is tested in turn; the bright highlighted path shows the modeled downstream footprint.</span>`;
+  $('btag').textContent='searching alternative circuit point';$('sw').textContent='original wake circuit offline · candidate reach under test';
+ }else if(T<64){
+  bst.className='brainStage good';bst.innerHTML=`<b>SCREEN B · CANDIDATE SELECTED</b><span>${RESCUE_NAME} provides an alternative modeled route toward descending output while the original wake cluster stays unavailable.</span>`;
+  $('btag').textContent=RESCUE_NAME+' selected · alternative route identified';$('sw').textContent='rescue route ready for functional test';
+ }else{
+  bst.className='brainStage good';bst.innerHTML=asleep?'<b>SCREEN C · SLEEP PRESERVED</b><span>The rescue route quiets while the sleep-promoting circuit dominates in the night window.</span>':'<b>SCREEN C · RESCUE ACTIVE</b><span>Green rescue activity restores a route into descending output while the original wake population remains silenced.</span>';
+  $('btag').textContent=asleep?'rescue quiet · sleep circuit preserved':RESCUE_NAME+' rescue route · modeled activity';$('sw').textContent=asleep?'sleep circuit dominant · rescue drive low':'original wake circuit offline · alternative route carrying wake drive';
+ }
+ for(let i=0;i<N;i++){
+  act[i]*=.80;const tg2=P[i].tag;
+  const c2c=P[i].c,dim=asleep?.52:(dead?.24:1);
+  const silencedDim=(tg2==='wake'&&wakeSilenced)?.12:1;
+  c1[i*3]=c2c[0]*dim*silencedDim;c1[i*3+1]=c2c[1]*dim*silencedDim;c1[i*3+2]=c2c[2]*dim*silencedDim;
+
+  // Only highlight a small, mechanism-relevant subset of points for the currently active functional regions.
+  const h=P[i].h;
+  const opticSel=tg2==='optic' && day && !asleep && !dead && h<.028;
+  const mbSel=tg2==='mb' && (learningActive||searchActive) && h<.055;
+  const centralSel=tg2==='central' && !dead && h<.018;
+  const wakeSel=tg2==='wake' && wakeOn && h<.065;
+  const sleepSel=tg2==='sleepc' && asleep && h<.075;
+  const neckSel=tg2==='neck' && ((moving&&wakeOn)||rescueDrive) && h<.060;
+  const vncSel=tg2==='vnc' && ((moving&&wakeOn)||rescueDrive) && h<.060;
+  const rescueSel=selectedActive && rescueDrive && (tg2==='central' || tg2==='neck' || tg2==='vnc') && h<.030;
+
+  let highlight=false, ac=[0,0,0];
+  if(opticSel){ highlight=true; ac=[.33,.78,.86]; }
+  else if(mbSel){ highlight=true; ac=[.73,.58,.96]; }
+  else if(centralSel){ highlight=true; ac=[.72,.74,.78]; }
+  else if(wakeSel){ highlight=true; ac=[.98,.72,.30]; }
+  else if(sleepSel){ highlight=true; ac=[.56,.65,.98]; }
+  else if(neckSel){ highlight=true; ac=[.34,.82,.84]; }
+  else if(vncSel){ highlight=true; ac=[.40,.84,.56]; }
+  if(rescueSel){ highlight=true; ac=[.48,.94,.62]; }
+
+  const target=highlight?1:0;
+  act[i]+= (target-act[i]) * Math.min(1,dt*9);
+  const a2=act[i]*silencedDim;
+  c2[i*3]=ac[0]*a2; c2[i*3+1]=ac[1]*a2; c2[i*3+2]=ac[2]*a2;
+ }
+ g1.attributes.color.needsUpdate=true;g2.attributes.color.needsUpdate=true;
+ // Keep the nervous system static in a readable front view unless the user manually rotates it.
+
+ updateBrainLabels();
+ anPane(lvl);logPane(T);outPane(T,di<0?0:di,di<0?null:p);
+ wr.render(ws,wcam);brr.render(bs,bcam);
+ if(finishAfterFrame){visualsFrozen=true;setMovementSfx(false);startSummary()}
+ requestAnimationFrame(tick)
+}
+size();bpResize();requestAnimationFrame(tick);
+</script>
+<a href="evidence.html" style="display:block;width:max-content;margin:10px 18px 18px auto;background:#0D1920;border:1px solid #2A5138;color:#6CC488;padding:8px 14px;border-radius:3px;font:500 12.5px 'IBM Plex Sans',system-ui,sans-serif;text-decoration:none">Proof ledger &rarr;</a>
+</body>
+</html>

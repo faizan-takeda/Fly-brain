@@ -43,7 +43,10 @@ test('restart resets freeze and summary state',()=>{
 // Screen narration behavior
 test('screen narration is single-entry gated',()=>{contains('if(ai<0||ai>=NARRATION.length||ai===lastActAudio)return')});
 test('screen transition plays recorded narration',()=>{contains('if(play)playNarration(ai)')});
-test('screen progression waits for narration completion',()=>{contains('if(T<endT && nextT>=endT && !narrationFinishedForAct(aiBefore)) nextT=Math.max(T, endT-0.001)')});
+test('screen progression uses shortened visual timeline without waiting for full narration',()=>{
+  contains('VISUAL_CUTS=[3,3,2]');contains('VISUAL_SPEEDS=[1.3,1,1]');contains('NARRATION_SKIP_SECONDS=0');contains('T=visualStart(0)');contains('T=visualStart(i)+.02');contains('let nextT=T+dt*speed');contains('skipNarrationIntro(currentNarration)');
+  ok(!html.includes('if(T<endT && nextT>=endT && !narrationFinishedForAct(aiBefore))'),'old narration boundary hold remains');
+});
 test('pause and resume control current narration',()=>{contains('setNarrationPaused(true)');contains('setNarrationPaused(false)')});
 
 // SFX loudness/event coverage

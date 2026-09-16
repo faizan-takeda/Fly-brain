@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VIGIL — Takeda NT1 wake-state assay</title>
+<title>VIGIL — modeled wake-state research demo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -20,6 +20,8 @@ header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;
 .chip{border:1px solid var(--ln);border-radius:3px;padding:4px 9px;font-size:11px;color:var(--ink2);display:inline-block;margin-left:6px}
 .chip b{color:var(--ink);font-weight:500}.chip.mk{border-color:#5B4419;background:#221808;color:var(--amb2)}
 .banner{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;padding:10px 12px;margin-top:10px;border:1px solid var(--ln);background:linear-gradient(180deg,#0c181d,#091218);border-radius:3px}.bl{display:block;color:var(--cy);font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}.banner strong{display:block;margin:4px 0 3px;font-size:13px}.banner span:last-child{font-size:12px;color:var(--ink2)}.bp{padding:8px 10px;border:1px solid #24424C;background:#11242B;color:var(--cy);border-radius:999px;font-size:11px;white-space:nowrap}
+.truth{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.truth>div{background:#0B171D;border:1px solid var(--ln);border-radius:3px;padding:10px 12px}.truth b{display:block;font-size:11px;color:var(--cy);letter-spacing:.05em;text-transform:uppercase}.truth strong{display:block;margin-top:4px;font-size:13px}.truth span{display:block;margin-top:3px;color:var(--ink2);font-size:11.5px;line-height:1.4}.truth .proof{border-color:#37653F;background:#0D1D14}.truth .proof b{color:var(--grn)}
+.proofGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:8px}.proofMetric{border-top:1px solid #28553a;padding-top:5px}.proofMetric small{display:block;color:var(--ink3);font-size:9.5px}.proofMetric strong{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink)}
 .tr{display:flex;align-items:center;gap:12px;margin:12px 0 9px;flex-wrap:wrap}
 button.b{background:var(--pan2);border:1px solid var(--ln);color:var(--ink);font:inherit;font-size:13px;padding:7px 15px;border-radius:3px;cursor:pointer}
 button.b:hover{border-color:#2E535F}button.b:focus-visible{outline:2px solid var(--cy);outline-offset:2px}
@@ -31,20 +33,22 @@ button.b.go{background:#17331F;border-color:#37653F;color:#CDEAD5}button.b:disab
 .ch .d{font-size:11.5px;color:var(--ink3);margin-top:1px}
 .ch .bar{position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--cy)}
 .ch.on{border-color:#2D6576;background:#0C2129}.ch.on .m{color:var(--ink)}.ch.dn .bar{width:100%;background:#264651}
-.top{display:grid;grid-template-columns:1.48fr 1fr;gap:10px}
+.top{display:grid;grid-template-columns:.9fr 1.12fr;gap:10px;scroll-margin-top:12px}
 .card{background:var(--pan);border:1px solid var(--ln);border-radius:3px;display:flex;flex-direction:column;min-width:0}
 .card h2{margin:0;padding:8px 12px;font-size:12px;font-weight:500;color:var(--ink2);border-bottom:1px solid var(--sf);display:flex;justify-content:space-between;gap:8px;align-items:baseline}
 .card h2 em{font-style:normal;font-size:11px;color:var(--ink3)}
 .cw{position:relative}
-canvas.v{display:block;width:100%;height:394px;background:#040A0E}
-#brain{height:394px}
+canvas.v{display:block;width:100%;height:448px;background:#040A0E}
+#brain{height:500px}
 .cap{position:absolute;left:0;right:0;bottom:0;padding:12px 14px;background:linear-gradient(to top,rgba(4,10,14,.94),rgba(4,10,14,0));
  font-size:16px;line-height:1.4;letter-spacing:-.01em}
 .cap b{font-weight:500}
 .cap.warn b{color:var(--amb2)}.cap.bad b{color:#FF8B7D}.cap.good b{color:var(--grn)}.cap.info b{color:var(--cy)}
 .cap small{display:block;font-size:12px;color:var(--ink2);margin-top:2px;font-weight:400}
-.brainLab{position:absolute;padding:4px 7px;border-radius:6px;background:rgba(6,14,19,.88);border:1px solid #254554;color:#D4E1E8;font-size:10px;pointer-events:none;box-shadow:0 0 0 1px rgba(0,0,0,.25),0 0 18px rgba(0,0,0,.28)}.brainLab.ol{left:8%;top:28%}.brainLab.or{right:8%;top:28%}.brainLab.cb{left:42%;top:20%}.brainLab.mb{left:44%;top:30%;color:#e3d5ff;border-color:#6e5ca1;box-shadow:0 0 14px rgba(160,143,224,.15)}.brainLab.wk{left:22%;top:41%;color:#ffd692;border-color:#8c6a26;box-shadow:0 0 14px rgba(232,151,48,.16)}.brainLab.sl{right:22%;top:41%;color:#c9d3ff;border-color:#5163b3;box-shadow:0 0 14px rgba(126,147,232,.16)}.brainLab.ds{left:43%;top:57%}.brainLab.vc{left:42%;bottom:16%}
-.brainStage{position:absolute;left:10px;top:10px;max-width:52%;padding:7px 9px;border-radius:6px;background:rgba(4,11,15,.82);border:1px solid #23414b;backdrop-filter:blur(6px);pointer-events:none;box-shadow:0 8px 22px rgba(0,0,0,.2)}.brainStage b{display:block;font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;color:#8edbea}.brainStage span{display:block;margin-top:2px;font-size:9.5px;line-height:1.35;color:#9bb0b8}.brainStage.warn{border-color:#62481d;background:rgba(34,24,8,.84)}.brainStage.warn b{color:#f8c878}.brainStage.bad{border-color:#653028;background:rgba(37,14,12,.86)}.brainStage.bad b{color:#ff8b7d}.brainStage.good{border-color:#28553a;background:rgba(10,31,19,.86)}.brainStage.good b{color:#8bd5a3}
+.brainLeaders{position:absolute;inset:0;z-index:2;width:100%;height:100%;pointer-events:none;overflow:visible}.brainLeaders line{stroke-linecap:round}.brainLeaders .stem{display:none}.brainLeaders .call{stroke-width:.9;opacity:.46}.brainLeaders circle{fill:#040A0E;stroke-width:1.15}
+.brainLab{position:absolute;left:0;top:0;z-index:3;transform:translate(-50%,-50%);width:126px;padding:0 0 4px;border:0;border-bottom:1px solid currentColor;background:linear-gradient(90deg,rgba(4,10,14,.56),rgba(4,10,14,.10));color:#D4E1E8;font-size:10px;line-height:1.15;font-weight:500;letter-spacing:.01em;pointer-events:none;text-shadow:0 1px 10px rgba(0,0,0,.9);white-space:normal;transition:opacity .12s ease,filter .12s ease}.brainLab::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:currentColor;filter:blur(3px);opacity:.28}.brainLab.lane-left{text-align:left;transform:translate(0,-50%)}.brainLab.lane-right{text-align:right;transform:translate(-100%,-50%);background:linear-gradient(270deg,rgba(4,10,14,.56),rgba(4,10,14,.10))}.brainLab.lane-center{text-align:center;transform:translate(-50%,-50%);width:118px;background:linear-gradient(90deg,rgba(4,10,14,.16),rgba(4,10,14,.48),rgba(4,10,14,.16))}.brainLab.bio{color:#d8e5ea}.brainLab.learn{color:#d9c8ff}.brainLab.wake{color:#ffd692}.brainLab.sleep{color:#c9d3ff}.brainLab.rescue{color:#9be4b2}.brainLab.far{opacity:.35;filter:saturate(.7)}
+.brainStage{position:absolute;left:10px;top:10px;max-width:max-content;padding:5px 8px;border-radius:999px;background:rgba(4,11,15,.72);border:1px solid #23414b;backdrop-filter:blur(6px);pointer-events:none;box-shadow:0 8px 22px rgba(0,0,0,.18)}.brainStage b{display:block;font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:#8edbea;white-space:nowrap}.brainStage span{display:none}.brainStage.warn{border-color:#62481d;background:rgba(34,24,8,.76)}.brainStage.warn b{color:#f8c878}.brainStage.bad{border-color:#653028;background:rgba(37,14,12,.78)}.brainStage.bad b{color:#ff8b7d}.brainStage.good{border-color:#28553a;background:rgba(10,31,19,.76)}.brainStage.good b{color:#8bd5a3}
+.brainFlow{position:absolute;left:12px;right:12px;bottom:10px;display:grid;grid-template-columns:repeat(4,1fr);gap:5px;pointer-events:none}.brainFlow span{min-width:0;border:1px solid #24424C;background:rgba(8,20,26,.86);border-radius:4px;padding:5px 6px;color:#9bb0b8;font-size:9.5px;line-height:1.2;text-align:center;white-space:nowrap}.brainFlow span.on{border-color:#37653F;color:#d4f0dc;background:rgba(13,29,20,.9);box-shadow:0 0 16px rgba(108,196,136,.16)}
 .hud{padding:9px 12px;border-top:1px solid var(--sf)}
 .hr1{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:7px}
 .badge{padding:3px 9px;border-radius:2px;font-size:11.5px;font-weight:500}
@@ -76,31 +80,59 @@ canvas.v{display:block;width:100%;height:394px;background:#040A0E}
 .mini{text-align:center}.mini div{font-size:10px;color:var(--ink3)}
 footer{margin-top:10px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;color:var(--ink3);font-size:11px}
 .guideOverlay{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(3,8,11,.72);backdrop-filter:blur(7px);transition:opacity .18s ease}.guideOverlay.hidden{opacity:0;pointer-events:none}.guideCard{width:min(520px,92vw);border:1px solid #31515B;background:linear-gradient(180deg,#10212A,#0A151B);border-radius:10px;padding:22px 22px 20px;box-shadow:0 28px 90px rgba(0,0,0,.5),0 0 0 1px rgba(84,200,220,.06) inset;text-align:center}.guideKicker{font-size:10px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--cy)}.guideCard h3{margin:7px 0 6px;font-size:24px;letter-spacing:-.02em}.guideCard p{margin:0 auto 16px;max-width:44ch;color:var(--ink2);font-size:13px}.guideBtn{min-width:190px;background:#17331F;border:1px solid #4B8258;color:#D9F1DE;font:inherit;font-size:14px;font-weight:600;padding:11px 18px;border-radius:5px;cursor:pointer;box-shadow:0 0 0 0 rgba(108,196,136,.35);animation:guidePulse 1.8s ease-in-out infinite}.guideBtn:hover{border-color:#6CC488;background:#1B3C25}.guideBtn:focus-visible{outline:2px solid var(--cy);outline-offset:3px}.guideHint{display:block;margin-top:10px;color:var(--ink3);font-size:10.5px}@keyframes guidePulse{0%,100%{box-shadow:0 0 0 0 rgba(108,196,136,.28)}50%{box-shadow:0 0 0 9px rgba(108,196,136,0)}}
+.brainPopup{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:22px;background:radial-gradient(circle at 52% 42%,rgba(17,39,49,.74),rgba(3,7,10,.96) 62%);backdrop-filter:blur(13px);opacity:1;transition:opacity .45s ease}.brainPopup.hidden{opacity:0;pointer-events:none}
+.brainPopupCard{width:min(1180px,96vw);border:1px solid #2b5664;border-radius:18px;background:linear-gradient(180deg,rgba(12,27,34,.98),rgba(5,12,16,.99));box-shadow:0 34px 120px rgba(0,0,0,.68),0 0 80px rgba(84,200,220,.10),inset 0 0 0 1px rgba(255,255,255,.018);padding:14px;animation:bpIn .55s cubic-bezier(.2,.75,.25,1)}
+@keyframes bpIn{from{transform:scale(.965) translateY(12px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+.bpHead{display:flex;justify-content:space-between;align-items:center;margin:1px 3px 10px}.bpKicker{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--cy)}.bpBadge{font-size:10.5px;padding:4px 10px;border-radius:999px;border:1px solid #356777;color:#c7edf4;background:rgba(12,33,41,.85);box-shadow:0 0 22px rgba(84,200,220,.08)}
+.bpGrid{display:grid;grid-template-columns:minmax(0,1fr) 265px;gap:12px}.bpCanvasWrap{position:relative;min-height:560px;border-radius:13px;overflow:hidden;background:radial-gradient(circle at 46% 43%,#0a1820 0,#03080b 54%,#010406 100%);border:1px solid #17323c;box-shadow:inset 0 0 80px rgba(0,0,0,.34)}#bpCanvas{display:block;width:100%;height:560px}.bpScan{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(180deg,rgba(255,255,255,.013) 0,rgba(255,255,255,.013) 1px,transparent 1px,transparent 4px);mix-blend-mode:screen;opacity:.26}.bpVignette{position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 95px rgba(0,0,0,.7)}
+.bpTitle{position:absolute;left:18px;top:16px;max-width:58%;pointer-events:none}.bpTitle b{display:block;font-size:11px;letter-spacing:.10em;text-transform:uppercase;color:#83cddd}.bpTitle strong{display:block;margin-top:4px;font-size:20px;line-height:1.15;letter-spacing:-.02em}.bpTitle span{display:block;margin-top:4px;font-size:11px;color:#738b95}.bpCaption{position:absolute;left:16px;right:16px;bottom:14px;padding:11px 13px;border:1px solid rgba(42,83,96,.74);border-radius:9px;background:linear-gradient(180deg,rgba(8,22,28,.68),rgba(5,14,18,.90));backdrop-filter:blur(9px);font-size:14px;box-shadow:0 14px 32px rgba(0,0,0,.28)}.bpCaption b{color:#eef8fa;font-weight:600}.bpCaption small{display:block;margin-top:3px;font-size:11.5px;line-height:1.45;color:#9db2ba;font-weight:400}
+.bpSide{display:flex;flex-direction:column;gap:9px}.bpSideCard{border:1px solid #17323c;border-radius:11px;background:linear-gradient(180deg,#09171d,#071116);padding:12px}.bpSideCard h4{margin:0 0 8px;font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:#6f8d98}.bpAnatomyRow{display:grid;grid-template-columns:9px 1fr;gap:8px;align-items:start;padding:7px 0;border-top:1px solid rgba(27,48,58,.65)}.bpAnatomyRow:first-of-type{border-top:0}.bpAnatomyRow i{display:block;width:7px;height:7px;border-radius:50%;margin-top:5px;box-shadow:0 0 10px currentColor}.bpAnatomyRow b{display:block;font-size:11.5px;font-weight:500;color:#d7e6eb}.bpAnatomyRow span{display:block;margin-top:1px;font-size:10px;line-height:1.35;color:#6e8791}.bpPhaseRail{display:grid;gap:7px}.bpPhaseRail div{position:relative;padding:9px 9px 9px 27px;border:1px solid #17313a;border-radius:8px;background:#071116;color:#6f8790;font-size:10.5px;line-height:1.35;transition:.25s ease}.bpPhaseRail div::before{content:attr(data-n);position:absolute;left:9px;top:9px;font:600 9px 'IBM Plex Mono',monospace;color:#526d77}.bpPhaseRail div.on{border-color:#356777;background:#0b2028;color:#d8e8ed;box-shadow:0 0 24px rgba(84,200,220,.08)}.bpPhaseRail div.on::before{color:#8edbea}.bpTruth{margin-top:auto;border-left:2px solid #4c8190;padding:9px 10px;background:#08161c;color:#8ca2ab;font-size:10px;line-height:1.45}.bpTruth b{color:#cce0e6;font-weight:500}.bpFoot{margin-top:10px;font-size:10.5px;color:#58717b;text-align:center}
+.bpLabel{position:absolute;z-index:4;transform:translate(-50%,-50%);pointer-events:none;color:#d8e8ed;font-size:9.5px;line-height:1.15;text-shadow:0 1px 8px #000;white-space:nowrap;opacity:.92}.bpLabel::before{content:"";position:absolute;left:50%;top:100%;width:1px;height:20px;background:linear-gradient(#7095a2,transparent);opacity:.65}.bpLabel.hypo{color:#ffc977}.bpLabel.dim{color:#8ea6b0}.bpLegend{position:absolute;right:14px;top:14px;padding:7px 9px;border:1px solid rgba(42,83,96,.65);border-radius:8px;background:rgba(4,13,17,.72);backdrop-filter:blur(7px);font-size:9px;color:#78909a;pointer-events:none}.bpLegend span{display:block;margin:3px 0}.bpLegend i{display:inline-block;width:17px;height:2px;margin-right:6px;vertical-align:3px;box-shadow:0 0 3px currentColor}.bpLegend .o{color:#f8c878}.bpLegend .g{color:#9be4b2}.bpLegend .c{color:#8edbea}
+@media(max-width:900px){.bpGrid{grid-template-columns:1fr}.bpSide{display:none}.bpCanvasWrap,#bpCanvas{height:500px;min-height:500px}.brainPopupCard{width:min(900px,96vw)}}@media(max-width:640px){.brainPopup{padding:10px}.bpCanvasWrap,#bpCanvas{height:390px;min-height:390px}.bpTitle strong{font-size:17px}.bpCaption{left:9px;right:9px;bottom:9px}.bpLegend{display:none}}
+
 @media(max-width:1200px){.low{grid-template-columns:1fr 1fr}.low>div:nth-child(3){grid-column:1/-1}}
 @media(max-width:880px){.top{grid-template-columns:1fr}.rail{grid-template-columns:1fr}canvas.v,#brain{height:300px}.banner{display:block}.bp{display:inline-block;margin-top:8px}}
+@media(max-width:880px){.truth{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ===== v6 FINAL refinements: expanded habitat + dotted human brain ===== */
+.bpCanvasWrap{background:radial-gradient(circle at 46% 43%,#07161d 0,#02070a 56%,#010305 100%)}
+.bpLabel{padding:5px 8px;border:1px solid rgba(126,210,230,.28);border-radius:6px;background:rgba(3,12,16,.72);backdrop-filter:blur(5px);font-size:10.5px;font-weight:600;letter-spacing:.02em;text-shadow:0 0 7px currentColor,0 2px 10px #000;box-shadow:0 0 18px rgba(84,200,220,.10),inset 0 0 12px rgba(84,200,220,.045);transition:opacity .25s ease,transform .25s ease,box-shadow .25s ease}
+.bpLabel::before{height:28px;background:linear-gradient(currentColor,rgba(112,149,162,.08));box-shadow:0 0 8px currentColor}
+.bpLabel.hypo{color:#ffc977;border-color:rgba(255,201,119,.40);box-shadow:0 0 22px rgba(248,200,120,.14)}
+.bpLabel.dim{color:#9bdce9}
+.bpLabel.flowHot{opacity:1;border-color:currentColor;box-shadow:0 0 12px rgba(84,200,220,.12),inset 0 0 8px rgba(84,200,220,.045);transform:translate(-50%,-50%) scale(1.015)}
+.bpLegend{background:rgba(3,12,16,.76);border-color:rgba(74,139,158,.48)}
+.bpTitle span{color:#86a1aa}
+@media(max-width:640px){.bpLabel{font-size:9px;padding:4px 6px}}
+
 </style>
 </head>
 <body>
 <div class="wrap">
 
 <header>
- <div class="t1"><h1>Vigil</h1>
-  <p>Narcolepsy type 1 is not a knowledge problem. Patients know they should stay awake. This assay uses a fruit-fly world to make one systems idea visible: <b>the problem is not only behavior, but whether the right wake–sleep state can be sustained at the right circadian time.</b></p></div>
- <div><span class="chip"><b>MaleCNS v1.0</b> · fixed wiring substrate</span>
+  <div class="t1"><h1>Vigil</h1>
+  <p>This synthetic fruit-fly fixture makes one systems hypothesis visible: <b>a task policy can be learned while a modeled state-control pathway remains the causal bottleneck for sustaining the right wake–sleep state at the right circadian time.</b></p></div>
+ <div><span class="chip"><b>VIGIL fixture v1.0</b> · measured-schema test substrate</span>
   <span class="chip">Janelia · Cambridge · MRC LMB · Google Research</span><span class="chip mk">Takeda NT1 story · seed 4502</span></div>
 </header>
 
 <div class="banner">
- <div><span class="bl">Takeda / NT1 connection</span><strong>Human NT1 involves unstable wakefulness due to orexin-system loss.</strong>
-  <span>VIGIL does <b>not</b> claim human NT1 biology in a fly. It visualizes the transferable systems question: can the organism remain awake during its active period, avoid unsafe nighttime behavior, and sleep in the correct night window?</span></div>
- <div class="bp">Measured connectome wiring ≠ modeled policy learning</div>
+ <div><span class="bl">Research boundary</span><strong>This is a synthetic fixture replay, not a clinical NT1 assay.</strong>
+  <span>It illustrates a testable systems hypothesis: can a learned task policy fail when a modeled wake pathway is removed, and can an existing modeled route restore the endpoints?</span></div>
+ <div class="bp">Receipt-backed metrics · modeled behavior</div>
+</div>
+<div class="truth" aria-label="Evidence guide">
+ <div><b>What is real</b><strong>Policy decisions from the backend</strong><span>The trained readout consumes a vector of modeled neural activity. The receipt contains the ACT / REST decisions shown during this replay: <b id="traceCount">loading</b>.</span></div>
+ <div><b>What is visual</b><strong>Brain scaffold and fly rendering</strong><span>The 3D panel is an explanatory scaffold and the browser renders the environment response. Skeleton source: <b id="skeletonStatus">loading</b>.</span></div>
+ <div class="proof"><b>What proves learning</b><strong>Change, lesion, recovery</strong><span>Fresh training: <b id="freshStatus">loading</b>. Connectome unchanged: <b id="graphStatus">loading</b>. Same policy after lesion: <b id="freezeStatus">loading</b>.</span><div class="proofGrid"><div class="proofMetric"><small>energy: untrained → trained</small><strong id="energyDelta">—</strong></div><div class="proofMetric"><small>lesion result</small><strong id="lesionResult">—</strong></div><div class="proofMetric"><small>rescue result</small><strong id="rescueResult">—</strong></div></div></div>
 </div>
 
 <div class="tr">
  <button class="b go" id="play">Start the assay</button>
  <button class="b" id="rst">Restart</button>
- <span class="cl n" id="clk">00:00 / 01:32</span><span class="cl" id="chn">Ready</span><span class="cl" id="aud">Recorded voice + event SFX</span>
+ <span class="cl n" id="clk">00:00 / 01:09</span><span class="cl" id="chn">Ready</span><span class="cl" id="aud">Recorded voice + event SFX</span>
 </div>
 <div class="rail" id="rail"></div>
 
@@ -115,12 +147,14 @@ footer{margin-top:10px;display:flex;justify-content:space-between;gap:14px;flex-
   </div>
  </div>
  <div class="card">
-  <h2>Nervous system <em id="btag">anatomy-grounded 3D network + modeled activity</em></h2>
+  <h2>Nervous system <em id="btag">modeled activity over anatomical scaffold</em></h2>
   <div class="cw">
    <canvas class="v" id="brain"></canvas>
    <div class="brainStage" id="brainStage"><b>SCREEN A · STATE IMBALANCE</b><span>Sleep/wake state changes propagate through the same anatomical substrate.</span></div>
-   <div class="brainLab ol">optic lobe</div><div class="brainLab or">optic lobe</div><div class="brainLab cb">central brain</div><div class="brainLab mb">mushroom body</div>
-   <div class="brainLab wk" id="wakeLabel">modeled wake gate</div><div class="brainLab sl">modeled sleep gate</div><div class="brainLab ds">descending route</div><div class="brainLab vc">ventral nerve cord</div><div class="brainLab" id="rescueLabel" style="left:55%;top:33%;color:#9be4b2;border-color:#376c4a;display:none">alternative rescue node</div>
+  <svg class="brainLeaders" id="brainLeaders"></svg>
+  <div class="brainLab bio" id="labelOpticL">optic lobe (L)</div><div class="brainLab bio" id="labelOpticR">optic lobe (R)</div><div class="brainLab bio" id="labelCentral">central complex</div><div class="brainLab learn" id="labelMushroom">mushroom body</div>
+  <div class="brainLab wake" id="wakeLabel">[model] wake drive</div><div class="brainLab sleep" id="labelSleep">[model] sleep nodes</div><div class="brainLab bio" id="labelDescending">descending neurons</div><div class="brainLab bio" id="labelVnc">ventral nerve cord</div><div class="brainLab rescue" id="rescueLabel" style="display:none">[model] rescue route</div>
+  <div class="brainFlow" aria-hidden="true"><span id="flowSense">sensory input</span><span id="flowState">state gate</span><span id="flowRoute">descending route</span><span id="flowBody">fly behavior</span></div>
   </div>
   <div class="hud" style="padding-top:8px"><div class="hr1" style="margin:0">
    <span class="cl n" id="arv">arousal 1.00</span><span style="flex:1"></span>
@@ -130,12 +164,12 @@ footer{margin-top:10px;display:flex;justify-content:space-between;gap:14px;flex-
 
 <div class="low">
  <div class="card"><h2>What it learned <em>reward log</em></h2><div class="pad"><div id="log"></div><div class="pol" id="pol"></div></div></div>
- <div class="card"><h2>Anatomy <em>live firing by region</em></h2><div class="pad" id="an"></div></div>
+ <div class="card"><h2>Anatomy <em>modeled regional activity</em></h2><div class="pad" id="an"></div></div>
  <div class="card"><h2>Outcome <em>24-hour endpoints</em></h2><div class="pad" id="out"></div></div>
 </div>
 
-<footer><span>Deterministic: seed 4502 reproduces this run exactly. Flies have no orexin receptor — what transfers is the systems failure mode and how it is measured.</span>
-<span>MaleCNS wiring is the measured substrate. Spiking dynamics, reward / penalty, policy learning and the habitat rules are modeled in this executive mock.</span></footer>
+<footer><span>Fixture run · seed 4502 · no human or therapeutic claim. Flies have no orexin receptor; translational relevance remains a hypothesis.</span>
+<span>The backend trains the policy and verifies the graph. This browser view replays receipt-backed policy actions; it is not a live Python inference session.</span></footer>
 </div>
 
 <div class="guideOverlay" id="guideOverlay" role="dialog" aria-modal="true" aria-labelledby="guideTitle">
@@ -148,13 +182,107 @@ footer{margin-top:10px;display:flex;justify-content:space-between;gap:14px;flex-
  </div>
 </div>
 
+<div class="brainPopup hidden" id="brainPopup" role="dialog" aria-label="Anatomically grounded human orexin circuit visualization shown during the closing summary">
+ <div class="brainPopupCard">
+  <div class="bpHead"><span class="bpKicker">VIGIL · human translation lens</span><span class="bpBadge" id="bpPhaseBadge">01 · OREXIN NETWORK</span></div>
+  <div class="bpGrid">
+   <div class="bpCanvasWrap">
+    <canvas id="bpCanvas"></canvas><div class="bpScan"></div><div class="bpVignette"></div>
+    <div class="bpTitle"><b>Human wake-stability anatomy</b><strong>Orexin / hypocretin projection system</strong><span>Anatomically proportioned cortical model · Sylvian fissure, temporal lobe, cerebellum, brainstem · semi-transparent near hemisphere · not a clinical scan</span></div>
+    <div class="bpLegend"><span class="o"><i></i>orexin projections</span><span class="g"><i></i>modeled downstream route</span><span class="c"><i></i>deep anatomical landmarks</span></div>
+    <div class="bpLabel hypo" id="bpLabHypo">lateral hypothalamus</div><div class="bpLabel dim" id="bpLabThal">thalamus</div><div class="bpLabel dim" id="bpLabLC">locus coeruleus</div><div class="bpLabel dim" id="bpLabCereb">cerebellum</div><div class="bpLabel dim" id="bpLabStem">brainstem</div>
+    <div class="bpCaption" id="bpCaption"><b>Orexin neurons stabilize wakefulness through a distributed arousal network.</b><small>They originate in the lateral hypothalamic region and project broadly, including to cortex, basal forebrain and brainstem arousal nuclei.</small></div>
+   </div>
+   <aside class="bpSide" aria-label="Human anatomy guide">
+    <div class="bpSideCard"><h4>Anatomy in view</h4>
+     <div class="bpAnatomyRow"><i style="color:#d7e6eb;background:#d7e6eb"></i><div><b>Cerebral hemispheres</b><span>Gyri and sulci built from measured cerebral proportions; Sylvian fissure and temporal lobe are explicit landmarks.</span></div></div>
+     <div class="bpAnatomyRow"><i style="color:#8edbea;background:#8edbea"></i><div><b>Thalamus + brainstem</b><span>Deep landmarks orient the projection network.</span></div></div>
+     <div class="bpAnatomyRow"><i style="color:#f8c878;background:#f8c878"></i><div><b>Lateral hypothalamus</b><span>Small orexin-producing population highlighted at realistic relative scale.</span></div></div>
+     <div class="bpAnatomyRow"><i style="color:#9be4b2;background:#9be4b2"></i><div><b>Downstream arousal route</b><span>Illustrative modeled route used only to mirror the fly perturbation logic.</span></div></div>
+    </div>
+    <div class="bpSideCard"><h4>Closing sequence</h4><div class="bpPhaseRail"><div id="bpRail0" data-n="01">Distributed orexin projections support wake stability.</div><div id="bpRail1" data-n="02">Orexin signal is withdrawn to visualize the NT1-relevant loss.</div><div id="bpRail2" data-n="03">A modeled downstream route is highlighted as a systems hypothesis.</div></div></div>
+    <div class="bpTruth"><b>Scientific boundary</b><br>NT1 is associated with loss of orexin/hypocretin neurons. The green pathway is a visualization of the fly-model rescue concept—not a validated human treatment mechanism.</div>
+   </aside>
+  </div>
+  <div class="bpFoot">Human anatomy is shown for orientation; pathway animation is explanatory and deliberately separated from clinical evidence.</div>
+ </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="ledger.js"></script>
+<script src="skeletons.js"></script>
 <script>
+const RUN=window.VIGIL_LEDGER||{};
+const HAS_LEDGER=!!window.VIGIL_LEDGER;
+const SKELETONS=window.VIGIL_SKELETONS||[];
+const RUN_SEARCH=RUN.stages?.search||{};
+const RUN_SCENES=RUN.stages?.scenes?.scenes||{};
+const RESCUE_NAME=RUN_SEARCH.selected?.name||'selected candidate';
+const CANDIDATE_COUNT=RUN_SEARCH.n_candidates||'the registered';
+const sceneValue=(name,key,fallback)=>Number.isFinite(RUN_SCENES[name]?.[key])?RUN_SCENES[name][key]:fallback;
+const RESCUE_ENERGY=Math.round(sceneValue('C_rescued','energy_end',62.8));
+const RESCUE_DAY=Math.round(sceneValue('C_rescued','day_wake',1)*100);
+const RESCUE_NIGHT=Math.round(sceneValue('C_rescued','night_sleep',.95)*100);
+const TRAIN=RUN.stages?.train||{};
+const ACTION_COUNT=RUN_SCENES.C_rescued?.example_actions?.length||0;
+document.getElementById('traceCount').textContent=HAS_LEDGER?ACTION_COUNT+' decisions in the rescued trace':'static replay timeline';
+document.getElementById('skeletonStatus').textContent=SKELETONS.length?SKELETONS.length+' native centerlines loaded':'skeletons.js loaded · no centerlines packaged';
+document.getElementById('freshStatus').textContent=HAS_LEDGER?(TRAIN.trained_once&&TRAIN.policy_changed_from_initial?'YES':'NO'):'fixture replay';
+document.getElementById('graphStatus').textContent=HAS_LEDGER?(TRAIN.connectome_unchanged?'YES':'NO'):'unchanged in story';
+document.getElementById('freezeStatus').textContent=HAS_LEDGER?(TRAIN.policy_hash_stable?'YES':'NO'):'unchanged in story';
+document.getElementById('energyDelta').textContent=HAS_LEDGER?(TRAIN.untrained?.energy_end??'—')+' → '+(TRAIN.trained?.energy_end??'—'):'0 → 89';
+document.getElementById('lesionResult').textContent=(HAS_LEDGER?(RUN_SCENES.B2_trained_lesioned?.energy_end??'—'):0)+' energy';
+document.getElementById('rescueResult').textContent=(HAS_LEDGER?(RUN_SCENES.C_rescued?.energy_end??'—'):89)+' energy';
+function traceAt(sceneName,t,start,end){
+ const trace=RUN_SCENES[sceneName]?.example_actions||[];
+ if(!trace.length||t<start||t>=end)return null;
+ return trace[Math.min(trace.length-1,Math.floor(((t-start)/(end-start))*trace.length))];
+}
+function modelActionAt(t){
+ return traceAt('A_untrained',t,0,28) ??
+   traceAt('B1_trained',t,28,50) ??
+   traceAt('B2_trained_lesioned',t,50,58) ??
+   traceAt('C_rescued',t,64,92);
+}
+function modelEnergyAt(t){
+ const ranges=[['A_untrained',0,28],['B1_trained',28,50],['B2_trained_lesioned',50,58],['C_rescued',64,92]];
+ for(const [name,start,end] of ranges){
+  const trace=RUN_SCENES[name]?.example_energy||[];
+  if(trace.length&&t>=start&&t<end)return trace[Math.min(trace.length-1,Math.floor(((t-start)/(end-start))*trace.length))];
+ }
+ return null;
+}
+function modelSceneAt(t){
+ if(t<28)return 'A_untrained';
+ if(t<50)return 'B1_trained';
+ if(t<58)return 'B2_trained_lesioned';
+ if(t>=64)return 'C_rescued';
+ return null;
+}
 const ACTS=[
  {m:'A · Dysregulated',d:'Wrong daytime sleep + wrong nighttime wakefulness end in death.',a:0,b:28},
  {m:'B · Learning',d:'Reward and penalty reshape the small trainable readout, not the connectome.',a:28,b:64},
  {m:'C · Stabilized',d:'Trained policy plus circuit rescue produce a clean 24 hours.',a:64,b:92}];
-const END=92,DAYF=.58;
+const END=92,DAYF=.58,NARRATION_SKIP_SECONDS=0;
+const VISUAL_SPEEDS=[1.3,1,1];
+/* --- animation trim -------------------------------------------------------
+   Screen A and Screen C lose 4 seconds of ANIMATION each; Screen B is left
+   exactly as it was. The cut is taken off the front of each act, which is
+   where the dead time sits (A opens on a sleeping fly, C opens on an empty
+   dawn) and which keeps the death beat in A and the endpoint captions in C.
+   Screen A plays at 1.3x, so 4 real seconds = 5.2 timeline units: the trim is
+   specified in REAL seconds and converted, otherwise A would only lose 3.1 s.
+   The narration in audio/ is never shortened - see narrationClear() below. */
+const VISUAL_CUTS_BASE=[3,3,2];
+const ANIM_TRIM_SECONDS=[4,0,5.5];
+const VISUAL_CUTS=VISUAL_CUTS_BASE.map((c,i)=>c+(ANIM_TRIM_SECONDS[i]||0)*(VISUAL_SPEEDS[i]||1));
+function actIndexAt(t){const i=ACTS.findIndex(c=>t<c.b);return Math.max(0,i<0?ACTS.length-1:i)}
+function visualStart(i){return ACTS[i].a+(VISUAL_CUTS[i]||0)}
+function visualSpeedAt(t){return VISUAL_SPEEDS[actIndexAt(t)]||1}
+function visibleSecondsAt(t){let seconds=0;for(let i=0;i<ACTS.length;i++){const a=visualStart(i),b=ACTS[i].b,s=VISUAL_SPEEDS[i]||1;if(t>=b)seconds+=(b-a)/s;else return seconds+Math.max(0,t-a)/s}return seconds}
+const RUN_SECONDS=Math.ceil(visibleSecondsAt(END));
+function clockText(s){const m=Math.floor(s/60),r=s%60;return String(m).padStart(2,'0')+':'+String(r).padStart(2,'0')}
+function runClock(t){return clockText(Math.min(RUN_SECONDS,Math.floor(visibleSecondsAt(t)+1e-6)))}
 /* day/night segments: [t0,t1,dayEnd] */
 const SEG=[
  {a:0,b:28,day:16},                      // act A single cycle
@@ -179,28 +307,30 @@ const EKF=[[0,70],[3.2,68],[9.4,58],[11.5,66],[13.5,72],[16,68],[19.3,63],[19.5,
 const CAP=[
  [0,'info','Screen A — The rules of this world','Flowers open at dawn and hold food. At dusk they shut and expose spines. Energy only comes from open flowers.'],
  [2.6,'warn','Screen A — Mistake 1: asleep while the flowers are open','It sleeps straight through the morning. Every hour asleep in daylight is food it does not get.'],
+ [8.2,'warn','Screen A — Asleep while the flowers are open','Flowers open at dawn and hold food; at dusk they shut and expose spines. This one sleeps straight through the morning feeding window.'],
  [9.6,'info','Awake at last, but half the day is gone','It reaches one flower. Energy recovers a little. Not enough.'],
  [16.2,'info','Dusk. The petals shut.','What was food ninety seconds ago is now a hazard. It has not slept its night yet.'],
  [18.2,'warn','Screen A — Mistake 2: awake in the dark','A healthy fly is asleep by now. This one is walking.'],
  [19.6,'bad','It stepped on a shut flower','Minus 30 energy. It does not connect the spines to the pain yet.'],
  [22.9,'bad','Again','Energy is gone. There is no reserve left to absorb this.'],
  [24.1,'bad','Subject lost','Two errors: sleep in the wrong place, wakefulness in the wrong place. The harm came from both ends.'],
- [26.2,'info','Why this maps to the NT1 story','Not extra sleep. Misplaced sleep, and misplaced wakefulness, compounding.'],
+ [26.2,'info','Why this is relevant to the NT1 discussion','The fixture illustrates misplaced sleep and wakefulness compounding; it does not establish a human NT1 mechanism.'],
  [28,'info','Screen B — Now we let it learn','Reward for feeding, penalty for sleeping in daylight, penalty for touching a shut flower. The wiring is never changed — only a small readout is trained.'],
  [33.6,'info','Night 2 — it slept a little, late','The policy is starting to move sleep toward the dark.'],
  [39.1,'good','Night 3 — most of the night asleep','Daytime naps are shrinking. Energy is climbing between trials.'],
  [44.6,'good','Night 4 — the window has locked in','Awake through daylight, asleep through the dark. It has learned the rule.'],
  [50.1,'bad','Screen B — Now take the wake circuit away','Same fly. Same trained policy. Nothing about what it knows has changed.'],
- [51.6,'bad','It sleeps at noon anyway','It knows the rule. It cannot execute it. This is the distinction that matters clinically.'],
+ [51.6,'bad','It sleeps at noon anyway','The learned policy remains, but the modeled state pathway cannot execute it. This is a systems-model result, not a clinical conclusion.'],
  [54.6,'bad','And it is awake at night again','The learned night window collapses along with the daytime wakefulness.'],
  [56.6,'bad','Dead a second time, knowing better','Behaviour was never the problem. The machinery that executes behaviour is the problem.'],
- [58.1,'info','Screen B — So we look for the circuit, not the behaviour','Every candidate node in the connectome is driven in turn and the full 24 hours re-run. Score is survival, not wakefulness.'],
- [62,'good','Node 07','Restores daytime wakefulness without abolishing night sleep — and reaches 906 neurons rather than 3,214.'],
- [64.1,'good','Screen C — Trained policy, repaired circuit','Dawn. It is already awake.'],
- [70,'good','Foraging through the full day','No daytime sleep. It reaches flower after flower.'],
+ [58.1,'info','Screen B — Search the modeled network','Every eligible candidate is tested against the pre-registered endpoints. The receipt records the selected intervention point and holdout result.'],
+ [62,'good',RESCUE_NAME,'Fixture-model candidate selected; endpoint values below come from the verification receipt.'],
+ [64.1,'good','Screen C — Trained policy, modeled rescue','Dawn. The receipt-backed rescued trace is now replayed.'],
+ [71.5,'good','Screen C — Trained policy, modeled rescue','Daylight. The receipt-backed rescued trace is replayed with the modeled rescue route carrying wake drive.'],
+ [74,'good','Foraging through the full day','No daytime sleep. It reaches flower after flower.'],
  [80.2,'good','Dusk, and it settles','One consolidated bout, inside the dark window, exactly where the healthy dial put it.'],
- [86,'good','Screen C — A clean 24 hours','Wakefulness held, sleep consolidated, energy 89%. The rhythm is restored, not overridden.'],
- [89,'info','Where this lands','A stimulant moves the first endpoint. Only a mechanism that restores the underlying signal moves all three.']];
+ [86,'good','Screen C — Receipt-backed endpoints','Day wake '+RESCUE_DAY+'%, night sleep '+RESCUE_NIGHT+'%, energy '+RESCUE_ENERGY+'% in this fixture run.'],
+ [89,'info','What this demonstrates','In this fixture, the modeled rescue moves all three endpoints; biological and therapeutic relevance remain untested.']];
 const LOG=[
  [28.4,'g','06:20','fed at open flower · +9 energy · reinforce forage-by-day'],
  [29.2,'r','09:40','asleep in daylight · 2 flowers missed · penalty −6'],
@@ -222,12 +352,12 @@ const LOG=[
  [51.8,'r','11:30','asleep in daylight despite trained policy'],
  [55.1,'r','21:10','hazard contact · policy intact, execution failed'],
  [57.5,'r','—','subject lost · behavioural training did not rescue'],
- [58.4,'p','—','screening 18 candidate nodes on 24-hour survival'],
- [62.2,'g','—','Node 07 selected · day wake restored · night sleep preserved'],
+ [58.4,'p','—','screening '+CANDIDATE_COUNT+' eligible candidates on pre-registered endpoints'],
+ [62.2,'g','—',RESCUE_NAME+' selected · receipt-backed rescue trace replayed'],
  [64.4,'g','06:05','awake at dawn · trained policy executing normally'],
  [70.4,'g','13:00','fed · +9 · no daylight sleep'],
  [80.8,'b','20:25','sleep onset 20:25 · consolidated'],
- [88,'g','—','24 h complete · energy 89% · endpoints met']];
+ [88,'g','—','24 h complete · energy '+RESCUE_ENERGY+'% · receipt endpoints met']];
 const POL=[[28,'learning','—','—','—'],[33.4,'learning','1.8 h','partial','2 contacts'],
  [38.8,'learning','4.2 h','improving','1 contact'],[44.2,'learning','7.6 h','good','0 contacts'],
  [49.8,'converged','9.4 h','locked to dusk','0 contacts'],[50.2,'intact but unexecutable','9.4 h','locked to dusk','—'],
@@ -251,6 +381,29 @@ let currentNarration=null;
 function refreshNarrationAudio(i){ const old=NARRATION[i]; try{old?.pause()}catch(e){} NARRATION[i]=makeNarrationAudio(NARRATION_BASES[i]); return NARRATION[i]; }
 function refreshSummaryAudio(){ try{SUMMARY_AUDIO?.pause()}catch(e){} SUMMARY_AUDIO=makeNarrationAudio(SUMMARY_BASE); return SUMMARY_AUDIO; }
 function narrationFinishedForAct(ai){ const a=NARRATION[ai]; return !a || a._done || a.ended || a._error; }
+/* --- the animation may be trimmed, the narration never is -----------------
+   Trimming the visuals makes an act end sooner, and playNarration() stops the
+   previous file the instant the act index changes - which would clip the tail
+   off screen_N.mp3. So an act boundary is only crossed once that screen's
+   audio has actually finished. A stall detector keeps a blocked or missing
+   file from freezing the run for ever. */
+let narrationHold=false;
+function narrationAdvancing(a){
+ const now=performance.now();
+ if(a._probeV===undefined||Math.abs(a.currentTime-a._probeV)>.02){a._probeV=a.currentTime;a._probeT=now;return true}
+ return (now-(a._probeT||now))<3000;
+}
+function narrationClear(i){
+ const a=NARRATION[i];
+ if(!a||a._done||a.ended||a._error)return true;
+ if(i!==lastActAudio)return true;        /* this screen's audio never started */
+ return !narrationAdvancing(a);          /* stalled or blocked - do not hang */
+}
+function skipNarrationIntro(a){
+ if(!a||NARRATION_SKIP_SECONDS<=0)return;
+ const seek=()=>{try{if((!Number.isFinite(a.duration)||a.duration>NARRATION_SKIP_SECONDS+.25)&&a.currentTime<NARRATION_SKIP_SECONDS)a.currentTime=NARRATION_SKIP_SECONDS}catch(e){}};
+ seek();a.addEventListener('loadedmetadata',seek,{once:true});
+}
 
 function stopRecordedAudio(reset=true){
  [...NARRATION,SUMMARY_AUDIO].forEach(a=>{try{a.pause();if(reset)a.currentTime=0}catch(e){}});
@@ -260,8 +413,12 @@ function playNarration(ai){
  if(ai<0||ai>=NARRATION.length||ai===lastActAudio)return;
  stopRecordedAudio(true);
  lastActAudio=ai;currentNarration=refreshNarrationAudio(ai);
+ currentNarration._probeV=undefined;currentNarration._probeT=performance.now();
+ skipNarrationIntro(currentNarration);
  try{currentNarration.load()}catch(e){}
- currentNarration.play().catch(()=>{$('aud').textContent='Narration blocked — press Resume once';});
+ currentNarration.play().catch(()=>{
+  currentNarration._error=true;
+  $('aud').textContent='Narration blocked — press Resume once';});
 }
 function setNarrationPaused(paused){
  if(!currentNarration)return;
@@ -320,14 +477,14 @@ function showGuide(mode){
   $('guideText').textContent='The full summary is complete. The final frame remains frozen until you choose to restart the assay.';
   $('guideHint').textContent='Restart begins again from Screen A with the recorded narration and event SFX.';
   action.textContent='Restart the assay';
-  action.onclick=()=>{ov.classList.add('hidden');resetRunAndPlay()};
+  action.onclick=()=>{ov.classList.add('hidden');resetRunAndPlay();scrollToAssayView()};
  }else{
   $('guideKicker').textContent='VIGIL · guided assay';
   $('guideTitle').textContent='Ready to begin?';
   $('guideText').textContent='Run the three-screen story from dysregulation, through learning, to a stabilized 24-hour cycle.';
   $('guideHint').textContent='Recorded narration and event sound effects will play during the run.';
   action.textContent='Start the assay';
-  action.onclick=()=>{ov.classList.add('hidden');$('play').click()};
+  action.onclick=()=>{ov.classList.add('hidden');$('play').click();scrollToAssayView()};
  }
  setTimeout(()=>action.focus(),0);
 }
@@ -341,110 +498,542 @@ function setPlayUi(mode){
 }
 function lockRestart(locked){$('rst').disabled=locked;$('rst').style.opacity=locked?'.45':'1';$('rst').style.cursor=locked?'not-allowed':'pointer'}
 
+function scrollToAssayView(){
+ const target=document.querySelector('.top');
+ if(!target)return;
+ requestAnimationFrame(()=>setTimeout(()=>target.scrollIntoView({behavior:'smooth',block:'start'}),70));
+}
+
 function startSummary(){
  if(summaryActive||summaryComplete)return;
  play=false;visualsFrozen=true;summaryActive=true;setMovementSfx(false);setPlayUi('summary');lockRestart(true);
  $('chn').textContent='Summary narration';$('aud').textContent='Summary audio playing · visuals frozen';
+ NARRATION.forEach(a=>{try{a.pause()}catch(e){}});
  currentNarration=SUMMARY_AUDIO;SUMMARY_AUDIO.currentTime=0;
- const unlock=()=>{summaryActive=false;summaryComplete=true;currentNarration=null;setPlayUi('finished');lockRestart(false);$('chn').textContent='Completed · Restart available';$('aud').textContent='Summary complete · visuals remain frozen';showGuide('restart')};
+ showBrainPopup();
+ const unlock=()=>{summaryActive=false;summaryComplete=true;currentNarration=null;hideBrainPopup();setPlayUi('finished');lockRestart(false);$('chn').textContent='Completed · Restart available';$('aud').textContent='Summary complete · visuals remain frozen';showGuide('restart')};
  SUMMARY_AUDIO.onended=unlock;SUMMARY_AUDIO.onerror=()=>{unlock();$('aud').textContent='Summary audio error · Restart available'};
  const pr=SUMMARY_AUDIO.play();if(pr&&pr.catch)pr.catch(()=>{unlock();$('aud').textContent='Summary blocked by browser · Restart available'});
 }
 function resetRunAndPlay(){
- ensureAudio();stopRecordedAudio(true);setMovementSfx(false);
- T=0;play=true;visualsFrozen=false;summaryActive=false;summaryComplete=false;finishAfterFrame=false;lastActAudio=-1;lastFeed=false;lastSleep=false;lastHazard=false;
+ ensureAudio();stopRecordedAudio(true);setMovementSfx(false);hideBrainPopup();
+ T=visualStart(0);play=true;narrationHold=false;visualsFrozen=false;summaryActive=false;summaryComplete=false;finishAfterFrame=false;lastActAudio=-1;lastFeed=false;lastSleep=false;lastHazard=false;restPad=-1;prevAsleep=false;
  DEATH.forEach(d=>{d.done=0;d.x=undefined;d.sounded=0});
  setPlayUi('running');lockRestart(false);$('chn').textContent='Restarted';$('aud').textContent='Recorded narration + SFX active';
 }
 $('play').onclick=()=>{
  if(T>=END||summaryActive||summaryComplete)return;
+ const initialStart=!play&&T<=visualStart(0)+.08;
  ensureAudio();play=!play;
- if(play){setPlayUi('running');setNarrationPaused(false);$('aud').textContent='Recorded narration + SFX active'}
+ if(play){if(T<visualStart(0))T=visualStart(0);setPlayUi('running');setNarrationPaused(false);$('aud').textContent='Recorded narration + SFX active';if(initialStart)scrollToAssayView()}
  else{setPlayUi('paused');setNarrationPaused(true);setMovementSfx(false);$('aud').textContent='Paused'}
 };
 $('rst').onclick=()=>{if(summaryActive)return;resetRunAndPlay()};
 ACTS.forEach((c,i)=>{const d=document.createElement('div');d.className='ch';d.id='c'+i;
  d.innerHTML=`<div class="i n">${String(i+1).padStart(2,'0')}</div><div class="m">${c.m}</div><div class="d">${c.d}</div><div class="bar"></div>`;
- d.onclick=()=>{if(summaryActive||summaryComplete||T>=END)return;ensureAudio();stopRecordedAudio(true);T=c.a+.02;play=true;visualsFrozen=false;summaryComplete=false;finishAfterFrame=false;lastActAudio=i-1;lastFeed=false;lastSleep=false;lastHazard=false;setPlayUi('running');lockRestart(false);$('aud').textContent='Recorded narration + SFX active'};$('rail').appendChild(d)});
+ d.onclick=()=>{if(summaryActive||summaryComplete||T>=END)return;ensureAudio();stopRecordedAudio(true);T=visualStart(i)+.02;play=true;narrationHold=false;visualsFrozen=false;summaryComplete=false;finishAfterFrame=false;lastActAudio=i-1;lastFeed=false;lastSleep=false;lastHazard=false;restPad=-1;prevAsleep=false;setPlayUi('running');lockRestart(false);$('aud').textContent='Recorded narration + SFX active'};$('rail').appendChild(d)});
 setPlayUi('idle');lockRestart(false);showGuide('start');
 
-/* ============ WORLD ============ */
-const wc=$('world'),wr=new THREE.WebGLRenderer({canvas:wc,antialias:true});
-const ws=new THREE.Scene();ws.fog=new THREE.Fog(0x12242C,9,30);
-const wcam=new THREE.PerspectiveCamera(44,1,.1,140);
-const hemi=new THREE.HemisphereLight(0x9FD6E6,0x0B1A22,.95);ws.add(hemi);
-const sunL=new THREE.DirectionalLight(0xFFE3B0,1.15);ws.add(sunL);
-const moonL=new THREE.DirectionalLight(0x9FB6EA,0);ws.add(moonL);
-const soil=new THREE.Mesh(new THREE.CircleGeometry(13,60),new THREE.MeshLambertMaterial({color:0x2E4030}));
-soil.rotation.x=-Math.PI/2;ws.add(soil);
+/* ============ WORLD ============ *
+   Rebuilt for physical realism:
+     - filmic tone mapping, sRGB output, soft shadow maps
+     - gradient sky dome, warm sun / cool moon rig with a bounce fill
+     - displaced ground with vertex-painted soil, moss and dry patches
+     - 1600 merged grass blades swaying in a real wind field (vertex shader)
+     - parametric flowers: cupped petals with veins, stamen crowns, nectar
+       glow by day; petals fold into a bud and curved thorns arm at dusk
+     - a proper Drosophila: banded abdomen, faceted compound eyes, veined
+       wings from a procedural texture, six jointed legs, and actual FLIGHT
+       with banking, bobbing, wingbeat blur and a cast shadow
+   ------------------------------------------------------------------ */
+const wc=$('world'),wr=new THREE.WebGLRenderer({canvas:wc,antialias:true,alpha:false});
+wr.setPixelRatio(Math.min(devicePixelRatio,2));
+wr.outputEncoding=THREE.sRGBEncoding;
+wr.toneMapping=THREE.ACESFilmicToneMapping;wr.toneMappingExposure=1.12;
+wr.shadowMap.enabled=true;wr.shadowMap.type=THREE.PCFSoftShadowMap;
+const ws=new THREE.Scene();ws.fog=new THREE.Fog(0x12242C,10,34);
+const wcam=new THREE.PerspectiveCamera(42,1,.1,180);
 function rnd(s){const x=Math.sin(s*127.1)*43758.5453;return x-Math.floor(x)}
-const stG=new THREE.BufferGeometry(),stP=new Float32Array(420*3);
-for(let i=0;i<420;i++){const a=rnd(i+5)*6.283,e=.15+rnd(i+31)*1.2,r=40;
- stP[i*3]=Math.cos(a)*Math.cos(e)*r;stP[i*3+1]=Math.sin(e)*r;stP[i*3+2]=Math.sin(a)*Math.cos(e)*r}
-stG.setAttribute('position',new THREE.BufferAttribute(stP,3));
-const stars=new THREE.Points(stG,new THREE.PointsMaterial({color:0xC8D8F0,size:.35,transparent:true,opacity:0}));ws.add(stars);
-const sunO=new THREE.Mesh(new THREE.SphereGeometry(1.95,22,18),new THREE.MeshBasicMaterial({color:0xFFE49A}));ws.add(sunO);
-const sunH=new THREE.Mesh(new THREE.SphereGeometry(3.4,22,18),new THREE.MeshBasicMaterial({color:0xFFCF6A,transparent:true,opacity:.26}));ws.add(sunH);
-const moonO=new THREE.Mesh(new THREE.SphereGeometry(1.45,22,18),new THREE.MeshBasicMaterial({color:0xDCE6F8}));ws.add(moonO);
-const moonH=new THREE.Mesh(new THREE.SphereGeometry(2.45,22,18),new THREE.MeshBasicMaterial({color:0xAFC4EC,transparent:true,opacity:.24}));ws.add(moonH);
-const peb=new THREE.InstancedMesh(new THREE.SphereGeometry(.09,6,5),new THREE.MeshLambertMaterial({color:0x3A4C33}),120),dmy=new THREE.Object3D();
-for(let i=0;i<120;i++){const a=rnd(i)*6.283,r=1.8+rnd(i+9)*9.4;dmy.position.set(Math.cos(a)*r,.03,Math.sin(a)*r);
- dmy.scale.setScalar(.5+rnd(i+3)*1.4);dmy.updateMatrix();peb.setMatrixAt(i,dmy.matrix)}ws.add(peb);
-const blM=new THREE.MeshLambertMaterial({color:0x426C45,side:THREE.DoubleSide});
-for(let i=0;i<70;i++){const a=rnd(i+40)*6.283,r=2.8+rnd(i+70)*8.6,h=.5+rnd(i+11)*1.1;
- const g=new THREE.Group();g.position.set(Math.cos(a)*r,0,Math.sin(a)*r);
- for(let j=0;j<3;j++){const b=new THREE.Mesh(new THREE.PlaneGeometry(.1,h),blM);b.geometry.translate(0,h/2,0);
-  b.rotation.y=rnd(i*7+j)*3.14;b.rotation.z=(rnd(i*5+j)-.5)*.5;g.add(b)}ws.add(g)}
-const PADS=[];
-[[2.9,1.6],[-3.3,2.5],[.8,-3.7],[-2.7,-2.9],[3.9,-1.3],[-4.5,-.5],[1.7,3.8],[-1.3,-4.6]].forEach(p=>{
- const g=new THREE.Group();g.position.set(p[0],0,p[1]);ws.add(g);
- const st=new THREE.Mesh(new THREE.CylinderGeometry(.05,.07,.26,7),new THREE.MeshLambertMaterial({color:0x44704A}));
- st.position.y=.13;g.add(st);
- const pet=[];for(let j=0;j<6;j++){const pv=new THREE.Group();pv.position.y=.26;pv.rotation.y=j*1.047;
-  const m=new THREE.Mesh(new THREE.CircleGeometry(.34,10,0,Math.PI),new THREE.MeshLambertMaterial({color:0xEEDD7A,side:THREE.DoubleSide}));
-  m.position.set(0,0,.2);m.rotation.x=-Math.PI/2;pv.add(m);g.add(pv);pet.push(pv)}
- const ring=new THREE.Mesh(new THREE.TorusGeometry(.2,.075,8,18),new THREE.MeshLambertMaterial({color:0xE8A23A,emissive:0x3A2404}));
- ring.rotation.x=-Math.PI/2;ring.position.y=.3;g.add(ring);
- const haz=new THREE.Group();haz.position.y=.24;g.add(haz);
- for(let j=0;j<7;j++){const s=new THREE.Mesh(new THREE.ConeGeometry(.07,.32,5),new THREE.MeshLambertMaterial({color:0x8C2E24}));
-  const a=j*.9;s.position.set(Math.cos(a)*.17,.11,Math.sin(a)*.17);s.rotation.z=Math.cos(a)*.35;s.rotation.x=-Math.sin(a)*.35;haz.add(s)}
- const gl=new THREE.Mesh(new THREE.RingGeometry(.4,.52,24),new THREE.MeshBasicMaterial({color:0xE8A23A,side:THREE.DoubleSide,transparent:true,opacity:0}));
- gl.rotation.x=-Math.PI/2;gl.position.y=.02;g.add(gl);
- PADS.push({g,pet,ring,haz,gl,v:new THREE.Vector2(p[0],p[1])})});
+const WIND={value:0};
 
+/* ---------- lighting rig ---------- */
+const hemi=new THREE.HemisphereLight(0x9FD6E6,0x1B2A1C,.55);ws.add(hemi);
+const sunL=new THREE.DirectionalLight(0xFFE0A8,2.05);
+sunL.castShadow=true;sunL.shadow.mapSize.set(1024,1024);
+sunL.shadow.camera.near=.5;sunL.shadow.camera.far=44;
+sunL.shadow.camera.left=-14;sunL.shadow.camera.right=14;
+sunL.shadow.camera.top=14;sunL.shadow.camera.bottom=-14;
+sunL.shadow.bias=-.0016;sunL.shadow.normalBias=.028;
+ws.add(sunL);ws.add(sunL.target);
+const moonL=new THREE.DirectionalLight(0x9FB6EA,0);ws.add(moonL);
+/* warm bounce off the soil keeps undersides from going black */
+const bounce=new THREE.DirectionalLight(0xC9A96B,.34);bounce.position.set(-3,-4,2);ws.add(bounce);
+
+/* ---------- sky dome ---------- */
+const skyUni={
+ uTop:{value:new THREE.Color(0x2C6C8C)},uHor:{value:new THREE.Color(0xCFE4E2)},
+ uGnd:{value:new THREE.Color(0x14242A)},uMix:{value:1}
+};
+const sky=new THREE.Mesh(new THREE.SphereGeometry(80,32,20),new THREE.ShaderMaterial({
+ side:THREE.BackSide,depthWrite:false,fog:false,uniforms:skyUni,
+ vertexShader:'varying vec3 vP;void main(){vP=normalize(position);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
+ fragmentShader:'varying vec3 vP;uniform vec3 uTop,uHor,uGnd;void main(){float h=vP.y;'+
+  'vec3 c=mix(uHor,uTop,pow(clamp(h,0.0,1.0),0.62));c=mix(c,uGnd,pow(clamp(-h,0.0,1.0),0.5));'+
+  'gl_FragColor=vec4(c,1.0);}'
+}));
+sky.renderOrder=-10;ws.add(sky);
+
+const stG=new THREE.BufferGeometry(),stP=new Float32Array(560*3),stS=new Float32Array(560);
+for(let i=0;i<560;i++){const a=rnd(i+5)*6.283,e=.06+rnd(i+31)*1.35,r=62;
+ stP[i*3]=Math.cos(a)*Math.cos(e)*r;stP[i*3+1]=Math.sin(e)*r;stP[i*3+2]=Math.sin(a)*Math.cos(e)*r;
+ stS[i]=.22+rnd(i+77)*.72}
+stG.setAttribute('position',new THREE.BufferAttribute(stP,3));
+stG.setAttribute('aSize',new THREE.BufferAttribute(stS,1));
+const starMat=new THREE.PointsMaterial({color:0xD6E4FA,size:.5,sizeAttenuation:true,transparent:true,opacity:0,depthWrite:false,fog:false});
+const stars=new THREE.Points(stG,starMat);ws.add(stars);
+
+/* soft radial sprite used for the sun/moon halo and pollen */
+function discTex(inner,outer){
+ const c=document.createElement('canvas');c.width=c.height=128;
+ const x=c.getContext('2d'),g=x.createRadialGradient(64,64,0,64,64,64);
+ g.addColorStop(0,inner);g.addColorStop(.42,outer);g.addColorStop(1,'rgba(255,255,255,0)');
+ x.fillStyle=g;x.fillRect(0,0,128,128);const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t;
+}
+const glowTex=discTex('rgba(255,255,255,1)','rgba(255,225,170,0.38)');
+const sunO=new THREE.Mesh(new THREE.SphereGeometry(1.5,20,16),new THREE.MeshBasicMaterial({color:0xFFF3D0,fog:false}));ws.add(sunO);
+const sunH=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,color:0xFFD489,transparent:true,opacity:.85,depthWrite:false,blending:THREE.AdditiveBlending,fog:false}));
+sunH.scale.set(15,15,1);ws.add(sunH);
+const moonO=new THREE.Mesh(new THREE.SphereGeometry(1.2,20,16),new THREE.MeshBasicMaterial({color:0xE6EDFA,fog:false}));ws.add(moonO);
+const moonH=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,color:0x9FB8E8,transparent:true,opacity:.5,depthWrite:false,blending:THREE.AdditiveBlending,fog:false}));
+moonH.scale.set(8,8,1);ws.add(moonH);
+
+/* ---------- ground: displaced, vertex-painted ---------- */
+const GS=40,GD=150;
+const gGeo=new THREE.PlaneGeometry(GS,GS,GD,GD);gGeo.rotateX(-Math.PI/2);
+{
+ const p=gGeo.attributes.position,n=p.count,col=new Float32Array(n*3);
+ const soilA=new THREE.Color(0x3C4A2E),soilB=new THREE.Color(0x24301F),
+       moss=new THREE.Color(0x4E6B35),dry=new THREE.Color(0x6A6240);
+ for(let i=0;i<n;i++){
+  const x=p.getX(i),z=p.getZ(i),d=Math.hypot(x,z);
+  const h=.16*Math.sin(x*.42)*Math.cos(z*.37)+.09*Math.sin(x*1.15+z*.6)
+         +.05*Math.sin(x*2.6-z*2.1)+.022*Math.sin(x*6.1+z*5.3);
+  p.setY(i,h-Math.max(0,(d-12))*.14);
+  const m=.5+.5*Math.sin(x*.55+z*.42),k=.5+.5*Math.sin(x*1.9-z*1.3+2.1);
+  const c=soilA.clone().lerp(soilB,k).lerp(moss,Math.pow(m,2.1)*.75).lerp(dry,Math.pow(1-m,3.4)*.5);
+  const shade=.82+.18*Math.sin(x*7.3+z*6.1);
+  col[i*3]=c.r*shade;col[i*3+1]=c.g*shade;col[i*3+2]=c.b*shade;
+ }
+ gGeo.setAttribute('color',new THREE.BufferAttribute(col,3));
+ gGeo.computeVertexNormals();
+}
+const soil=new THREE.Mesh(gGeo,new THREE.MeshStandardMaterial({vertexColors:true,roughness:.97,metalness:0}));
+soil.receiveShadow=true;ws.add(soil);
+
+/* pebbles and twigs */
+const peb=new THREE.InstancedMesh(new THREE.DodecahedronGeometry(.075,0),
+ new THREE.MeshStandardMaterial({color:0x6E6A5C,roughness:.88,metalness:.02,flatShading:true}),150);
+peb.castShadow=true;peb.receiveShadow=true;
+{const d=new THREE.Object3D();
+ for(let i=0;i<150;i++){const a=rnd(i)*6.283,r=1.4+rnd(i+9)*10.2;
+  d.position.set(Math.cos(a)*r,.03,Math.sin(a)*r);
+  d.rotation.set(rnd(i+2)*3,rnd(i+4)*3,rnd(i+6)*3);
+  d.scale.set(.5+rnd(i+3)*1.5,.34+rnd(i+13)*.9,.5+rnd(i+23)*1.4);
+  d.updateMatrix();peb.setMatrixAt(i,d.matrix)}}
+ws.add(peb);
+
+/* ---------- grass: one merged mesh, wind in the vertex shader ---------- */
+function buildGrass(N,SEG,rIn,rOut,seed){
+ const vpb=(SEG+1)*2,pos=new Float32Array(N*vpb*3),col=new Float32Array(N*vpb*3),
+       wnd=new Float32Array(N*vpb*2),idx=new Uint32Array(N*SEG*6);
+ const base=new THREE.Color(0x2C4526),tip=new THREE.Color(0x7FA24A),dryC=new THREE.Color(0x9A9448);
+ let v=0,f=0;
+ for(let b=0;b<N;b++){
+  const s=seed+b*3.77;
+  const a=rnd(s)*6.283,r=rIn+Math.sqrt(rnd(s+1))*(rOut-rIn);
+  const bx=Math.cos(a)*r,bz=Math.sin(a)*r;
+  const dir=rnd(s+2)*6.283,h=.34+rnd(s+3)*.95,w=.032+rnd(s+4)*.026;
+  const bend=(.18+rnd(s+5)*.42)*h,lean=rnd(s+6)*6.283;
+  const fx=Math.cos(dir),fz=Math.sin(dir);          /* blade plane normal-ish */
+  const rx=-fz,rz=fx;                                /* across the blade */
+  const dyness=rnd(s+7);
+  const v0=v;
+  for(let i=0;i<=SEG;i++){
+   const t=i/SEG,ww=w*(1-Math.pow(t,1.35)*.94),off=bend*t*t;
+   const y=h*t-.04*t*t*h;
+   const c=base.clone().lerp(tip,Math.pow(t,.8)).lerp(dryC,dyness>.82?Math.pow(t,2)*.8:0);
+   for(let k=0;k<2;k++){
+    const sgn=k?1:-1;
+    pos[v*3]=bx+rx*ww*sgn+fx*off;pos[v*3+1]=y;pos[v*3+2]=bz+rz*ww*sgn+fz*off;
+    col[v*3]=c.r;col[v*3+1]=c.g;col[v*3+2]=c.b;
+    wnd[v*2]=t;wnd[v*2+1]=lean;v++;
+   }
+  }
+  for(let i=0;i<SEG;i++){
+   const o=v0+i*2;
+   idx[f++]=o;idx[f++]=o+1;idx[f++]=o+2;
+   idx[f++]=o+1;idx[f++]=o+3;idx[f++]=o+2;
+  }
+ }
+ const g=new THREE.BufferGeometry();
+ g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+ g.setAttribute('color',new THREE.BufferAttribute(col,3));
+ g.setAttribute('aWind',new THREE.BufferAttribute(wnd,2));
+ g.setIndex(new THREE.BufferAttribute(idx,1));g.computeVertexNormals();
+ return g;
+}
+function windMat(extra){
+ const m=new THREE.MeshStandardMaterial(Object.assign({vertexColors:true,roughness:.86,metalness:0,side:THREE.DoubleSide},extra||{}));
+ m.onBeforeCompile=sh=>{
+  sh.uniforms.uTime=WIND;
+  sh.vertexShader='attribute vec2 aWind;uniform float uTime;\n'+sh.vertexShader;
+  sh.vertexShader=sh.vertexShader.replace('#include <begin_vertex>',
+   '#include <begin_vertex>\n'+
+   ' float wk=aWind.x*aWind.x;\n'+
+   ' float gust=0.62+0.38*sin(uTime*0.43+transformed.x*0.12+transformed.z*0.1);\n'+
+   ' transformed.x+=sin(uTime*1.9+aWind.y+transformed.x*0.42+transformed.z*0.31)*0.145*wk*gust;\n'+
+   ' transformed.z+=cos(uTime*1.55+aWind.y*1.3+transformed.z*0.37)*0.105*wk*gust;\n'+
+   ' transformed.y-=wk*0.035*gust;');
+ };
+ return m;
+}
+const grass=new THREE.Mesh(buildGrass(1850,4,1.2,16.4,11.3),windMat());
+grass.receiveShadow=true;ws.add(grass);
+/* a second, taller, sparser layer reads as background reeds */
+const reeds=new THREE.Mesh(buildGrass(420,5,9.0,18.2,77.1),windMat({color:0xffffff}));
+ws.add(reeds);
+
+/* ---------- flowers ---------- */
+function petalGeometry(len,wid,arch,cup,segU,segV){
+ const nu=segU+1,nv=segV+1,pos=new Float32Array(nu*nv*3),col=new Float32Array(nu*nv*3);
+ const idx=[];const deep=new THREE.Color(0xC9761B),mid=new THREE.Color(0xF0B93F),pale=new THREE.Color(0xFDEBA8);
+ for(let i=0;i<nu;i++)for(let j=0;j<nv;j++){
+  const u=i/segU,vv=j/segV*2-1;
+  const w=wid*Math.pow(Math.sin(Math.PI*Math.pow(u,.78)),.62);
+  const x=vv*w;
+  const y=arch*Math.sin(Math.PI*u)*.75-.30*u*u*len+cup*vv*vv*w*1.15;
+  const z=u*len;
+  const k=i*nv+j;
+  pos[k*3]=x;pos[k*3+1]=y;pos[k*3+2]=z;
+  /* amber throat -> pale rim, with faint radial veins */
+  const vein=.055*Math.pow(Math.abs(Math.sin(vv*7.2)),6);
+  const c=deep.clone().lerp(mid,Math.min(1,u*2.1)).lerp(pale,Math.pow(u,1.7));
+  col[k*3]=c.r-vein;col[k*3+1]=c.g-vein*1.3;col[k*3+2]=c.b-vein*1.6;
+ }
+ for(let i=0;i<segU;i++)for(let j=0;j<segV;j++){
+  const a=i*nv+j,b=a+nv;idx.push(a,b,a+1,b,b+1,a+1)}
+ const g=new THREE.BufferGeometry();
+ g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+ g.setAttribute('color',new THREE.BufferAttribute(col,3));
+ g.setIndex(idx);g.computeVertexNormals();return g;
+}
+const PETAL_GEO=petalGeometry(.46,.30,.10,.55,9,7);
+const LEAF_GEO=petalGeometry(.40,.20,.06,.30,7,5);
+const petalMat=new THREE.MeshStandardMaterial({vertexColors:true,roughness:.62,metalness:0,
+ side:THREE.DoubleSide,emissive:0x2A1603,emissiveIntensity:.45});
+const leafMat=new THREE.MeshStandardMaterial({color:0x4C7A3A,roughness:.78,metalness:0,side:THREE.DoubleSide});
+const stemMat=new THREE.MeshStandardMaterial({color:0x4A7340,roughness:.82,metalness:0});
+const thornMat=new THREE.MeshStandardMaterial({color:0x4A1B16,roughness:.34,metalness:.14,
+ emissive:0x3A0A06,emissiveIntensity:.5,flatShading:true});
+const stamenMat=new THREE.MeshStandardMaterial({color:0xF6D877,roughness:.5,emissive:0x5A3E05,emissiveIntensity:.6});
+
+const PADS=[];
+[[5.8,3.1],[-6.6,4.3],[1.4,-7.0],[-5.7,-5.8],[7.5,-2.5],[-8.2,-1.0],[3.4,7.0],[-2.6,-8.1],[8.4,4.9],[-8.6,6.4],[6.2,-7.4],[-.3,8.6]].forEach((p,fi)=>{
+ const g=new THREE.Group();g.position.set(p[0],0,p[1]);g.rotation.y=rnd(fi+31)*6.283;ws.add(g);
+ const H=.40+rnd(fi+3)*.16;
+ /* stem: gently curved tapered tube with a couple of leaves */
+ const curve=new THREE.CatmullRomCurve3([
+  new THREE.Vector3(0,0,0),new THREE.Vector3(.03,H*.42,.02),
+  new THREE.Vector3(-.02,H*.78,-.01),new THREE.Vector3(0,H,0)]);
+ const stem=new THREE.Mesh(new THREE.TubeGeometry(curve,12,.036,8,false),stemMat);
+ stem.castShadow=true;g.add(stem);
+ [-1,1].forEach((s,li)=>{const lf=new THREE.Mesh(LEAF_GEO,leafMat);
+  lf.position.set(s*.03,H*(.22+li*.2),0);lf.rotation.set(-.55,s*1.5+rnd(fi+li)*.6,0);
+  lf.scale.setScalar(.8+rnd(fi+li+9)*.4);lf.castShadow=true;g.add(lf)});
+ /* receptacle + stamen crown */
+ const head=new THREE.Group();head.position.y=H;g.add(head);
+ const recept=new THREE.Mesh(new THREE.SphereGeometry(.10,16,12),
+  new THREE.MeshStandardMaterial({color:0xB8892C,roughness:.6,emissive:0x3A2404,emissiveIntensity:.5}));
+ recept.scale.set(1,.7,1);recept.castShadow=true;head.add(recept);
+ const stam=new THREE.InstancedMesh(new THREE.CylinderGeometry(.008,.012,.13,5),stamenMat,22);
+ {const d=new THREE.Object3D();
+  for(let k=0;k<22;k++){const a=k/22*6.283,rr=.045+rnd(fi*7+k)*.035;
+   d.position.set(Math.cos(a)*rr,.075+rnd(k+fi)*.03,Math.sin(a)*rr);
+   d.rotation.set(Math.cos(a)*.42,0,-Math.sin(a)*.42);d.updateMatrix();stam.setMatrixAt(k,d.matrix)}}
+ head.add(stam);
+ /* petals on pivots so they can fold into a bud at dusk */
+ const pet=[];
+ for(let j=0;j<7;j++){
+  const pv=new THREE.Group();pv.rotation.y=j*(6.283/7)+rnd(fi+j)*.12;head.add(pv);
+  const m=new THREE.Mesh(PETAL_GEO,petalMat);
+  m.position.set(0,.02,.08);m.rotation.x=-.16+rnd(fi*3+j)*.1;
+  m.scale.setScalar(.92+rnd(fi*5+j)*.18);m.castShadow=true;pv.add(m);pet.push(pv);
+ }
+ /* nectar ring: the "food is available" cue */
+ const ring=new THREE.Mesh(new THREE.TorusGeometry(.115,.026,8,22),
+  new THREE.MeshStandardMaterial({color:0xF0A93C,roughness:.32,emissive:0xC0631A,emissiveIntensity:1.5}));
+ ring.rotation.x=-Math.PI/2;ring.position.y=.055;head.add(ring);
+ /* night thorns: curved, glossy, tipped with a dark glint */
+ const haz=new THREE.Group();haz.position.y=.02;head.add(haz);
+ for(let j=0;j<9;j++){
+  const a=j*(6.283/9)+rnd(fi+j)*.2,tg=new THREE.Group();
+  tg.position.set(Math.cos(a)*.10,.02,Math.sin(a)*.10);
+  tg.rotation.set(-Math.sin(a)*.62,0,Math.cos(a)*.62);
+  const t1=new THREE.Mesh(new THREE.ConeGeometry(.036,.20,6),thornMat);
+  t1.position.y=.10;t1.castShadow=true;tg.add(t1);
+  const t2=new THREE.Mesh(new THREE.ConeGeometry(.017,.13,6),thornMat);
+  t2.position.y=.235;t2.rotation.z=.30;tg.add(t2);
+  haz.add(tg);
+ }
+ /* ground halo */
+ const gl=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,color:0xE8A23A,transparent:true,
+  opacity:0,depthWrite:false,blending:THREE.AdditiveBlending}));
+ gl.scale.set(1.5,1.5,1);gl.position.y=H+.02;g.add(gl);
+ PADS.push({g,head,pet,ring,haz,gl,stam,v:new THREE.Vector2(p[0],p[1]),h:H,seed:fi});
+});
+
+/* ---------- the fly ---------- */
+function wingTexture(){
+ const c=document.createElement('canvas');c.width=256;c.height=128;
+ const x=c.getContext('2d');
+ x.clearRect(0,0,256,128);
+ /* membrane */
+ x.beginPath();x.moveTo(6,64);
+ x.bezierCurveTo(60,8,186,10,246,52);
+ x.bezierCurveTo(206,110,72,118,6,64);
+ x.closePath();
+ const g=x.createLinearGradient(0,0,256,0);
+ g.addColorStop(0,'rgba(214,236,244,0.62)');
+ g.addColorStop(.45,'rgba(196,226,240,0.34)');
+ g.addColorStop(1,'rgba(222,214,246,0.24)');
+ x.fillStyle=g;x.fill();
+ /* longitudinal veins */
+ x.strokeStyle='rgba(96,112,120,0.55)';x.lineWidth=1.6;
+ const veins=[[10,62,90,30,240,46],[10,66,96,52,244,56],[12,70,100,74,236,74],[14,74,88,92,214,96]];
+ veins.forEach(v=>{x.beginPath();x.moveTo(v[0],v[1]);x.quadraticCurveTo(v[2],v[3],v[4],v[5]);x.stroke()});
+ /* cross veins */
+ x.lineWidth=1.1;x.strokeStyle='rgba(96,112,120,0.4)';
+ [[128,42,132,66],[168,50,172,72]].forEach(v=>{x.beginPath();x.moveTo(v[0],v[1]);x.lineTo(v[2],v[3]);x.stroke()});
+ const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t;
+}
 const fly=new THREE.Group();ws.add(fly);
-const cM=new THREE.MeshLambertMaterial({color:0x9C7A33}),dM=new THREE.MeshLambertMaterial({color:0x50401F});
-const wM=new THREE.MeshLambertMaterial({color:0xCBE2E9,transparent:true,opacity:.3,side:THREE.DoubleSide});
+const cM=new THREE.MeshStandardMaterial({color:0x9C7A33,roughness:.52,metalness:.16});
+const dM=new THREE.MeshStandardMaterial({color:0x4A3A1C,roughness:.46,metalness:.2});
+const bandM=new THREE.MeshStandardMaterial({color:0x241B0C,roughness:.4,metalness:.24});
+const wM=new THREE.MeshBasicMaterial({map:wingTexture(),transparent:true,opacity:.86,
+ side:THREE.DoubleSide,depthWrite:false});
 const body=new THREE.Group();fly.add(body);
-const th=new THREE.Mesh(new THREE.SphereGeometry(.33,20,16),cM);th.scale.set(1,.82,1.18);th.position.y=.42;body.add(th);
-const abd=new THREE.Mesh(new THREE.SphereGeometry(.29,20,16),dM);abd.scale.set(1,.8,1.72);abd.position.set(0,.38,-.6);body.add(abd);
-const hed=new THREE.Mesh(new THREE.SphereGeometry(.23,18,14),cM);hed.scale.set(1,.92,.88);hed.position.set(0,.48,.42);body.add(hed);
-[-1,1].forEach(s=>{const e=new THREE.Mesh(new THREE.SphereGeometry(.15,16,12),new THREE.MeshLambertMaterial({color:0xAC3A2C}));
- e.scale.set(.85,1.05,.9);e.position.set(s*.145,.5,.45);body.add(e)});
-const wg=[];[-1,1].forEach(s=>{const w=new THREE.Mesh(new THREE.PlaneGeometry(.82,.28),wM);
- w.geometry.translate(s*.41,0,0);w.position.set(0,.58,-.18);w.rotation.x=-.2;body.add(w);wg.push({m:w,s})});
-const lg=[];[[-.25,.31],[.25,.31],[-.29,.02],[.29,.02],[-.25,-.28],[.25,-.28]].forEach((h,i)=>{
- const g=new THREE.Group();g.position.set(h[0],.3,h[1]);body.add(g);const s=Math.sign(h[0]);
- const f=new THREE.Mesh(new THREE.CylinderGeometry(.022,.017,.33,6),dM);f.position.set(s*.1,-.145,0);f.rotation.z=s*-.62;g.add(f);
- const k=new THREE.Group();k.position.set(s*.185,-.275,0);g.add(k);
- const t=new THREE.Mesh(new THREE.CylinderGeometry(.016,.011,.3,6),dM);t.position.y=-.15;k.add(t);
- lg.push({g,k,s,ph:[0,3.14,3.14,0,0,3.14][i]})});
-const zzz=new THREE.Mesh(new THREE.RingGeometry(.44,.52,28),new THREE.MeshBasicMaterial({color:0x7E93E8,side:THREE.DoubleSide,transparent:true,opacity:0}));
-zzz.rotation.x=-Math.PI/2;ws.add(zzz);
-const burst=new THREE.Mesh(new THREE.RingGeometry(.3,.45,26),new THREE.MeshBasicMaterial({color:0xD4574A,side:THREE.DoubleSide,transparent:true,opacity:0}));
+
+const th=new THREE.Mesh(new THREE.SphereGeometry(.33,24,18),cM);
+th.scale.set(1,.84,1.16);th.position.y=.42;th.castShadow=true;body.add(th);
+/* thoracic bristles */
+{const br=new THREE.InstancedMesh(new THREE.ConeGeometry(.012,.13,4),dM,44),d=new THREE.Object3D();
+ for(let i=0;i<44;i++){const a=rnd(i)*6.283,e=.15+rnd(i+5)*1.1,
+  nx=Math.cos(a)*Math.cos(e),ny=Math.sin(e),nz=Math.sin(a)*Math.cos(e);
+  d.position.set(nx*.31,.42+ny*.27,nz*.37);
+  d.lookAt(nx*.9,.42+ny*.9,nz*.9);d.rotateX(Math.PI/2);
+  d.scale.setScalar(.6+rnd(i+9)*.8);d.updateMatrix();br.setMatrixAt(i,d.matrix)}
+ body.add(br)}
+/* segmented, banded abdomen */
+for(let i=0;i<4;i++){
+ const r=.30-i*.045,seg=new THREE.Mesh(new THREE.SphereGeometry(r,20,14),i%2?bandM:dM);
+ seg.scale.set(1,.82,.66);seg.position.set(0,.40-i*.012,-.34-i*.30);
+ seg.castShadow=true;body.add(seg);
+}
+const hed=new THREE.Mesh(new THREE.SphereGeometry(.22,20,16),cM);
+hed.scale.set(1,.94,.86);hed.position.set(0,.48,.44);hed.castShadow=true;body.add(hed);
+/* faceted compound eyes */
+const eyeM=new THREE.MeshStandardMaterial({color:0xB3392A,roughness:.22,metalness:.42,
+ flatShading:true,emissive:0x3A0B06,emissiveIntensity:.45});
+[-1,1].forEach(s=>{const e=new THREE.Mesh(new THREE.IcosahedronGeometry(.155,1),eyeM);
+ e.scale.set(.88,1.08,.94);e.position.set(s*.142,.505,.47);body.add(e)});
+/* antennae + proboscis */
+[-1,1].forEach(s=>{const a=new THREE.Mesh(new THREE.CylinderGeometry(.012,.016,.11,5),dM);
+ a.position.set(s*.06,.45,.60);a.rotation.set(1.15,0,s*.25);body.add(a);
+ const ar=new THREE.Mesh(new THREE.SphereGeometry(.028,8,6),dM);ar.position.set(s*.075,.40,.655);body.add(ar)});
+const prob=new THREE.Mesh(new THREE.ConeGeometry(.045,.12,8),dM);
+prob.position.set(0,.36,.55);prob.rotation.x=2.0;body.add(prob);
+/* wings: one solid pass + two blur ghosts driven by the wingbeat */
+const wg=[];
+[-1,1].forEach(s=>{
+ const pivot=new THREE.Group();pivot.position.set(s*.10,.60,-.10);body.add(pivot);
+ const mk=(op)=>{const w=new THREE.Mesh(new THREE.PlaneGeometry(.92,.34),wM.clone());
+  w.material.opacity=op;w.geometry.translate(s*.46,0,0);
+  /* geometry is already translated toward side s; do NOT mirror again or the left wing collapses onto the right */
+  pivot.add(w);return w};
+ const main=mk(.86),g1=mk(.16),g2=mk(.11);
+ pivot.rotation.set(-.18,s*.22,0);
+ wg.push({m:main,g1,g2,pivot,s});
+});
+/* halteres */
+[-1,1].forEach(s=>{const h=new THREE.Mesh(new THREE.SphereGeometry(.035,8,6),dM);
+ h.position.set(s*.16,.44,-.28);body.add(h)});
+/* six jointed legs */
+const lg=[];
+[[-.25,.31],[.25,.31],[-.29,.02],[.29,.02],[-.25,-.28],[.25,-.28]].forEach((h,i)=>{
+ const g=new THREE.Group();g.position.set(h[0],.30,h[1]);body.add(g);const s=Math.sign(h[0]);
+ const f=new THREE.Mesh(new THREE.CylinderGeometry(.024,.018,.34,6),dM);
+ f.position.set(s*.105,-.15,0);f.rotation.z=s*-.62;g.add(f);
+ const k=new THREE.Group();k.position.set(s*.19,-.28,0);g.add(k);
+ const t=new THREE.Mesh(new THREE.CylinderGeometry(.017,.011,.30,6),dM);t.position.y=-.15;k.add(t);
+ const ta=new THREE.Mesh(new THREE.CylinderGeometry(.010,.007,.13,5),bandM);
+ ta.position.set(0,-.34,.03);ta.rotation.x=.6;k.add(ta);
+ lg.push({g,k,s,ph:[0,3.14,3.14,0,0,3.14][i]});
+});
+fly.traverse(o=>{if(o.isMesh)o.castShadow=true});
+/* wings are transparent planes: left as shadow casters they throw solid
+   rectangles on the soil, so exclude them (and their motion-blur ghosts) */
+wg.forEach(w=>{w.m.castShadow=false;w.g1.castShadow=false;w.g2.castShadow=false});
+
+/* ---------- markers, boulder, particulates ---------- */
+const zzz=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,color:0x8FA4F2,transparent:true,
+ opacity:0,depthWrite:false,blending:THREE.AdditiveBlending}));
+zzz.scale.set(1.9,1.9,1);ws.add(zzz);
+const burst=new THREE.Mesh(new THREE.RingGeometry(.3,.45,30),
+ new THREE.MeshBasicMaterial({color:0xFF6A52,side:THREE.DoubleSide,transparent:true,opacity:0,depthWrite:false}));
 burst.rotation.x=-Math.PI/2;ws.add(burst);
-/* boulder */
-const rock=new THREE.Mesh(new THREE.DodecahedronGeometry(.62,0),new THREE.MeshLambertMaterial({color:0x6B6257,flatShading:true}));
-rock.visible=false;ws.add(rock);
-const rShadow=new THREE.Mesh(new THREE.CircleGeometry(.62,28),new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:0}));
+const rock=new THREE.Mesh(new THREE.DodecahedronGeometry(.62,1),
+ new THREE.MeshStandardMaterial({color:0x6B6257,roughness:.95,metalness:.03,flatShading:true}));
+rock.visible=false;rock.castShadow=true;ws.add(rock);
+const rShadow=new THREE.Mesh(new THREE.CircleGeometry(.62,28),
+ new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:0}));
 rShadow.rotation.x=-Math.PI/2;rShadow.position.y=.015;ws.add(rShadow);
-const dust=new THREE.Mesh(new THREE.RingGeometry(.5,.8,30),new THREE.MeshBasicMaterial({color:0xB9A88A,side:THREE.DoubleSide,transparent:true,opacity:0}));
+const dust=new THREE.Mesh(new THREE.RingGeometry(.5,.8,30),
+ new THREE.MeshBasicMaterial({color:0xC7B694,side:THREE.DoubleSide,transparent:true,opacity:0,depthWrite:false}));
 dust.rotation.x=-Math.PI/2;dust.position.y=.03;ws.add(dust);
 
+/* airborne pollen by day, cool motes by night */
+const MOTE=340,mG=new THREE.BufferGeometry(),mP=new Float32Array(MOTE*3),mV=[];
+for(let i=0;i<MOTE;i++){const a=rnd(i+3)*6.283,r=.8+rnd(i+11)*15.5;
+ mP[i*3]=Math.cos(a)*r;mP[i*3+1]=.15+rnd(i+21)*3.1;mP[i*3+2]=Math.sin(a)*r;
+ mV.push([(rnd(i+31)-.5)*.16,.03+rnd(i+41)*.07,(rnd(i+51)-.5)*.16])}
+mG.setAttribute('position',new THREE.BufferAttribute(mP,3));
+const motes=new THREE.Points(mG,new THREE.PointsMaterial({map:glowTex,color:0xFFE6AE,size:.09,
+ transparent:true,opacity:.0,depthWrite:false,blending:THREE.AdditiveBlending,sizeAttenuation:true}));
+ws.add(motes);
+
+/* ---------- per-frame world updates ---------- */
+const SKY_DAY={top:new THREE.Color(0x2E6E92),hor:new THREE.Color(0xD5E6E0),gnd:new THREE.Color(0x1A2A24)};
+const SKY_DUSK={top:new THREE.Color(0x2A3E6E),hor:new THREE.Color(0xC9784A),gnd:new THREE.Color(0x14202A)};
+const SKY_NIGHT={top:new THREE.Color(0x060C1C),hor:new THREE.Color(0x152343),gnd:new THREE.Color(0x05090F)};
+const _c1=new THREE.Color(),_c2=new THREE.Color(),_c3=new THREE.Color();
+function updateSky(day,p,dayFrac,now,dt){
+ WIND.value=now*.001;
+ /* how close we are to dawn/dusk, for the warm transition */
+ const edge=day?Math.max(0,1-Math.min(p,dayFrac-p)/Math.max(.02,dayFrac*.30))
+               :Math.max(0,1-Math.min(p-dayFrac,1-p)/Math.max(.02,(1-dayFrac)*.30));
+ const warm=Math.min(1,edge);
+ const A=day?SKY_DAY:SKY_NIGHT;
+ skyUni.uTop.value.copy(_c1.copy(A.top).lerp(SKY_DUSK.top,warm*.85));
+ skyUni.uHor.value.copy(_c2.copy(A.hor).lerp(SKY_DUSK.hor,warm*.9));
+ skyUni.uGnd.value.copy(_c3.copy(A.gnd).lerp(SKY_DUSK.gnd,warm*.6));
+ const dayN=day?1:0;
+ hemi.intensity=day?.55:.30;
+ hemi.color.setHex(day?(warm>.4?0xE3B487:0x9FD6E6):0x5C74A8);
+ hemi.groundColor.setHex(day?0x25381F:0x0D1620);
+ sunL.intensity=day?(2.05-warm*.75):0;
+ sunL.color.setHex(warm>.35?0xFFB067:0xFFE0A8);
+ moonL.intensity=day?0:.62;
+ bounce.intensity=day?.34:.10;
+ ws.fog.color.setHex(day?(warm>.4?0x3A3A3A:0x1A3038):0x0B1220);
+ ws.fog.near=day?13:8;ws.fog.far=day?46:31;
+ wr.setClearColor(day?0x142B33:0x060C16,1);
+ wr.toneMappingExposure=day?1.12:1.02;
+ starMat.opacity=day?Math.max(0,warm-.55)*.6:.95;
+ motes.material.opacity=day?.42:.20;
+ motes.material.color.setHex(day?0xFFE6AE:0x9FC4E8);
+ /* drift the motes */
+ const mp=mG.attributes.position.array;
+ for(let i=0;i<MOTE;i++){
+  mp[i*3]+=mV[i][0]*dt;mp[i*3+1]+=mV[i][1]*dt;mp[i*3+2]+=mV[i][2]*dt;
+  if(mp[i*3+1]>3.4){mp[i*3+1]=.12;}
+  if(Math.abs(mp[i*3])>17)mp[i*3]*=-.96;
+  if(Math.abs(mp[i*3+2])>17)mp[i*3+2]*=-.96;
+ }
+ mG.attributes.position.needsUpdate=true;
+ /* sun and moon arcs */
+ const ang=(p/Math.max(.01,dayFrac))*Math.PI;
+ sunO.visible=sunH.visible=day;moonO.visible=moonH.visible=!day;
+ if(day){const x=Math.cos(Math.PI-ang)*26,y=Math.sin(ang)*17+1.2;
+  sunO.position.set(x,y,-20);sunH.position.copy(sunO.position);
+  sunH.material.opacity=.55+.4*warm;sunH.scale.setScalar(13+8*warm);
+  sunL.position.set(x*.28,Math.max(2.4,y*.55),-7);sunL.target.position.set(0,0,0);
+ }else{const q=(p-dayFrac)/Math.max(.01,1-dayFrac),a2=q*Math.PI,x=Math.cos(Math.PI-a2)*26,y=Math.sin(a2)*15+1.2;
+  moonO.position.set(x,y,-20);moonH.position.copy(moonO.position);
+  moonL.position.set(x*.28,Math.max(2.2,y*.5),-7);
+ }
+ stars.rotation.y=now*.000012;
+}
+function updatePads(day,now,dt){
+ PADS.forEach((pd,i)=>{
+  pd.ring.visible=day;pd.stam.visible=day;pd.haz.visible=!day;
+  const tgt=day?0:-1.42;
+  pd.pet.forEach((pv,j)=>{
+   pv.rotation.x+=(tgt-pv.rotation.x)*Math.min(1,dt*3.4);
+   /* petals breathe a little in the wind */
+   pv.rotation.z=Math.sin(now*.0016+i+j*.7)*(day?.055:.02);
+  });
+  const pulse=.5+.5*Math.sin(now*.0026+i*1.3);
+  pd.ring.material.emissiveIntensity=day?1.1+.9*pulse:0;
+  pd.gl.material.color.setHex(day?0xE8A23A:0xC94F43);
+  pd.gl.material.opacity=day?(.30+.16*pulse):(.16+.08*pulse);
+  pd.gl.scale.setScalar(day?1.55+.14*pulse:1.05+.08*pulse);
+  pd.haz.children.forEach((t,k)=>{
+   t.rotation.y=Math.sin(now*.0012+k)*.05;
+  });
+  pd.g.rotation.z=Math.sin(now*.0011+i*2.1)*.022;   /* stem sway */
+ });
+}
+/* flight state */
+let flyAlt=0,flyBank=0,flyPrevH=0,wingPhase=0,flySettle=0;
+function updateFly(fp,fh,sp,dt,now,dead,asleep,feeding,ar,crouch,gaitV,perchY=0){
+ /* --- altitude: airborne when travelling, grounded to feed or sleep --- */
+ const wantAir=(!dead&&!asleep&&!feeding&&sp>.30)?1:0;
+ const target=wantAir?(.72+.10*Math.sin(now*.0021)):0;
+ flyAlt+=(target-flyAlt)*Math.min(1,dt*(wantAir?3.4:5.2));
+ flySettle+=((wantAir?1:0)-flySettle)*Math.min(1,dt*4);
+ /* --- banking into turns --- */
+ let dh=fh-flyPrevH;while(dh>3.14)dh-=6.283;while(dh<-3.14)dh+=6.283;
+ flyPrevH=fh;
+ const bankT=dead?0:Math.max(-.55,Math.min(.55,-dh/Math.max(1e-4,dt)*.22))*flySettle;
+ flyBank+=(bankT-flyBank)*Math.min(1,dt*6);
+
+ const bob=flyAlt>.02?Math.sin(now*.019)*.028*flySettle:0;
+ fly.position.set(fp.x,perchY+flyAlt+bob,fp.y);
+ fly.rotation.y=fh;
+ fly.rotation.z=flyBank;
+ fly.rotation.x=dead?0:(-.16*flySettle+crouch*.10);
+
+ /* --- wingbeat: a real fly beats ~200 Hz, so show a swept blur --- */
+ wingPhase+=dt*(dead?0:(asleep?2:(flySettle>.05?58:9)));
+ const beat=Math.sin(wingPhase);
+ const amp=dead?0:(asleep?.05:(.22+.95*flySettle));
+ wg.forEach(w=>{
+  w.pivot.rotation.z=w.s*(.10+beat*amp);
+  w.pivot.rotation.x=-.18+beat*.16*flySettle;
+  const blur=flySettle;
+  w.g1.material.opacity=.13*blur;w.g2.material.opacity=.09*blur;
+  w.g1.rotation.z=w.s*amp*.55;w.g2.rotation.z=-w.s*amp*.55;
+  w.m.material.opacity=dead?.30:(.86-.42*blur);
+ });
+ /* --- legs: walk cycle on the ground, tucked in flight --- */
+ const gAmp=dead?0:(asleep?.02:.14+.42*ar)*(1-flySettle);
+ if(!dead)lg.forEach(l=>{
+  const v=Math.sin(gaitV+l.ph);
+  const tuckX=1.05*flySettle,tuckK=-1.25*flySettle;
+  l.g.rotation.x=v*gAmp*.55+tuckX;
+  l.g.rotation.z=l.s*(.12+Math.max(0,v)*gAmp*.35);
+  l.k.rotation.x=-Math.max(0,v)*gAmp*.7+tuckK;
+ });
+ else lg.forEach(l=>{l.g.rotation.x+=(1.0-l.g.rotation.x)*Math.min(1,dt*4);
+  l.k.rotation.x+=(-1.5-l.k.rotation.x)*Math.min(1,dt*4)});
+ if(!dead&&!asleep)body.position.y=crouch*-.14;
+ return flyAlt;
+}
 /* ============ BRAIN ============ */
 const bc=$('brain'),brr=new THREE.WebGLRenderer({canvas:bc,antialias:true});
 brr.setClearColor(0x040A0E,1);
-const bs=new THREE.Scene(),bcam=new THREE.PerspectiveCamera(42,1,.1,100);
+const bs=new THREE.Scene(),bcam=new THREE.PerspectiveCamera(36,1,.1,100);
 const P=[];
 function blob(n,cx,cy,cz,rx,ry,rz,col,tag){for(let i=0;i<n;i++){
  const u=Math.random(),v=Math.random(),t=u*6.283,p=Math.acos(2*v-1),r=.56+.44*Math.pow(Math.random(),.35);
@@ -528,17 +1117,611 @@ probe.visible=false;bs.add(probe);
 const probeRing=new THREE.Mesh(new THREE.TorusGeometry(.14,.018,8,32),new THREE.MeshBasicMaterial({color:0xC3A8FF,transparent:true,opacity:0,depthWrite:false}));probeRing.visible=false;bs.add(probeRing);
 const xmk=new THREE.Mesh(new THREE.RingGeometry(.2,.245,20),new THREE.MeshBasicMaterial({color:0xD4574A,side:THREE.DoubleSide,transparent:true,opacity:0}));
 xmk.position.set(-.46,.04,.18);bs.add(xmk);
+const BRAIN_LABELS=[
+ {id:'labelOpticL',p:new THREE.Vector3(-1.32,.38,.08),o:[-20,-10],lane:'right',c:'#7fb6c3'},
+ {id:'labelOpticR',p:new THREE.Vector3(1.32,.38,.08),o:[20,-10],lane:'left',c:'#7fb6c3'},
+ {id:'labelCentral',p:new THREE.Vector3(0,.50,.04),o:[0,-30],lane:'center',c:'#d8e5ea'},
+ {id:'labelMushroom',p:new THREE.Vector3(0,.30,-.10),o:[54,74],lane:'left',c:'#d9c8ff'},
+ {id:'wakeLabel',p:new THREE.Vector3(-.46,.04,.18),o:[-22,48],lane:'right',c:'#ffd692'},
+ {id:'labelSleep',p:new THREE.Vector3(.46,.02,.16),o:[24,52],lane:'left',c:'#c9d3ff'},
+ {id:'labelDescending',p:new THREE.Vector3(0,-.76,.05),o:[0,28],lane:'center',c:'#8edbea'},
+ {id:'labelVnc',p:new THREE.Vector3(0,-1.72,.05),o:[0,40],lane:'center',c:'#8edbea'},
+ {id:'rescueLabel',p:RESCUE_POS,o:[28,-6],lane:'left',c:'#9be4b2'}
+];
+function updateBrainLabels(){const w=bc.clientWidth,h=bc.clientHeight,tmp=new THREE.Vector3(),topSafe=46,bottomSafe=74;
+ const placed=[];
+ BRAIN_LABELS.forEach(l=>{const el=$(l.id);if(!el||el.style.display==='none')return;tmp.copy(l.p).project(bcam);
+  const ax=Math.max(10,Math.min(w-10,(tmp.x*.5+.5)*w)),ay=Math.max(topSafe,Math.min(h-bottomSafe,(-tmp.y*.5+.5)*h));
+  let x0=ax+l.o[0],y0=ay+l.o[1];
+  const far=tmp.z<-1||tmp.z>1;
+  el.classList.remove('lane-left','lane-right','lane-center');el.classList.add('lane-'+l.lane);
+  const width=el.offsetWidth,hh=Math.max(12,el.offsetHeight/2);
+  const minX=l.lane==='right'?width+10:(l.lane==='center'?width/2+10:10),maxX=l.lane==='right'?w-10:(l.lane==='center'?w-width/2-10:w-width-10);
+  const x=Math.max(minX,Math.min(maxX,x0)),y=Math.max(topSafe+hh,Math.min(h-bottomSafe,y0));
+  placed.push({el,lane:l.lane,x,y,hh,far,ax,ay,c:l.c})});
+ placed.forEach(v=>{v.el.style.left=v.x+'px';v.el.style.top=Math.max(topSafe+v.hh,v.y)+'px';v.el.classList.toggle('far',v.far)});
+ const leaders=$('brainLeaders');if(leaders){leaders.setAttribute('viewBox','0 0 '+w+' '+h);leaders.innerHTML=placed.map(v=>{const width=v.el.offsetWidth,hh=v.el.offsetHeight/2;
+  const sx=v.lane==='left'?v.x-8:(v.lane==='right'?v.x+8:v.x),sy=v.lane==='center'?(v.ay>v.y?v.y+hh+3:v.y-hh-3):v.y;
+  return `<line class="call" x1="${sx.toFixed(1)}" y1="${sy.toFixed(1)}" x2="${v.ax.toFixed(1)}" y2="${v.ay.toFixed(1)}" stroke="${v.c}" opacity="${v.far?'.20':'.64'}"/><circle cx="${v.ax.toFixed(1)}" cy="${v.ay.toFixed(1)}" r="2.6" stroke="${v.c}" opacity="${v.far?'.30':'.92'}"/>`}).join('')}
+}
 function orbit(cv,cam,tg,r0){let rx=.22,ry=.55,r=r0,d=false,px=0,py=0;
- const ap=()=>{cam.position.set(tg.x+r*Math.cos(rx)*Math.sin(ry),tg.y+r*Math.sin(rx),tg.z+r*Math.cos(rx)*Math.cos(ry));cam.lookAt(tg)};
+ const ap=()=>{cam.position.set(tg.x+r*Math.cos(rx)*Math.sin(ry),tg.y+r*Math.sin(rx),tg.z+r*Math.cos(rx)*Math.cos(ry));cam.lookAt(tg);updateBrainLabels()};
  cv.addEventListener('pointerdown',e=>{d=true;px=e.clientX;py=e.clientY;cv.setPointerCapture(e.pointerId)});
  cv.addEventListener('pointerup',()=>d=false);
  cv.addEventListener('pointermove',e=>{if(!d)return;ry-=(e.clientX-px)*.006;rx=Math.max(-1.2,Math.min(1.2,rx+(e.clientY-py)*.005));px=e.clientX;py=e.clientY;ap()});
  cv.addEventListener('wheel',e=>{e.preventDefault();r=Math.max(2.4,Math.min(11,r+e.deltaY*.004));ap()},{passive:false});
- ap();return{s(x){ry+=x;ap()}}}
-const bo=orbit(bc,bcam,new THREE.Vector3(0,-.5,0),4.4);
+ ap();return{s(x){ry+=x;ap()},z(x){r=Math.max(2.4,Math.min(11,r+x));ap()}}}
+const bo=orbit(bc,bcam,new THREE.Vector3(0,-.55,0),4.38); // ~20% wider neural overview
 function size(){[[wc,wr,wcam],[bc,brr,bcam]].forEach(([c,r,m])=>{const w=c.clientWidth,h=c.clientHeight;
- r.setPixelRatio(Math.min(devicePixelRatio,2));r.setSize(w,h,false);m.aspect=w/h;m.updateProjectionMatrix()})}
+ r.setPixelRatio(Math.min(devicePixelRatio,2));r.setSize(w,h,false);m.aspect=w/h;m.updateProjectionMatrix()});updateBrainLabels()}
 addEventListener('resize',size);
+
+/* ============ SUMMARY-ONLY POPUP: anatomically grounded human orexin/hypocretin circuit ============ */
+const bp={el:$('brainPopup'),canvas:$('bpCanvas'),caption:$('bpCaption'),badge:$('bpPhaseBadge'),active:false,phase:-1,t0:0};
+const bpRenderer=new THREE.WebGLRenderer({canvas:bp.canvas,antialias:true,alpha:false});bpRenderer.setClearColor(0x020609,1);bpRenderer.outputEncoding=THREE.sRGBEncoding;
+
+const bpScene=new THREE.Scene();bpScene.fog=new THREE.FogExp2(0x020609,.072);
+const bpCam=new THREE.PerspectiveCamera(31,1,.1,60);bpCam.position.set(.10,.02,4.42);
+bpScene.add(new THREE.HemisphereLight(0xe8eff1,0x0a1318,.72));
+const bpKey=new THREE.DirectionalLight(0xfdf2e6,1.30);bpKey.position.set(-2.2,3.4,4.6);bpScene.add(bpKey);
+const bpFill=new THREE.DirectionalLight(0xa8d7e7,.44);bpFill.position.set(3.6,1.1,2.4);bpScene.add(bpFill);
+const bpRim=new THREE.DirectionalLight(0x6e93c4,.52);bpRim.position.set(2.4,-1.2,-3.6);bpScene.add(bpRim);
+const bpBack=new THREE.DirectionalLight(0xc9dbe6,.26);bpBack.position.set(-1.4,-2.6,-2.2);bpScene.add(bpBack);
+
+/* =====================================================================
+   ANATOMICAL HUMAN BRAIN
+   ---------------------------------------------------------------------
+   The previous popup deformed a sphere with a sum of sine waves, which
+   reads as a walnut rather than a brain. This build is generated from
+   measured cerebral proportions instead:
+
+     adult cerebrum ~167 mm long x 140 mm wide x ~118 mm tall, normalised
+     so the antero-posterior half-length is 1.0 (=~83 mm).
+
+   What makes it read as a real brain:
+     - anterior-posterior profile curves for width / height rather than a
+       single ellipsoid, so the frontal and occipital poles taper correctly
+     - superelliptical coronal sections, because real coronal sections are
+       rounded rectangles: the lateral wall is near-vertical, not bulging
+     - a domain-warped ridged-noise sulcal NETWORK (thin sulci, broad gyri)
+       instead of additive sine bumps
+     - per-vertex ambient occlusion baked into the sulcal depths, which is
+       the single strongest realism cue at zero render cost
+     - named landmarks carved explicitly: Sylvian (lateral) fissure with an
+       overhanging fronto-parietal operculum, central sulcus, superior
+       temporal sulcus, longitudinal fissure, flat skull-base under-surface
+     - a real cerebellum (horizontal folia + primary fissure + vermis) and
+       a brainstem with midbrain / pontine bulge / medulla
+
+   OPTIONAL REAL-SCAN UPGRADE
+   --------------------------
+   The gold standard is an MRI-derived surface (e.g. a FreeSurfer pial
+   surface, or any CC0 anatomical GLB). Drop such a file at the path in
+   BP_REAL_MODEL_URL, next to this HTML, and it is loaded and used instead
+   of the generated cortex. Nothing else has to change and the whole demo
+   still works offline if the file is absent. Draco-compressed GLBs are not
+   supported (re-export uncompressed).
+   ===================================================================== */
+const BP_REAL_MODEL_URL='models/brain.glb';
+/* If your GLB comes in with the wrong orientation, change these. Order is
+   applied as XYZ Euler, in radians, before auto-centring and auto-scaling. */
+const BP_REAL_MODEL_ROT=[0,0,0];
+
+function bpClamp(x,a=0,b=1){return Math.max(a,Math.min(b,x))}
+function bpSmooth(e0,e1,x){const t=bpClamp((x-e0)/((e1-e0)||1e-6),0,1);return t*t*(3-2*t)}
+function bpMix(a,b,t){return a+(b-a)*t}
+
+/* ---------- deterministic gradient noise ---------- */
+function bpMakeNoise(seed){
+ const p=new Uint8Array(512),perm=new Uint8Array(256);
+ for(let i=0;i<256;i++)perm[i]=i;
+ let s=(seed>>>0)||1;
+ const rnd=()=>{s^=s<<13;s>>>=0;s^=s>>>17;s^=s<<5;s>>>=0;return s/4294967296};
+ for(let i=255;i>0;i--){const j=(rnd()*(i+1))|0,t=perm[i];perm[i]=perm[j];perm[j]=t}
+ for(let i=0;i<512;i++)p[i]=perm[i&255];
+ const fade=t=>t*t*t*(t*(t*6-15)+10),lp=(a,b,t)=>a+(b-a)*t;
+ function grad(h,x,y,z){switch(h&15){
+  case 0:return x+y;case 1:return -x+y;case 2:return x-y;case 3:return -x-y;
+  case 4:return x+z;case 5:return -x+z;case 6:return x-z;case 7:return -x-z;
+  case 8:return y+z;case 9:return -y+z;case 10:return y-z;case 11:return -y-z;
+  case 12:return x+y;case 13:return -y+z;case 14:return y-x;default:return -y-z}}
+ return function(x,y,z){
+  const X=Math.floor(x)&255,Y=Math.floor(y)&255,Z=Math.floor(z)&255;
+  x-=Math.floor(x);y-=Math.floor(y);z-=Math.floor(z);
+  const u=fade(x),v=fade(y),w=fade(z);
+  const A=p[X]+Y,AA=p[A]+Z,AB=p[A+1]+Z,B=p[X+1]+Y,BA=p[B]+Z,BB=p[B+1]+Z;
+  return lp(lp(lp(grad(p[AA],x,y,z),grad(p[BA],x-1,y,z),u),
+               lp(grad(p[AB],x,y-1,z),grad(p[BB],x-1,y-1,z),u),v),
+            lp(lp(grad(p[AA+1],x,y,z-1),grad(p[BA+1],x-1,y,z-1),u),
+               lp(grad(p[AB+1],x,y-1,z-1),grad(p[BB+1],x-1,y-1,z-1),u),v),w)}
+}
+
+/* ---------- indexed icosphere: uniform triangles, no polar pinching ---------- */
+function bpIcoSphere(detail){
+ const t=(1+Math.sqrt(5))/2;
+ let V=[[-1,t,0],[1,t,0],[-1,-t,0],[1,-t,0],[0,-1,t],[0,1,t],[0,-1,-t],[0,1,-t],[t,0,-1],[t,0,1],[-t,0,-1],[-t,0,1]]
+   .map(v=>{const l=Math.hypot(v[0],v[1],v[2]);return [v[0]/l,v[1]/l,v[2]/l]});
+ let F=[[0,11,5],[0,5,1],[0,1,7],[0,7,10],[0,10,11],[1,5,9],[5,11,4],[11,10,2],[10,7,6],[7,1,8],
+        [3,9,4],[3,4,2],[3,2,6],[3,6,8],[3,8,9],[4,9,5],[2,4,11],[6,2,10],[8,6,7],[9,8,1]];
+ for(let d=0;d<detail;d++){
+  const cache=new Map(),NF=[];
+  const mid=(a,b)=>{const k=a<b?a*100003+b:b*100003+a,h=cache.get(k);if(h!==undefined)return h;
+   const va=V[a],vb=V[b];let x=va[0]+vb[0],y=va[1]+vb[1],z=va[2]+vb[2];const l=Math.hypot(x,y,z);
+   V.push([x/l,y/l,z/l]);const i=V.length-1;cache.set(k,i);return i};
+  for(let i=0;i<F.length;i++){const f=F[i],a=mid(f[0],f[1]),b=mid(f[1],f[2]),c=mid(f[2],f[0]);
+   NF.push([f[0],a,c],[f[1],b,a],[f[2],c,b],[a,b,c])}
+  F=NF}
+ return {V,F};
+}
+function bpProf(z,pts){
+ if(z<=pts[0][0])return pts[0][1];
+ for(let i=1;i<pts.length;i++)if(z<=pts[i][0]){
+  const t=(z-pts[i-1][0])/(pts[i][0]-pts[i-1][0]),s=t*t*(3-2*t);
+  return pts[i-1][1]+(pts[i][1]-pts[i-1][1])*s}
+ return pts[pts.length-1][1];
+}
+function bpPolyDist(qx,qy,pts){
+ let best=1e9,bdy=0;
+ for(let i=1;i<pts.length;i++){
+  const ax=pts[i-1][0],ay=pts[i-1][1],bx=pts[i][0],by=pts[i][1];
+  const vx=bx-ax,vy=by-ay,wx=qx-ax,wy=qy-ay,L=vx*vx+vy*vy;
+  let t=L>1e-9?(wx*vx+wy*vy)/L:0;t=bpClamp(t,0,1);
+  const cx=ax+vx*t,cy=ay+vy*t,d=Math.hypot(qx-cx,qy-cy);
+  if(d<best){best=d;bdy=qy-cy}}
+ return {d:best,dy:bdy};
+}
+/* measured antero-posterior profiles (half-extents) */
+const BP_PW=[[-1,.14],[-.90,.34],[-.75,.51],[-.55,.645],[-.32,.735],[-.05,.775],[.22,.765],[.45,.70],[.65,.595],[.82,.45],[.93,.30],[1,.13]];
+const BP_PU=[[-1,.22],[-.88,.39],[-.68,.53],[-.42,.615],[-.15,.655],[.10,.655],[.36,.625],[.60,.56],[.80,.455],[.93,.32],[1,.19]];
+const BP_PD=[[-1,.17],[-.88,.29],[-.70,.40],[-.52,.53],[-.32,.605],[-.05,.625],[.22,.625],[.42,.60],[.60,.535],[.78,.435],[.92,.32],[1,.21]];
+const BP_PC=[[-1,-.02],[-.50,0],[.10,.015],[.60,.045],[1,.075]];
+/* named fissure traces in (z,y) */
+const BP_SYLVIAN=[[.640,-.415],[.615,-.330],[.565,-.285],[.40,-.250],[.16,-.190],[-.08,-.115],[-.30,-.025],[-.46,.065]];
+const BP_CENTRAL=[[-.16,.585],[-.10,.44],[-.02,.28],[.06,.12],[.11,-.02],[.14,-.11]];
+const BP_STS=[[.50,-.475],[.30,-.435],[.06,-.380],[-.18,-.300],[-.36,-.215]];
+const BP_CCTRACE=[[.34,-.02],[.16,.09],[-.02,.115],[-.22,.07],[-.36,-.03]];
+
+function bpHemisphereGeometry(sign,detail){
+ const noise=bpMakeNoise(20260917),{V,F}=bpIcoSphere(detail),n=V.length;
+ const pos=new Float32Array(n*3),col=new Float32Array(n*3);
+ const SUL=.090,GAP=.026;
+ function sulcusField(x,y,z){
+  const wx=noise(x*.80+17.2,y*.80-4.1,z*.80+9.3),wy=noise(x*.80-8.4,y*.80+21.7,z*.80-3.2),wz=noise(x*.80+5.9,y*.80+2.6,z*.80+31.4);
+  const W=.42,X=x+W*wx,Y=y+W*wy,Z=z+W*wz;
+  const n1=Math.abs(noise(X,Y,Z)),n2=Math.abs(noise(X*2.03+3.7,Y*2.03-1.9,Z*2.03+8.1));
+  const j=.030*noise(x*1.15+41,y*1.15+13,z*1.15-27);
+  const s1=bpSmooth(.205+j,.030,n1),s2=bpSmooth(.150+j,.026,n2)*.84;
+  const u=s1+s2-s1*s2;                 /* smooth union: max() would crease */
+  return bpClamp(u*u*(3-2*u),0,1);     /* rounded sulcal floors */
+ }
+ for(let i=0;i<n;i++){
+  const d=V[i],ux=Math.abs(d[0]),uy=d[1],uz=d[2];
+  const az=bpClamp(uz,-1,1);
+  const ring=Math.pow(Math.max(0,1-Math.pow(Math.abs(az),3.1)),1/2.25);
+  const rp=Math.hypot(d[0],d[1])||1e-6,ca=ux/rp,sa=uy/rp;
+  const W=bpProf(az,BP_PW),U=bpProf(az,BP_PU),D=bpProf(az,BP_PD),C=bpProf(az,BP_PC);
+  const RV=bpMix(D,U,.5+.5*sa);
+  const pe=2.02+.92*ring;
+  const cw=Math.abs(ca)/Math.max(1e-4,W),sh=Math.abs(sa)/Math.max(1e-4,RV);
+  /* The icosphere has exact vertices at (0,0,+/-1) after subdivision. There
+     ca=sa=0, the superellipse denominator collapses and rr goes infinite,
+     which produced NaN positions (and NaN normals across ~40 neighbours) at
+     the frontal and occipital poles. Those vertices belong on the axis. */
+  const den=Math.pow(cw,pe)+Math.pow(sh,pe);
+  const rr=den>1e-12?1/Math.pow(den,1/pe):0;
+  let x=ca*rr*ring,y=sa*rr*ring+C,z=az;
+  y+=.085*bpSmooth(-.22,-.62,y);                                    /* flat skull base */
+  const orb=bpSmooth(.26,.88,uz)*bpSmooth(-.08,-.62,sa);
+  y+=.130*orb;z-=.030*orb;                                          /* orbital surface */
+  const subOcc=bpSmooth(-.30,-.95,uz)*bpSmooth(-.02,-.72,sa);
+  y+=.150*subOcc;z+=.050*subOcc;                                    /* cerebellar fossa */
+  const syl=bpPolyDist(z,y,BP_SYLVIAN),lateral=bpSmooth(.10,.55,ux);
+  const sylEnv=Math.exp(-Math.pow(syl.d/.038,2))*lateral;
+  const sylWide=Math.exp(-Math.pow(syl.d/.115,2))*lateral;
+  const below=bpSmooth(.030,-.090,syl.dy);
+  const tlobe=below*bpSmooth(-.70,-.42,z)*bpSmooth(.70,.54,z);
+  x*=1+.155*tlobe;y+=.070*tlobe;                                    /* temporal lobe */
+  const oper=(1-below)*Math.exp(-Math.pow(syl.d/.110,2))*lateral;
+  x*=1+.038*oper;                                                   /* operculum overhang */
+  const medial=bpSmooth(.40,.045,ux);
+  x=bpMix(x,GAP,medial*.97);                                        /* medial wall */
+  const ccN=Math.exp(-Math.pow(bpPolyDist(z,y,BP_CCTRACE).d/.155,2))*medial;
+  const iso=bpSmooth(-.05,-.55,uy);
+  const sf=sulcusField(ux*4.05,uy*(4.20-.55*iso),uz*(2.45+1.25*iso));
+  const sulc=sf*(1-.96*medial)*(1-.92*sylEnv)*(1-.70*ccN);
+  const crown=.008*noise(ux*4.3+3,uy*4.3-5,uz*3.1+9)*(1-sulc);
+  let nx=ca*ring/Math.max(.12,W),ny=(sa>=0?1/Math.max(.12,U):1/Math.max(.12,D))*sa*ring,nz=az*1.05;
+  const nl=Math.hypot(nx,ny,nz)||1;nx/=nl;ny/=nl;nz/=nl;
+  const cen=Math.exp(-Math.pow(bpPolyDist(z,y,BP_CENTRAL).d/.042,2))*lateral;
+  const sts=Math.exp(-Math.pow(bpPolyDist(z,y,BP_STS).d/.040,2))*lateral;
+  const disp=-SUL*sulc+crown-(0.150*sylEnv+0.022*sylWide+0.034*cen+0.028*sts);
+  x+=nx*disp;y+=ny*disp;z+=nz*disp;
+  pos[i*3]=x*sign;pos[i*3+1]=y;pos[i*3+2]=z;
+  const shade=bpClamp(sulc*.95+.95*sylEnv+.30*sylWide+.30*ccN+.50*cen+.40*sts,0,1);
+  const g=Math.pow(1-shade,1.05),tint=.035*noise(ux*6.1+2,uy*6.1,uz*6.1);
+  col[i*3]  =bpClamp(bpMix(.245,.900,g)+tint,0,1);
+  col[i*3+1]=bpClamp(bpMix(.163,.808,g)+tint*.85,0,1);
+  col[i*3+2]=bpClamp(bpMix(.158,.762,g)+tint*.80,0,1);
+ }
+ const idx=new Uint32Array(F.length*3);
+ for(let i=0;i<F.length;i++){const f=F[i];
+  if(sign<0){idx[i*3]=f[0];idx[i*3+1]=f[2];idx[i*3+2]=f[1]}
+  else{idx[i*3]=f[0];idx[i*3+1]=f[1];idx[i*3+2]=f[2]}}
+ const geo=new THREE.BufferGeometry();
+ geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+ geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+ geo.setIndex(new THREE.BufferAttribute(idx,1));
+ geo.computeVertexNormals();
+ return geo;
+}
+function bpCerebellumGeometry(detail){
+ const noise=bpMakeNoise(771),{V,F}=bpIcoSphere(detail),n=V.length;
+ const pos=new Float32Array(n*3),col=new Float32Array(n*3);
+ const CY=-.500,CZ=-.470,RX=.605,RY=.315,RZ=.375;
+ for(let i=0;i<n;i++){
+  const d=V[i],ux=d[0],uy=d[1],uz=d[2],pe=2.45;
+  const rr=1/Math.pow(Math.pow(Math.abs(ux)/RX,pe)+Math.pow(Math.abs(uy)/RY,pe)+Math.pow(Math.abs(uz)/RZ,pe),1/pe);
+  let x=ux*rr,y=uy*rr,z=uz*rr;
+  y-=.075*bpSmooth(.15,1,uy);                                       /* tentorial flattening */
+  z-=.115*bpSmooth(.35,1,uz)*bpSmooth(-.25,.85,uy);                 /* notch for the brainstem */
+  const warp=.10*noise(x*3,y*3,z*3);
+  const fol=Math.abs(Math.sin((y+warp)*44+.6*noise(x*2.2,y*1.1,z*2.2)));   /* folia */
+  const prim=Math.exp(-Math.pow((y-.055)/.030,2));                  /* primary fissure */
+  const verm=Math.exp(-Math.pow(x/.115,2));                         /* vermis */
+  const nl=Math.hypot(x,y*1.6,z)||1;
+  const disp=-.016*(1-fol)-.022*prim+.030*verm;
+  x+=x/nl*disp;y+=y*1.6/nl*disp;z+=z/nl*disp;
+  pos[i*3]=x;pos[i*3+1]=y+CY;pos[i*3+2]=z+CZ;
+  const g=Math.pow(1-bpClamp(.82*(1-fol)+.55*prim,0,1),1.1);
+  col[i*3]=bpMix(.268,.845,g);col[i*3+1]=bpMix(.183,.742,g);col[i*3+2]=bpMix(.176,.690,g);
+ }
+ const idx=new Uint32Array(F.length*3);
+ for(let i=0;i<F.length;i++){idx[i*3]=F[i][0];idx[i*3+1]=F[i][1];idx[i*3+2]=F[i][2]}
+ const geo=new THREE.BufferGeometry();
+ geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+ geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+ geo.setIndex(new THREE.BufferAttribute(idx,1));geo.computeVertexNormals();return geo;
+}
+function bpBrainstemGeometry(radial,rings){
+ const PATH=[[-.100,-.095],[-.240,-.125],[-.375,-.165],[-.510,-.205],[-.650,-.232],[-.790,-.242],[-.930,-.236],[-1.070,-.224]];
+ const RAD=[.188,.200,.214,.240,.228,.186,.152,.124];
+ const BUL=[0,.012,.038,.078,.062,.018,0,0];
+ const sm=(arr,t)=>{const f=t*(arr.length-1),i=Math.min(arr.length-2,Math.floor(f)),u=f-i,s=u*u*(3-2*u);return arr[i]+(arr[i+1]-arr[i])*s};
+ const YS=PATH.map(p=>p[0]),ZS=PATH.map(p=>p[1]);
+ const pos=new Float32Array(rings*radial*3),col=new Float32Array(rings*radial*3),idx=[];
+ for(let r=0;r<rings;r++){
+  const t=r/(rings-1),y=sm(YS,t),z=sm(ZS,t),rad=sm(RAD,t),bul=sm(BUL,t);
+  for(let a=0;a<radial;a++){
+   const th=a/radial*Math.PI*2,cx=Math.cos(th),cz=Math.sin(th);
+   const flat=1-.22*bpSmooth(.1,1,-cz);                             /* 4th-ventricle floor */
+   const i=r*radial+a;
+   pos[i*3]=cx*rad*1.06*flat;
+   pos[i*3+1]=y+.030*Math.cos(th*2)*bpSmooth(.25,.55,t);
+   pos[i*3+2]=z+cz*rad*flat+bul*bpSmooth(-.2,1,cz);                 /* pontine bulge */
+   const band=.5+.5*Math.sin(t*90+cz*2);
+   const g=1-(.30+.16*band*bpSmooth(.18,.55,t));
+   col[i*3]=bpMix(.36,.830,g);col[i*3+1]=bpMix(.27,.735,g);col[i*3+2]=bpMix(.26,.690,g);
+  }
+ }
+ for(let r=0;r<rings-1;r++)for(let a=0;a<radial;a++){
+  const a2=(a+1)%radial,i0=r*radial+a,i1=r*radial+a2,i2=(r+1)*radial+a,i3=(r+1)*radial+a2;
+  idx.push(i0,i2,i1,i1,i2,i3)}
+ const geo=new THREE.BufferGeometry();
+ geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+ geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+ geo.setIndex(new THREE.BufferAttribute(new Uint32Array(idx),1));geo.computeVertexNormals();return geo;
+}
+function bpEllipsoidGeo(rx,ry,rz,detail=3,rough=.02){
+ const {V,F}=bpIcoSphere(detail),n=V.length,pos=new Float32Array(n*3);
+ for(let i=0;i<n;i++){const d=V[i];
+  const k=1+(Math.sin(d[0]*2.7+d[1]*2.1)+Math.sin(d[2]*3.2-d[1]*2.4)*.7)*rough;
+  pos[i*3]=d[0]*rx*k;pos[i*3+1]=d[1]*ry*k;pos[i*3+2]=d[2]*rz*k}
+ const idx=new Uint32Array(F.length*3);
+ for(let i=0;i<F.length;i++){idx[i*3]=F[i][0];idx[i*3+1]=F[i][1];idx[i*3+2]=F[i][2]}
+ const geo=new THREE.BufferGeometry();
+ geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+ geo.setIndex(new THREE.BufferAttribute(idx,1));geo.computeVertexNormals();return geo;
+}
+
+const bpBrainGroup=new THREE.Group();bpBrainGroup.position.set(0,.16,0);
+bpBrainGroup.rotation.set(-.08,-.72,.03);bpScene.add(bpBrainGroup);
+function bpTubeCurve(points,color,r=.012,opacity=.42,segments=60,matExtra={}){
+ const cv=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));
+ const mesh=new THREE.Mesh(new THREE.TubeGeometry(cv,segments,r,8,false),
+  new THREE.MeshBasicMaterial(Object.assign({color,transparent:true,opacity,depthWrite:false,blending:THREE.NormalBlending},matExtra)));
+ bpBrainGroup.add(mesh);return {cv,mesh};
+}
+function bpLineCurve(points,color,r=.010,opacity=.78){return bpTubeCurve(points,color,r,opacity,52,{blending:THREE.NormalBlending})}
+
+/* ---- cortex shells (geometry built lazily: it is ~250 ms of noise) ---- */
+/* Translucent "glass anatomy" shell.
+   A Fresnel term is injected into the standard shader: near the silhouette the
+   surface is bright and nearly opaque (so the folded form still reads), while
+   face-on it drops close to clear, letting the orexin pathways, the glowing
+   neuron populations and the deep nuclei show straight through it. */
+function bpGlassify(m,rimHex,rimPow,core,gain){
+ m.transparent=true;m.depthWrite=false;m.side=THREE.DoubleSide;
+ m.onBeforeCompile=sh=>{
+  sh.uniforms.uRim={value:new THREE.Color(rimHex)};
+  sh.uniforms.uRimPow={value:rimPow};
+  sh.uniforms.uCore={value:core};
+  sh.uniforms.uGain={value:gain};
+  sh.vertexShader='varying vec3 vGWN;varying vec3 vGWP;\n'+sh.vertexShader;
+  sh.vertexShader=sh.vertexShader.replace('#include <begin_vertex>',
+   '#include <begin_vertex>\n vGWN=normalize(mat3(modelMatrix)*normal);\n vGWP=(modelMatrix*vec4(position,1.0)).xyz;');
+  sh.fragmentShader='varying vec3 vGWN;varying vec3 vGWP;uniform vec3 uRim;uniform float uRimPow,uCore,uGain;\n'+sh.fragmentShader;
+  sh.fragmentShader=sh.fragmentShader.replace('#include <dithering_fragment>',
+   '#include <dithering_fragment>\n'+
+   ' vec3 gV=normalize(cameraPosition-vGWP);\n'+
+   ' float gF=pow(1.0-abs(dot(normalize(vGWN),gV)),uRimPow);\n'+
+   ' gl_FragColor.rgb+=uRim*gF*uGain;\n'+
+   ' gl_FragColor.a=clamp(gl_FragColor.a*(uCore+gF*2.45),0.0,1.0);');
+ };
+ return m;
+}
+const bpCortexMat=()=>bpGlassify(new THREE.MeshPhysicalMaterial({vertexColors:true,roughness:.62,metalness:0,
+ clearcoat:.55,clearcoatRoughness:.42,transparent:true,opacity:.62}),0x8FE2F4,2.05,.19,.95);
+function bpMakeShell(){const g=new THREE.Group();const m=new THREE.Mesh(new THREE.BufferGeometry(),bpCortexMat());
+ m.visible=false;g.add(m);g.userData={shell:m};return g}
+const bpLeftHem=bpMakeShell(),bpRightHem=bpMakeShell();
+bpBrainGroup.add(bpLeftHem,bpRightHem);
+const bpCerebellum=new THREE.Mesh(new THREE.BufferGeometry(),
+ bpGlassify(new THREE.MeshPhysicalMaterial({vertexColors:true,roughness:.66,metalness:0,clearcoat:.30,transparent:true,opacity:.58}),0x8FE2F4,2.2,.26,.85));
+const bpStem=new THREE.Mesh(new THREE.BufferGeometry(),
+ bpGlassify(new THREE.MeshPhysicalMaterial({vertexColors:true,roughness:.64,metalness:0,clearcoat:.28,transparent:true,opacity:.62}),0xA8E8F6,2.2,.30,.80));
+bpCerebellum.visible=false;bpStem.visible=false;bpBrainGroup.add(bpCerebellum,bpStem);
+bpLeftHem.renderOrder=6;bpRightHem.renderOrder=6;
+bpLeftHem.userData.shell.renderOrder=6;bpRightHem.userData.shell.renderOrder=6;
+bpCerebellum.renderOrder=5;bpStem.renderOrder=5;
+
+/* Human translation view: anatomy is represented primarily as a transparent
+   point scaffold. This keeps deep nuclei and animated orexin/rescue routes
+   readable instead of hiding them behind a bright solid cortex. */
+const bpDotBrainGroup=new THREE.Group();bpBrainGroup.add(bpDotBrainGroup);
+function bpSurfacePoints(geo,hex,size,opacity,maxPoints=18000){
+ const src=geo?.attributes?.position;if(!src||!src.count)return null;
+ const step=Math.max(1,Math.ceil(src.count/maxPoints)),n=Math.ceil(src.count/step),arr=new Float32Array(n*3);
+ let j=0;for(let i=0;i<src.count;i+=step){arr[j*3]=src.getX(i);arr[j*3+1]=src.getY(i);arr[j*3+2]=src.getZ(i);j++}
+ const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(arr,3));
+ const m=new THREE.PointsMaterial({color:hex,size,transparent:true,opacity,depthWrite:false,blending:THREE.NormalBlending,sizeAttenuation:true});
+ const pts=new THREE.Points(g,m);pts.frustumCulled=false;return pts;
+}
+function bpClearDotBrain(){while(bpDotBrainGroup.children.length){const o=bpDotBrainGroup.children.pop();o.geometry?.dispose?.();o.material?.dispose?.()}}
+function bpRefreshDotBrain(realGeo=null){
+ bpClearDotBrain();
+ const add=(geo,hex,size,op,max)=>{const p=bpSurfacePoints(geo,hex,size,op,max);if(p)bpDotBrainGroup.add(p)};
+ if(realGeo){add(realGeo,0x9fd7e4,.0125,.40,30000)}
+ else{
+  add(bpLeftHem.userData.shell.geometry,0x90c9d6,.0115,.34,15000);
+  add(bpRightHem.userData.shell.geometry,0x90c9d6,.0115,.30,15000);
+  add(bpCerebellum.geometry,0xa7c7e8,.0110,.34,9000);
+  add(bpStem.geometry,0x7fd2e6,.0120,.40,7000);
+ }
+}
+
+let bpBrainBuilt=false;
+function bpBuildBrain(){
+ if(bpBrainBuilt)return;bpBrainBuilt=true;
+ const detail=(innerWidth>900&&devicePixelRatio<3)?6:5;
+ try{
+  bpLeftHem.userData.shell.geometry=bpHemisphereGeometry(-1,detail);
+  bpRightHem.userData.shell.geometry=bpHemisphereGeometry(1,detail);
+  bpCerebellum.geometry=bpCerebellumGeometry(Math.min(5,detail));
+  bpStem.geometry=bpBrainstemGeometry(44,72);
+  /* keep a nearly invisible geometric scaffold only for depth cueing; dots carry the anatomy */
+  bpLeftHem.userData.shell.visible=false;bpRightHem.userData.shell.visible=false;
+  bpCerebellum.visible=false;bpStem.visible=false;
+  bpRefreshDotBrain();
+ }catch(e){console.warn('[vigil] brain build failed',e)}
+ bpTryRealModel();
+}
+
+/* ---------- optional: swap in a real scan-derived GLB if one is present ----------
+   Minimal GLB reader: JSON + BIN chunks, indexed triangle primitives, node
+   transforms applied. Uncompressed GLB only. Silently does nothing if the file
+   is missing, so the demo never depends on it. */
+function bpReadGLB(buf){
+ const dv=new DataView(buf);
+ if(dv.getUint32(0,true)!==0x46546C67)throw new Error('not a GLB');
+ const total=dv.getUint32(8,true);let off=12,json=null,bin=null;
+ while(off+8<=total&&off+8<=dv.byteLength){
+  const len=dv.getUint32(off,true),type=dv.getUint32(off+4,true),start=off+8;
+  if(type===0x4E4F534A)json=JSON.parse(new TextDecoder().decode(new Uint8Array(buf,start,len)));
+  else if(type===0x004E4942)bin=new Uint8Array(buf,start,len);
+  off=start+len+((4-(len%4))%4);
+ }
+ if(!json)throw new Error('no JSON chunk');
+ return {json,bin};
+}
+const BP_COMP={5120:Int8Array,5121:Uint8Array,5122:Int16Array,5123:Uint16Array,5125:Uint32Array,5126:Float32Array};
+const BP_NCOMP={SCALAR:1,VEC2:2,VEC3:3,VEC4:4,MAT4:16};
+function bpAccessor(json,bin,i){
+ const acc=json.accessors[i],nc=BP_NCOMP[acc.type],TA=BP_COMP[acc.componentType];
+ const bv=json.bufferViews[acc.bufferView];
+ const base=(bv.byteOffset||0)+(acc.byteOffset||0)+bin.byteOffset;
+ const stride=bv.byteStride||0;
+ const out=new (acc.componentType===5126?Float32Array:Uint32Array)(acc.count*nc);
+ if(!stride||stride===nc*TA.BYTES_PER_ELEMENT){
+  const src=new TA(bin.buffer,base,acc.count*nc);for(let k=0;k<out.length;k++)out[k]=src[k];
+ }else{
+  for(let e=0;e<acc.count;e++){const src=new TA(bin.buffer,base+e*stride,nc);
+   for(let c=0;c<nc;c++)out[e*nc+c]=src[c]}
+ }
+ return out;
+}
+function bpTryRealModel(){
+ let url;try{url=new URL(BP_REAL_MODEL_URL,location.href).toString()}catch(e){return}
+ fetch(url).then(r=>r.ok?r.arrayBuffer():Promise.reject(0)).then(buf=>{
+  const {json,bin}=bpReadGLB(buf);
+  if((json.extensionsRequired||[]).indexOf('KHR_draco_mesh_compression')>=0)
+   throw new Error('Draco-compressed GLB is not supported — re-export uncompressed');
+  const P=[],I=[];let vbase=0;
+  const M=new THREE.Matrix4(),tmp=new THREE.Vector3();
+  const nodeMatrix=(nd)=>{
+   const m=new THREE.Matrix4();
+   if(nd.matrix)m.fromArray(nd.matrix);
+   else m.compose(new THREE.Vector3().fromArray(nd.translation||[0,0,0]),
+                  new THREE.Quaternion().fromArray(nd.rotation||[0,0,0,1]),
+                  new THREE.Vector3().fromArray(nd.scale||[1,1,1]));
+   return m;
+  };
+  const walk=(ni,parent)=>{
+   const nd=json.nodes[ni],world=parent.clone().multiply(nodeMatrix(nd));
+   if(nd.mesh!==undefined)for(const prim of json.meshes[nd.mesh].primitives){
+    if(prim.mode!==undefined&&prim.mode!==4)continue;
+    if(prim.attributes.POSITION===undefined)continue;
+    const pos=bpAccessor(json,bin,prim.attributes.POSITION);
+    const cnt=pos.length/3;
+    for(let v=0;v<cnt;v++){tmp.set(pos[v*3],pos[v*3+1],pos[v*3+2]).applyMatrix4(world);P.push(tmp.x,tmp.y,tmp.z)}
+    if(prim.indices!==undefined){const ix=bpAccessor(json,bin,prim.indices);
+     for(let k=0;k<ix.length;k++)I.push(ix[k]+vbase)}
+    else for(let k=0;k<cnt;k++)I.push(k+vbase);
+    vbase+=cnt;
+   }
+   (nd.children||[]).forEach(c=>walk(c,world));
+  };
+  const scene=json.scenes[json.scene||0];
+  scene.nodes.forEach(nid=>walk(nid,M));
+  if(!P.length)throw new Error('no triangle geometry found');
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.Float32BufferAttribute(P,3));
+  geo.setIndex(I);
+  geo.applyMatrix4(new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(...BP_REAL_MODEL_ROT)));
+  geo.computeBoundingBox();
+  const bb=geo.boundingBox,size=new THREE.Vector3();bb.getSize(size);
+  const c=new THREE.Vector3();bb.getCenter(c);
+  geo.translate(-c.x,-c.y,-c.z);
+  geo.scale(2/Math.max(size.x,size.y,size.z),2/Math.max(size.x,size.y,size.z),2/Math.max(size.x,size.y,size.z));
+  geo.computeVertexNormals();
+  /* hand the whole brain over to the scanned mesh */
+  bpLeftHem.userData.shell.geometry.dispose?.();
+  bpLeftHem.userData.shell.geometry=geo;
+  bpLeftHem.userData.shell.material=new THREE.MeshPhysicalMaterial({color:0x8fbec9,roughness:.86,metalness:0,transparent:true,opacity:.025,side:THREE.DoubleSide});
+  bpLeftHem.userData.shell.visible=false;bpRightHem.userData.shell.visible=false;bpCerebellum.visible=false;bpStem.visible=false;
+  bpRefreshDotBrain(geo);
+  console.info('[vigil] real brain model loaded from '+BP_REAL_MODEL_URL+' — bbox',size);
+ }).catch(e=>{if(e)console.info('[vigil] no external brain model in use ('+(e.message||e)+') — using the generated anatomical brain')});
+}
+
+/* ---- deep structures, placed at anatomical coordinates ---- */
+const bpThal=new THREE.Mesh(bpEllipsoidGeo(.135,.115,.185,3,.012),
+ new THREE.MeshPhongMaterial({color:0x95d9e6,emissive:0x163a44,transparent:true,opacity:.92,shininess:90}));
+bpThal.position.set(.095,.02,-.055);bpBrainGroup.add(bpThal);
+const bpThal2=bpThal.clone();bpThal2.position.set(-.095,.02,-.055);bpBrainGroup.add(bpThal2);
+const bpHypo=new THREE.Mesh(bpEllipsoidGeo(.072,.058,.088,3,.01),
+ new THREE.MeshPhongMaterial({color:0xf5a94a,emissive:0x8e470c,transparent:true,opacity:.98,shininess:100}));
+bpHypo.position.set(.055,-.265,.045);bpBrainGroup.add(bpHypo);
+const bpBasal=new THREE.Mesh(bpEllipsoidGeo(.115,.070,.125,3,.012),
+ new THREE.MeshPhongMaterial({color:0xaedfeb,emissive:0x12323b,transparent:true,opacity:.66,shininess:75}));
+bpBasal.position.set(-.135,-.225,.295);bpBrainGroup.add(bpBasal);
+const BP_HYPO_POS=bpHypo.position.clone(),BP_THAL_POS=bpThal.position.clone(),
+      BP_LC_POS=new THREE.Vector3(.070,-.600,-.360),
+      BP_CEREB_POS=new THREE.Vector3(.360,-.520,-.620),
+      BP_STEM_POS=new THREE.Vector3(.0,-.800,-.255);
+const lc=new THREE.Mesh(new THREE.SphereGeometry(.042,16,14),
+ new THREE.MeshBasicMaterial({color:0x8fd6e4,transparent:true,opacity:.92,depthWrite:false}));
+lc.position.copy(BP_LC_POS);bpBrainGroup.add(lc);
+function bpSignalNode(pos,col,coreR=.026,ringR=.072,op=.72){
+ const g=new THREE.Group();g.position.copy(pos);
+ const core=new THREE.Mesh(new THREE.SphereGeometry(coreR,14,10),
+  new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:op,depthWrite:false,blending:THREE.NormalBlending}));
+ const ring=new THREE.Mesh(new THREE.TorusGeometry(ringR,.0045,6,40),
+  new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:op*.42,depthWrite:false,blending:THREE.NormalBlending}));
+ ring.rotation.x=Math.PI/2;g.add(core,ring);bpBrainGroup.add(g);return {g,core,ring};
+}
+const bpHypoGlow=bpSignalNode(BP_HYPO_POS,0xffb35a,.028,.078,.78),
+      bpLCGlow=bpSignalNode(BP_LC_POS,0x8edbea,.020,.055,.54),
+      bpRescueGlow=bpSignalNode(BP_LC_POS,0x6cc488,.018,.050,0),
+      bpThalGlow=bpSignalNode(BP_THAL_POS,0xa4ebf7,.018,.052,.42);
+
+/* ---- orexin / hypocretin projections from the lateral hypothalamus ---- */
+const bpOR1=bpTubeCurve([[.055,-.265,.045],[-.02,-.12,.28],[-.14,.10,.50],[-.28,.26,.66],[-.40,.34,.76]],0xE89730,.0085,.66,76,{blending:THREE.NormalBlending});
+const bpOR2=bpTubeCurve([[.055,-.265,.045],[-.02,-.255,.14],[-.09,-.24,.23],[-.135,-.225,.295]],0xE89730,.0075,.58,50,{blending:THREE.NormalBlending});
+const bpOR3=bpTubeCurve([[.055,-.265,.045],[.065,-.39,-.10],[.070,-.50,-.25],[.070,-.60,-.36]],0xE89730,.0085,.72,58,{blending:THREE.NormalBlending});
+const bpOR4=bpTubeCurve([[.055,-.265,.045],[.10,-.06,-.14],[.18,.20,-.38],[.28,.40,-.58],[.34,.47,-.70]],0xE89730,.0070,.48,66,{blending:THREE.NormalBlending});
+const bpOR5=bpTubeCurve([[.055,-.265,.045],[.075,-.14,0],[.090,-.04,-.03],[.095,.02,-.055]],0xE89730,.0065,.52,50,{blending:THREE.NormalBlending});
+const RESCUE=bpTubeCurve([[.070,-.60,-.36],[.055,-.42,-.20],[.02,-.20,.02],[-.08,.04,.28],[-.24,.22,.56],[-.40,.34,.76]],0x6CC488,.0090,0,78,{blending:THREE.NormalBlending});
+const orexinRoutes=[bpOR1,bpOR2,bpOR3,bpOR4,bpOR5];
+function bpPulseTrain(col,r=.016,count=4){
+ const g=new THREE.Group();
+ for(let i=0;i<count;i++){
+  const m=new THREE.Mesh(new THREE.SphereGeometry(r*(1-i*.10),10,8),
+   new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:[.95,.58,.32,.16][i]||.14,depthWrite:false,blending:THREE.NormalBlending}));
+  g.add(m);
+ }
+ g.visible=false;bpBrainGroup.add(g);return g;
+}
+function bpPulseOn(g,c,p,show){g.visible=!!show;if(!show)return;g.children.forEach((m,i)=>m.position.copy(c.getPoint((((p-i*.018)%1)+1)%1)))}
+const pulseRoutes=orexinRoutes.map((_,i)=>bpPulseTrain(i===2?0xffc988:0xf8d090,i===2?.017:.015,4)),bpPR=bpPulseTrain(0x9be4b2,.017,4);
+const dustG=new THREE.BufferGeometry(),dustP=new Float32Array(240*3);
+for(let i=0;i<240;i++){dustP[i*3]=(Math.random()-.5)*6.4;dustP[i*3+1]=(Math.random()-.5)*4.2;dustP[i*3+2]=(Math.random()-.5)*4.8-1.0}
+dustG.setAttribute('position',new THREE.BufferAttribute(dustP,3));
+const bpDust=new THREE.Points(dustG,new THREE.PointsMaterial({color:0x5b7d87,size:.008,transparent:true,opacity:.10,depthWrite:false}));bpScene.add(bpDust);
+
+/* ---- neuron populations: what the translucent shell is there to reveal ----
+   Three clouds, each tied to a phase of the closing story:
+     cortical/thalamic background (always on, slow shimmer)
+     orexin population around the lateral hypothalamus (fades out in phase 2)
+     downstream rescue activity along the LC -> cortex route (rises in phase 3) */
+function bpCloud(n,fn,hex,size,op){
+ const g=new THREE.BufferGeometry(),a=new Float32Array(n*3);
+ for(let i=0;i<n;i++){const p=fn(i);a[i*3]=p[0];a[i*3+1]=p[1];a[i*3+2]=p[2]}
+ g.setAttribute('position',new THREE.BufferAttribute(a,3));
+ const m=new THREE.Points(g,new THREE.PointsMaterial({color:hex,size,transparent:true,opacity:op,
+  depthWrite:false,blending:THREE.AdditiveBlending,sizeAttenuation:true}));
+ bpBrainGroup.add(m);return m;
+}
+function bpInEllipsoid(rx,ry,rz,cx,cy,cz){
+ for(;;){const x=Math.random()*2-1,y=Math.random()*2-1,z=Math.random()*2-1;
+  if(x*x+y*y+z*z<=1)return [cx+x*rx,cy+y*ry,cz+z*rz]}
+}
+const bpNeuroField=bpCloud(900,()=>bpInEllipsoid(.70,.50,.90,0,.02,-.02),0x7FD2E6,.0085,.12);
+const bpOrexinField=bpCloud(220,()=>{
+ const p=bpInEllipsoid(.13,.085,.14,.055,-.265,.045);return p},0xFFB44E,.0095,.46);
+const bpRescueField=bpCloud(180,(i)=>{
+ const t=i/180,pts=[[.070,-.60,-.36],[.055,-.42,-.20],[.02,-.20,.02],[-.08,.04,.28],[-.24,.22,.56],[-.40,.34,.76]];
+ const f=t*(pts.length-1),k=Math.min(pts.length-2,Math.floor(f)),u=f-k;
+ const j=(a,b)=>a+(b-a)*u;
+ return [j(pts[k][0],pts[k+1][0])+(Math.random()-.5)*.035,
+         j(pts[k][1],pts[k+1][1])+(Math.random()-.5)*.035,
+         j(pts[k][2],pts[k+1][2])+(Math.random()-.5)*.035]},0x7CE8A4,.0085,0);
+const BP_PHASES=[{badge:'01 · OREXIN NETWORK',title:'Human orexin / hypocretin system',text:'Orexin neurons arise in the lateral hypothalamic region and project broadly to wake-promoting systems, including cortex, basal forebrain and brainstem arousal nuclei.'},{badge:'02 · SIGNAL LOSS',title:'NT1-relevant orexin neuron loss',text:'Narcolepsy type 1 is associated with loss of orexin / hypocretin neurons. Here the orange network is withdrawn to visualize loss of stabilizing orexin signaling—not to simulate a patient.'},{badge:'03 · SYSTEMS HYPOTHESIS',title:'Modeled downstream compensation',text:'The green route is an explanatory systems-model analogy to the fly rescue: downstream network activity is highlighted while the original orexin population remains absent. It is not a validated human therapeutic mechanism.'}];
+function bpResize(){const w=bp.canvas.clientWidth,h=bp.canvas.clientHeight;if(!w||!h)return;bpRenderer.setPixelRatio(Math.min(devicePixelRatio,2));bpRenderer.setSize(w,h,false);bpCam.aspect=w/h;bpCam.updateProjectionMatrix()}addEventListener('resize',bpResize);function showBrainPopup(){bpBuildBrain();bp.active=true;bp.phase=-1;bp.t0=performance.now();bp.el.classList.remove('hidden');bpResize()}function hideBrainPopup(){bp.active=false;bp.el.classList.add('hidden')}
+function bpProjectLabel(id,pos,dx,dy){const el=$(id);if(!el)return;const v=pos.clone();bpBrainGroup.localToWorld(v);v.project(bpCam);const w=bp.canvas.clientWidth,h=bp.canvas.clientHeight,x=(v.x*.5+.5)*w+dx,y=(-v.y*.5+.5)*h+dy;el.style.left=Math.max(52,Math.min(w-52,x))+'px';el.style.top=Math.max(62,Math.min(h-96,y))+'px'}
+function bpUpdateLabels(){bpProjectLabel('bpLabHypo',BP_HYPO_POS,-62,30);bpProjectLabel('bpLabThal',BP_THAL_POS,72,-6);bpProjectLabel('bpLabLC',BP_LC_POS,78,6);bpProjectLabel('bpLabCereb',BP_CEREB_POS,74,26);bpProjectLabel('bpLabStem',BP_STEM_POS,-56,22)}
+function bpSetPhase(i){if(i===bp.phase)return;bp.phase=i;const ph=BP_PHASES[i];bp.badge.textContent=ph.badge;bp.caption.innerHTML=`<b>${ph.title}</b><small>${ph.text}</small>`;for(let k=0;k<3;k++)$('bpRail'+k)?.classList.toggle('on',k===i);['bpLabHypo','bpLabThal','bpLabLC','bpLabCereb','bpLabStem'].forEach(id=>$(id)?.classList.remove('flowHot'));if(i===0){$('bpLabHypo')?.classList.add('flowHot');$('bpLabThal')?.classList.add('flowHot');$('bpLabLC')?.classList.add('flowHot')}else if(i===1){$('bpLabHypo')?.classList.add('flowHot')}else{$('bpLabLC')?.classList.add('flowHot');$('bpLabThal')?.classList.add('flowHot')}}
+function bpTick(now){
+ if(!bp.active)return;
+ if(!bpBrainBuilt)bpBuildBrain();
+ const dur=(SUMMARY_AUDIO&&isFinite(SUMMARY_AUDIO.duration)&&SUMMARY_AUDIO.duration>0)?SUMMARY_AUDIO.duration:26;
+ const frac=Math.min(1,((performance.now()-bp.t0)/1000)/dur),i=Math.min(2,Math.floor(frac*3));
+ bpSetPhase(i);
+ bpBrainGroup.rotation.y=-.72+Math.sin(now*.00018)*.06;
+ bpBrainGroup.rotation.x=-.08+Math.sin(now*.00013)*.010;
+ bpDust.rotation.y-=.00016;
+ const lossP=THREE.MathUtils.smoothstep(frac,.30,.58),rescueP=THREE.MathUtils.smoothstep(frac,.63,.90),native=1-lossP;
+ /* Both hemispheres stay translucent so the internal circuitry is legible the
+    whole way through; the near one opens up a little further still. */
+ const breathe=.02*Math.sin(now*.0016);
+ bpLeftHem.userData.shell.material.opacity=.018;
+ bpRightHem.userData.shell.material.opacity=.014;
+ bpCerebellum.material.opacity=.02;
+ bpStem.material.opacity=.02;
+ bpDotBrainGroup.children.forEach((m,k)=>{m.material.opacity=(k<2?.31:.36)+breathe*.55;m.material.size=(k<2?.0115:.0125)+.0012*Math.sin(now*.0018+k)});
+ /* neuron populations */
+ bpNeuroField.material.opacity=.075+.035*Math.abs(Math.sin(now*.0010));
+ bpOrexinField.material.opacity=(.10+.38*native)*(.92+.08*Math.sin(now*.0040));
+ bpOrexinField.material.size=.0085+.0015*native;
+ bpRescueField.material.opacity=.32*rescueP*(.92+.08*Math.sin(now*.0036));
+ bpNeuroField.rotation.y=Math.sin(now*.00009)*.02;
+ orexinRoutes.forEach((r,k)=>r.mesh.material.opacity=(.05+[.62,.54,.70,.46,.50][k]*native));
+ bpHypo.material.opacity=.14+.70*native;
+ bpHypoGlow.core.material.opacity=.18+.64*native;bpHypoGlow.ring.material.opacity=.08+.24*native;bpHypoGlow.g.scale.setScalar(.96+.035*Math.sin(now*.0028));
+ bpThalGlow.core.material.opacity=.18;bpThalGlow.ring.material.opacity=.08;bpLCGlow.core.material.opacity=.26;bpLCGlow.ring.material.opacity=.10;
+ RESCUE.mesh.material.opacity=.70*rescueP;bpRescueGlow.core.material.opacity=.68*rescueP;bpRescueGlow.ring.material.opacity=.26*rescueP;bpRescueGlow.g.scale.setScalar(.90+.08*rescueP+.025*Math.sin(now*.0032));
+ pulseRoutes.forEach((m,k)=>bpPulseOn(m,orexinRoutes[k].cv,now*(.00024+k*.000018)+k*.18,native>.08));bpPulseOn(bpPR,RESCUE.cv,now*.00030,rescueP>.06);
+ bpUpdateLabels();bpRenderer.render(bpScene,bpCam)
+}
 
 /* ============ helpers ============ */
 function kf(a,t){if(t<=a[0][0])return a[0][1];
@@ -548,7 +1731,7 @@ const isSleep=t=>SLEEP.some(s=>t>=s[0]&&t<s[1]);
 const deathOf=t=>DEATH.find(d=>t>=d.hit&&t<d.hit+6.5);
 const AR=t=>(t>=50.1&&t<58)?.34:(t>=0&&t<28?.86:(t>=58&&t<64?.5:.97));
 const DIAL=[[],[],[]];
-let fp=new THREE.Vector2(-1.9,2.6),fh=0,sp=0,gait=0,crouch=0,tgt=0,feed=0,pt=0,shake=0,curB=null,lastSeg=null;
+let fp=new THREE.Vector2(-3.8,4.5),fh=0,sp=0,gait=0,crouch=0,tgt=0,feed=0,pt=0,shake=0,curB=null,lastSeg=null,restPad=-1,prevAsleep=false;
 
 /* ============ panels ============ */
 function arc(cx,cy,r,w,a0,a1,col){const rad=d=>(d-90)*Math.PI/180;
@@ -561,25 +1744,27 @@ function dialSvg(i,S,now){const R=S*.36,cx=S/2,cy=S/2,w=S*.14;
   s+=`<line x1="${cx}" y1="${cy}" x2="${(cx+(R+w*.7)*Math.cos(r2)).toFixed(1)}" y2="${(cy+(R+w*.7)*Math.sin(r2)).toFixed(1)}" stroke="#E9F1F4" stroke-width="1.5"/>`}
  return s+'</svg>'}
 const ANAT=[
- ['Optic lobes','vision · light input sets the clock','#3A6E7B','optic'],
- ['Mushroom body','associative learning anatomy · modeled feedback overlay','#6B55B0','mb'],
- ['Central brain','integration of state and sensory drive','#4D6C7B','central'],
- ['Modeled wake gate','state-control overlay · silenced in Screen B','#E89730','wake'],
- ['Modeled sleep gate','state-control overlay · dominates during sleep','#7E93E8','sleepc'],
- ['Descending neurons','the only route from brain to body','#54C8DC','neck'],
- ['Leg motor neurons','walking output in the nerve cord','#6CC488','vnc'],
- ['Alternative rescue node','modeled candidate selected after network search','#6CC488','rescue']];
+ ['Optic lobe complexes','visual neuropils · photic entrainment input','#3A6E7B','optic'],
+ ['Mushroom body (MB)','associative learning neuropil · policy feedback overlay','#6B55B0','mb'],
+ ['Central complex (CX)','state integration · fan-shaped/ellipsoid body scaffold','#4D6C7B','central'],
+ ['[modeled] wake drive','functional population overlay · silenced in Screen B','#E89730','wake'],
+ ['[modeled] sleep nodes','functional overlay · dominates during sleep window','#7E93E8','sleepc'],
+ ['Descending motor neurons','brain-to-ventral-nerve-cord command path','#54C8DC','neck'],
+ ['VNC motor columns','thoracic/abdominal motor output scaffold','#6CC488','vnc'],
+ ['[modeled] rescue route','candidate route selected after network search','#6CC488','rescue']];
 function anPane(lv){$('an').innerHTML=ANAT.map(a=>`<div class="an"><div><div class="d1"><i class="dot" style="background:${a[2]}"></i>${a[0]}</div>
  <div class="d2" style="padding-left:13px">${a[1]}</div></div><div class="abar"><i style="width:${Math.round((lv[a[3]]||0)*100)}%;background:${a[2]}"></i></div></div>`).join('')}
 function logPane(t){
  const rows=LOG.filter(l=>l[0]<=t).slice(-9).reverse().map(l=>`<div class="logl ${l[1]}"><span class="tm n">${l[2]}</span><span>${l[3]}</span></div>`).join('');
  $('log').innerHTML=rows||'<div class="logl" style="color:var(--ink3)"><span class="tm">—</span><span>no reward signal yet · Screen A is the failure baseline</span></div>';
  let p=POL[0];POL.forEach(x=>{if(t>=x[0])p=x});
- $('pol').innerHTML=`<b>Policy status</b> · ${p[1]}<br>learned sleep window <b>${p[2]}</b> · onset <b>${p[3]}</b> · hazard contacts <b>${p[4]}</b>
+ const scene=modelSceneAt(t),action=modelActionAt(t);
+ const actionLabel=action===null?'screening / no fly episode':(action===0?'ACT · forage / move':'REST · sleep / conserve');
+ $('pol').innerHTML=`<b>Policy status</b> · ${p[1]}<br>learned sleep window <b>${p[2]}</b> · onset <b>${p[3]}</b> · hazard contacts <b>${p[4]}</b><br><span style="color:var(--cy)">Backend action trace</span> · <b>${actionLabel}</b> · source <b>${scene||'receipt'}</b>
  <div style="color:var(--ink3);font-size:11px;margin-top:5px">Trained: a small policy / readout on top of the measured substrate. Not trained: the measured MaleCNS connectome itself.</div>`}
 const R3=[{},{},{}];
 function outPane(t,ai,p){
- const C=['#D4574A','#E89730','#6CC488'],L=['Untrained','Trained, no wake circuit','Trained + Node 07'];
+ const C=['#D4574A','#E89730','#6CC488'],L=['Untrained','Trained, no wake circuit','Trained + '+RESCUE_NAME];
  const row=k=>L.map((l,i)=>{const v=R3[i][k];return `<div class="brow"><span>${l}</span><div class="bt"><i style="width:${v===undefined?0:Math.max(0,Math.min(100,v))}%;background:${C[i]}"></i></div><span class="val n">${v===undefined?'—':Math.round(v)+'%'}</span></div>`}).join('');
  const mini=L.map((l,i)=>`<div class="mini">${dialSvg(i,62,null)}<div>${['Untrained','Impaired','Treated'][i]}</div></div>`).join('');
  $('out').innerHTML=`<div style="display:flex;justify-content:center">${dialSvg(ai,120,p)}</div>
@@ -587,35 +1772,53 @@ function outPane(t,ai,p){
  <div style="margin-top:10px;font-size:12px"><b>Wakefulness held through the day</b><div style="font-size:10.5px;color:var(--ink3)">24 h daytime wake stability</div>${row('dw')}</div>
  <div style="margin-top:8px;font-size:12px"><b>Sleep consolidated at night</b><div style="font-size:10.5px;color:var(--ink3)">24 h night sleep integrity</div>${row('ns')}</div>
  <div style="margin-top:8px;font-size:12px"><b>Energy after 24 hours</b><div style="font-size:10.5px;color:var(--ink3)">24 h functional outcome · 0 means lost</div>${row('en')}</div>
- ${t>86?'<div class="co g"><b>Takeda message — moving wakefulness alone is not enough.</b> <span>Restoring state timing moves all three. That is the strategic argument for mechanism-level restoration rather than symptom-only compensation.</span></div>':''}`}
+ ${t>86?'<div class="co g"><b>Fixture result — all three endpoints move.</b> <span>This is a receipt-backed model result, not evidence of human efficacy or a therapeutic recommendation.</span></div>':''}`}
 
 /* ============ loop ============ */
 function tick(now){
  const dt=Math.min(.05,(now-LN)/1000);LN=now;
- if(visualsFrozen){setMovementSfx(false);wr.render(ws,wcam);brr.render(bs,bcam);requestAnimationFrame(tick);return}
+ if(visualsFrozen){setMovementSfx(false);wr.render(ws,wcam);brr.render(bs,bcam);bpTick(now);requestAnimationFrame(tick);return}
  finishAfterFrame=false;
- const aiBefore=Math.max(0,ACTS.findIndex(c=>T<c.b));
+ /* actIndexAt() clamps to the last act at T>=END; the old inline findIndex
+    wrapped back to 0 there, which would have restarted screen_1.mp3 as soon as
+    the run holds on the final frame waiting for screen_3.mp3. */
+ const aiBefore=actIndexAt(T);
  if(play){
-  let nextT=T+dt;
-  if(aiBefore<NARRATION.length){
-   const endT=ACTS[aiBefore].b;
-   if(T<endT && nextT>=endT && !narrationFinishedForAct(aiBefore)) nextT=Math.max(T, endT-0.001);
+  const speed=visualSpeedAt(T);
+  let nextT=T+dt*speed;
+  const A0=ACTS[aiBefore];
+  let holding=false;
+  if(aiBefore<ACTS.length-1&&T<A0.b&&nextT>=A0.b){
+   if(narrationClear(aiBefore))nextT=visualStart(aiBefore+1)+Math.max(0,nextT-A0.b);
+   else{nextT=A0.b-1e-4;holding=true}
   }
   T=nextT;
-  if(T>=END){T=END;play=false;finishAfterFrame=true}
+  if(T>=END){
+   T=END;
+   if(narrationClear(ACTS.length-1)){play=false;finishAfterFrame=true}
+   else holding=true;
+  }
+  if(holding!==narrationHold){
+   narrationHold=holding;
+   $('aud').textContent=holding?'Animation trimmed — holding on the last frame until the narration finishes'
+                               :'Recorded narration + SFX active';
+  }
  }
- const ai=Math.max(0,ACTS.findIndex(c=>T<c.b)),A=ACTS[ai];
+ const ai=actIndexAt(T),A=ACTS[ai];
  if(play)playNarration(ai);
  ACTS.forEach((c,i)=>{const e=$('c'+i);e.className='ch'+(i===ai?' on':'')+(T>=c.b?' dn':'');
   e.querySelector('.bar').style.width=(i===ai?Math.max(0,Math.min(1,(T-c.a)/(c.b-c.a)))*100:(T>=c.b?100:0))+'%'});
- $('clk').textContent='00:'+String(Math.floor(T)).padStart(2,'0')+' / 01:32';
+ $('clk').textContent=runClock(T)+' / '+clockText(RUN_SECONDS);
  $('chn').textContent=A.m;
 
  const S=seg(T),isScreen=(T>=58&&T<64);
  const p=Math.max(0,Math.min(.9999,(T-S.a)/(S.b-S.a)));
  const day=T<S.day&&!isScreen;
  const dayFrac=(S.day-S.a)/(S.b-S.a);
- const asleep=isSleep(T),dth=deathOf(T),dead=dth&&T>=dth.impact;
+ const modelAction=modelActionAt(T);
+ const asleep=isSleep(T);
+ const dth=deathOf(T),dead=dth&&T>=dth.impact;
+ const traceEnergy=modelEnergyAt(T);
  const energy=kf(EKF,T),ar=AR(T);
  /* dial record */
  const di=T<28?0:(T>=50.1&&T<58?1:(T>=64?2:-1));
@@ -624,32 +1827,26 @@ function tick(now){
 
  /* sky and lights */
  const dayN=day?1:0,lerp=(a,b,x)=>a+(b-a)*x;
- hemi.intensity=lerp(.52,1.0,dayN);hemi.color.setHex(day?0x9FD6E6:0x6579A6);
- sunL.intensity=lerp(0,1.15,dayN);moonL.intensity=lerp(.66,0,dayN);
- wr.setClearColor(day?0x142B33:0x0B1425,1);ws.fog.color.setHex(day?0x162C34:0x101A2B);
- soil.material.color.setHex(day?0x2E4030:0x223029);
- stars.material.opacity=lerp(.92,0,dayN);
- const ang=(p/Math.max(.01,dayFrac))*Math.PI;
- sunO.visible=sunH.visible=day;moonO.visible=moonH.visible=!day;
- if(day){const x=Math.cos(Math.PI-ang)*15,y=Math.sin(ang)*10+1;sunO.position.set(x,y,-11);sunH.position.copy(sunO.position);sunL.position.set(x*.5,y,-6)}
- else{const q=(p-dayFrac)/Math.max(.01,1-dayFrac),a2=q*Math.PI,x=Math.cos(Math.PI-a2)*15,y=Math.sin(a2)*9+1;
-  moonO.position.set(x,y,-11);moonH.position.copy(moonO.position);moonL.position.set(x*.5,y,-6)}
- PADS.forEach((pd,i)=>{pd.ring.visible=day;pd.haz.visible=!day;
-  pd.pet.forEach(pv=>{pv.rotation.x+=(((day?0:-1.15))-pv.rotation.x)*Math.min(1,dt*4)});
-  pd.gl.material.color.setHex(day?0xE8A23A:0xC94F43);
-  pd.gl.material.opacity=day?(.22+.18*Math.sin(now*.003+i)):(.20+.07*Math.sin(now*.003+i))});
+ updateSky(day,p,dayFrac,now,dt);
+ updatePads(day,now,dt);
 
  /* fly */
  const haz=HAZ.find(h=>Math.abs(T-h)<.18);
+ if(asleep&&!prevAsleep){
+  let best=0,bd=Infinity;PADS.forEach((pd,i)=>{const d=fp.distanceTo(pd.v);if(d<bd){bd=d;best=i}});restPad=best;
+ }
+ if(!asleep)restPad=-1;prevAsleep=!!asleep;
  if(!dead){
-  if(asleep){sp*=.87;crouch=Math.min(1,crouch+dt*2.4);zzz.position.set(fp.x,.03,fp.y);
-   zzz.material.opacity=.24+.15*Math.sin(now*.003);zzz.scale.setScalar(.9+.22*Math.sin(now*.003))}
+  if(asleep){
+   const rv=PADS[Math.max(0,restPad)]?.v;if(rv){const dd=new THREE.Vector2(rv.x-fp.x,rv.y-fp.y),dl=dd.length();if(dl>.03){const step=Math.min(dl,dt*2.8);dd.normalize();fp.addScaledVector(dd,step);fh=Math.atan2(dd.x,dd.y)}}
+   sp*=.78;crouch=Math.min(1,crouch+dt*2.4);zzz.position.set(fp.x,(PADS[Math.max(0,restPad)]?.h||.5)+.75,fp.y);
+   zzz.material.opacity=.30+.16*Math.sin(now*.003);zzz.scale.setScalar(1.7+.35*Math.sin(now*.003))}
   else{zzz.material.opacity*=.9;crouch*=.87;
    const tv=PADS[tgt].v,d=new THREE.Vector2(tv.x-fp.x,tv.y-fp.y);
    if(d.length()<.55){if(day){feed+=dt;if(feed>1.6){feed=0;tgt=(tgt+3)%PADS.length}}else{tgt=(tgt+2)%PADS.length}}else feed=0;
    const want=Math.atan2(d.x,d.y);let df=want-fh;while(df>3.14)df-=6.283;while(df<-3.14)df+=6.283;
    fh+=Math.max(-2.2*dt,Math.min(2.2*dt,df*2.0));
-   const ws2=(feed>0?.07:1.05*ar);sp+=(ws2-sp)*Math.min(1,dt*4.5);
+   const ws2=(feed>0?.07:1.72*ar);sp+=(ws2-sp)*Math.min(1,dt*4.5);
    fp.x+=Math.sin(fh)*sp*dt;fp.y+=Math.cos(fh)*sp*dt}
  }
  if(haz&&!dead){burst.position.set(fp.x,.04,fp.y);burst.material.opacity=.95;burst.scale.setScalar(.6);shake=.35}
@@ -675,27 +1872,24 @@ function tick(now){
   if(T<.2||Math.abs(T-28)<.2||Math.abs(T-64)<.2){DEATH.forEach(d=>{d.done=0;d.x=undefined})}}
  dust.material.opacity*=.93;dust.scale.setScalar(dust.scale.x+dt*3.2);
  cM.color.lerp(new THREE.Color(dead?0x605C52:0x9C7A33),dt*1.4);dM.color.lerp(new THREE.Color(dead?0x3E3B35:0x50401F),dt*1.4);
- fly.position.set(fp.x,0,fp.y);fly.rotation.y=fh;
  gait+=dt*(2.4+sp*2.2);
- const amp=dead?0:(asleep?.02:.14+.42*ar);
- if(!dead)lg.forEach(l=>{const v=Math.sin(gait+l.ph);l.g.rotation.x=v*amp*.55;
-  l.g.rotation.z=l.s*(.12+Math.max(0,v)*amp*.35);l.k.rotation.x=-Math.max(0,v)*amp*.7});
- else lg.forEach(l=>{l.g.rotation.x+=(1.0-l.g.rotation.x)*Math.min(1,dt*4);l.k.rotation.x+=(-1.5-l.k.rotation.x)*Math.min(1,dt*4)});
- wg.forEach(w=>{w.m.rotation.z=w.s*(.1+(dead||asleep?0:Math.sin(now*.004)*.05)*.55)});
- if(!dead&&!asleep)body.position.y=crouch*-.14;
+ const perchY=dead?0:(isFeeding?(PADS[tgt]?.h||0)+.06:(asleep&&restPad>=0?(PADS[restPad]?.h||0)+(day?.07:.19):0));
+ const alt=updateFly(fp,fh,sp,dt,now,dead,asleep,isFeeding,ar,crouch,gait,perchY);
  shake*=.88;
- const cd=dth?4.4:6.0;
- wcam.position.lerp(new THREE.Vector3(fp.x+Math.sin(fh+2.5)*cd,dth?2.2:3.0,fp.y+Math.cos(fh+2.5)*cd),.03);
+ const cd=dth?5.4:8.8;
+ wcam.position.lerp(new THREE.Vector3(fp.x+Math.sin(fh+2.5)*cd,(dth?2.4:3.15)+alt*.82,fp.y+Math.cos(fh+2.5)*cd),.030);
  wcam.position.x+=(Math.random()-.5)*shake;wcam.position.y+=(Math.random()-.5)*shake;
- wcam.lookAt(fp.x,.5,fp.y);
+ wcam.lookAt(fp.x,.44+alt*.92,fp.y);
 
  /* HUD */
+ const finalSummary=T>=END||summaryActive||summaryComplete;
  const clock=day?(6+(p/Math.max(.01,dayFrac))*14):(20+((p-dayFrac)/Math.max(.01,1-dayFrac))*10);
  const hh=Math.floor(clock)%24,mm=Math.floor((clock%1)*60);
- $('tod').textContent=isScreen?'—':String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0');
- $('cd').textContent=isScreen?'':(day?'dusk in '+((S.day-T)).toFixed(1)+' s':'dawn in '+((S.b-T)).toFixed(1)+' s');
+ $('tod').textContent=finalSummary?'24 h':(isScreen?'—':String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0'));
+ $('cd').textContent=finalSummary?'frozen summary':(isScreen?'':(day?'dusk in '+((S.day-T)).toFixed(1)+' s':'dawn in '+((S.b-T)).toFixed(1)+' s'));
  const b=$('bdg');
- if(dead){b.className='badge dd';b.textContent='subject lost'}
+ if(finalSummary){b.className='badge ok';b.textContent='24 h complete · endpoints met'}
+ else if(dead){b.className='badge dd';b.textContent='subject lost'}
  else if(isScreen){b.className='badge na';b.textContent='screening 18 nodes'}
  else if(asleep&&day){b.className='badge no';b.textContent='asleep in daylight — wrong'}
  else if(asleep){b.className='badge sl';b.textContent='asleep at night — correct'}
@@ -704,9 +1898,9 @@ function tick(now){
  else{b.className='badge ok';b.textContent='foraging'}
  $('ef').style.width=energy+'%';
  $('ef').style.background=energy>60?'#6CC488':energy>25?'#E89730':'#D4574A';
- $('ev').textContent='energy '+Math.round(energy)+'%';
- $('note').textContent=isScreen?'18-node screen in progress':(day?'daylight — open flowers reward feeding':'night — closed flowers are hazards');
- $('wtag').textContent=isScreen?'screening':(day?'daylight':'night');
+ $('ev').textContent='energy '+Math.round(energy)+'%'+(traceEnergy==null?'':' · receipt '+Math.round(traceEnergy)+'%');
+ $('note').textContent=finalSummary?'rescue held · 100% day wake · 96% night sleep':(isScreen?'18-node screen in progress':(asleep?(day?'day sleep · perched on open flower · energy opportunity lost':'night sleep · perched on closed thorn crown · energy conserved'):(day?'daylight · flower feeding increases energy':'night · thorn contact drains energy')));
+ $('wtag').textContent=finalSummary?'complete':(isScreen?'screening':(day?'daylight':'night'));
  $('arv').textContent='arousal '+ar.toFixed(2);
 
  /* caption */
@@ -715,9 +1909,9 @@ function tick(now){
  capEl.innerHTML=`<b>${c[2]}</b><small>${c[3]}</small>`;
 
  /* endpoints */
- if(T>26&&R3[0].dw===undefined)R3[0]={dw:52,ns:0,en:0};
- if(T>57.6&&R3[1].dw===undefined)R3[1]={dw:58,ns:0,en:0};
- if(T>87&&R3[2].dw===undefined)R3[2]={dw:100,ns:96,en:89};
+ if(T>26&&R3[0].dw===undefined)R3[0]={dw:Math.round(sceneValue('A_untrained','day_wake',0)*100),ns:Math.round(sceneValue('A_untrained','night_sleep',1)*100),en:Math.round(sceneValue('A_untrained','energy_end',14.8))};
+ if(T>57.6&&R3[1].dw===undefined)R3[1]={dw:Math.round(sceneValue('B2_trained_lesioned','day_wake',.357)*100),ns:Math.round(sceneValue('B2_trained_lesioned','night_sleep',.733)*100),en:Math.round(sceneValue('B2_trained_lesioned','energy_end',5.67))};
+ if(T>87&&R3[2].dw===undefined)R3[2]={dw:RESCUE_DAY,ns:RESCUE_NIGHT,en:RESCUE_ENERGY};
 
  /* brain — narration-aligned mechanism animation */
  const moving=!dead&&!asleep&&sp>.35&&!isScreen;
@@ -731,6 +1925,8 @@ function tick(now){
  const wakeOn=!asleep&&!dead&&!isScreen&&!wakeSilenced;
  const learnProgress=learningActive?Math.max(0,Math.min(1,(T-28)/22.1)):(T>=50.1?1:0);
  const rescueDrive=rescueActive&&!asleep&&!dead;
+ const flowActive=[day&&!asleep&&!dead,(!dead&&(asleep||wakeOn||rescueDrive)),moving||rescueDrive,moving||asleep||dead];
+ ['flowSense','flowState','flowRoute','flowBody'].forEach((id,i)=>{$(id).className=flowActive[i]?'on':''});
  const lvl={
   optic:day&&!asleep?.58:.14,
   mb:learningActive?.40+.48*Math.abs(Math.sin(now*.0045)):(searchActive?.36:.10),
@@ -772,7 +1968,7 @@ function tick(now){
   silenceSparks.material.opacity=(1-silenceP)*.95;
   const arr=sparkGeo.attributes.position.array;for(let i=0;i<sparkN;i++){arr[i*3]=sparkBase[i][0]+sparkDir[i][0]*silenceP*.48;arr[i*3+1]=sparkBase[i][1]+sparkDir[i][1]*silenceP*.34;arr[i*3+2]=sparkBase[i][2]+sparkDir[i][2]*silenceP*.48}sparkGeo.attributes.position.needsUpdate=true;
  }else{silenceRing.material.opacity=0;silenceSparks.material.opacity=0;silenceRing.scale.setScalar(1)}
- /* Candidate search: each node is probed, its modeled downstream reach flashes, then Node 07 is selected. */
+ /* Candidate search: each node is probed, its modeled downstream reach flashes, then the receipt-selected candidate is shown. */
  let searchK=0;
  if(searchActive){
   searchK=Math.max(1,Math.min(18,Math.floor((T-58.1)/((62-58.1)/18))+1));
@@ -783,7 +1979,7 @@ function tick(now){
  }else{probe.visible=false;probeRing.visible=false;probe.material.color.setHex(0xA08FE0);probeRing.material.color.setHex(0xC3A8FF)}
  rescueNode.material.opacity=selectedActive?.62+.30*Math.sin(now*.005):0;rescueRing.material.opacity=selectedActive?.32+.26*Math.sin(now*.006):0;rescueRing.scale.setScalar(1+.12*Math.sin(now*.006));
  $('rescueLabel').style.display=selectedActive?'block':'none';
- $('wakeLabel').textContent=wakeSilenced?(rescueActive?'modeled wake gate · unavailable':'modeled wake gate · SILENCED'):'modeled wake gate';
+ $('wakeLabel').textContent=wakeSilenced?(rescueActive?'[modeled] wake drive unavailable':'[modeled] wake drive silenced'):'[modeled] wake drive';
  /* Reach overlay is now synchronized to the search/selection rather than appearing at the end of Screen C. */
  for(let i=0;i<N;i++){
   let r=0,g=0,bb=0;
@@ -797,7 +1993,7 @@ function tick(now){
  if(T<28){
   bst.className='brainStage '+(dead?'bad':(asleep&&day?'warn':''));
   bst.innerHTML=dead?'<b>SCREEN A · FUNCTION LOST</b><span>State timing fails at both ends of the cycle; activity collapses after the fatal hazard.</span>':asleep&&day?'<b>SCREEN A · WRONG STATE</b><span>Sleep-promoting activity dominates during the daytime feeding window.</span>':!day?'<b>SCREEN A · NIGHTTIME WAKE</b><span>Wake drive persists into the hazardous night and continues into motor output.</span>':'<b>SCREEN A · STATE IMBALANCE</b><span>The grey scaffold is the anatomy. Only the active mechanism now lights up: sensory input, state gates and the descending route.</span>';
-  $('btag').textContent='anatomy-grounded 3D network · live state';
+  $('btag').textContent='modeled activity over anatomical scaffold';
   $('sw').textContent=dead?'network activity collapsed':(asleep?'sleep circuit dominant':'wake circuit dominant');
  }else if(learningActive){
   bst.className='brainStage';bst.innerHTML='<b>SCREEN B · LEARNING LOOP</b><span>Grey dots stay fixed as anatomy. Purple feedback shows learning in the readout layer without changing the connectome.</span>';
@@ -809,11 +2005,11 @@ function tick(now){
   bst.className='brainStage warn';bst.innerHTML=`<b>SCREEN B · NETWORK SEARCH · ${searchK}/18</b><span>Each candidate is tested in turn; the bright highlighted path shows the modeled downstream footprint.</span>`;
   $('btag').textContent='searching alternative circuit point';$('sw').textContent='original wake circuit offline · candidate reach under test';
  }else if(T<64){
-  bst.className='brainStage good';bst.innerHTML='<b>SCREEN B · CANDIDATE SELECTED</b><span>Node 07 provides an alternative route toward descending motor output while the original wake cluster stays unavailable.</span>';
-  $('btag').textContent='Node 07 selected · alternative route identified';$('sw').textContent='rescue route ready for functional test';
+  bst.className='brainStage good';bst.innerHTML=`<b>SCREEN B · CANDIDATE SELECTED</b><span>${RESCUE_NAME} provides an alternative modeled route toward descending output while the original wake cluster stays unavailable.</span>`;
+  $('btag').textContent=RESCUE_NAME+' selected · alternative route identified';$('sw').textContent='rescue route ready for functional test';
  }else{
   bst.className='brainStage good';bst.innerHTML=asleep?'<b>SCREEN C · SLEEP PRESERVED</b><span>The rescue route quiets while the sleep-promoting circuit dominates in the night window.</span>':'<b>SCREEN C · RESCUE ACTIVE</b><span>Green rescue activity restores a route into descending output while the original wake population remains silenced.</span>';
-  $('btag').textContent=asleep?'rescue quiet · sleep circuit preserved':'Node 07 rescue route · live activity';$('sw').textContent=asleep?'sleep circuit dominant · rescue drive low':'original wake circuit offline · alternative route carrying wake drive';
+  $('btag').textContent=asleep?'rescue quiet · sleep circuit preserved':RESCUE_NAME+' rescue route · modeled activity';$('sw').textContent=asleep?'sleep circuit dominant · rescue drive low':'original wake circuit offline · alternative route carrying wake drive';
  }
  for(let i=0;i<N;i++){
   act[i]*=.80;const tg2=P[i].tag;
@@ -850,12 +2046,30 @@ function tick(now){
  g1.attributes.color.needsUpdate=true;g2.attributes.color.needsUpdate=true;
  // Keep the nervous system static in a readable front view unless the user manually rotates it.
 
+ updateBrainLabels();
  anPane(lvl);logPane(T);outPane(T,di<0?0:di,di<0?null:p);
  wr.render(ws,wcam);brr.render(bs,bcam);
  if(finishAfterFrame){visualsFrozen=true;setMovementSfx(false);startSummary()}
  requestAnimationFrame(tick)
 }
-size();requestAnimationFrame(tick);
+size();bpResize();requestAnimationFrame(tick);
+/* Generating the cortex is ~250 ms of noise evaluation, so do it while the
+   assay is still running rather than at the moment the popup opens. */
+window.VIGIL_QA={
+ wingSides:()=>wg.map(w=>Math.sign(w.pivot.position.x)),
+ wingCount:()=>wg.length,
+ habitatPadCount:()=>PADS.length,
+ habitatExtent:()=>PADS.reduce((m,p)=>Math.max(m,Math.abs(p.v.x),Math.abs(p.v.y)),0),
+ brainDotParts:()=>bpDotBrainGroup.children.length,
+ brainShellVisible:()=>[bpLeftHem.userData.shell.visible,bpRightHem.userData.shell.visible,bpCerebellum.visible,bpStem.visible],
+ summaryPreview:()=>{showBrainPopup();bpSetPhase(0);},
+ scrollTarget:()=>document.querySelector('.top')?.getBoundingClientRect(),
+ neuralCameraDistance:()=>bcam.position.distanceTo(new THREE.Vector3(0,-.55,0)),
+ humanFlowStyle:()=>({orexinRadius:bpOR1.mesh.geometry.parameters?.radius||null,pulseCount:pulseRoutes[0]?.children?.length||0,hypoNodeScale:bpHypoGlow.g.scale.x})
+};
+if(window.requestIdleCallback)requestIdleCallback(()=>bpBuildBrain(),{timeout:4000});
+else setTimeout(bpBuildBrain,1200);
 </script>
+<a href="evidence.html" style="display:block;width:max-content;margin:10px 18px 18px auto;background:#0D1920;border:1px solid #2A5138;color:#6CC488;padding:8px 14px;border-radius:3px;font:500 12.5px 'IBM Plex Sans',system-ui,sans-serif;text-decoration:none">Proof ledger &rarr;</a>
 </body>
 </html>
