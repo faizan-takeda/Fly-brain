@@ -8,10 +8,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#070E13;--pan:#0D1920;--pan2:#12242E;--ln:#1B303A;--sf:#132630;
+:root{--bg:#070E13;--pan:#0D1920;--pan2:#12242E;--ln:#1B303A;--sf:#132630;--pageScale:.9;
 --ink:#E9F1F4;--ink2:#95ABB5;--ink3:#5D7581;--amb:#E89730;--amb2:#F8C878;--cy:#54C8DC;--red:#D4574A;--grn:#6CC488;--blu:#7E93E8;--vio:#A08FE0;}
 *{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink)}
-body{font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body{font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;zoom:var(--pageScale)}
 .n{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
 .wrap{max-width:1440px;margin:0 auto;padding:14px 18px 26px}
 header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;padding-bottom:10px;border-bottom:1px solid var(--ln)}
@@ -93,6 +93,9 @@ footer{margin-top:10px;display:flex;justify-content:space-between;gap:14px;flex-
 @media(max-width:1200px){.low{grid-template-columns:1fr 1fr}.low>div:nth-child(3){grid-column:1/-1}}
 @media(max-width:880px){.top{grid-template-columns:1fr}.rail{grid-template-columns:1fr}canvas.v,#brain{height:300px}.banner{display:block}.bp{display:inline-block;margin-top:8px}}
 @media(max-width:880px){.truth{grid-template-columns:1fr}}
+@media(min-width:881px) and (max-height:950px){.wrap{padding-top:8px}.t1 h1{font-size:21px}.banner{margin-top:6px;padding:7px 10px}.truth{margin-top:6px}.truth>div{padding:7px 10px}.truth span{line-height:1.25}.proofGrid{margin-top:5px}.tr{margin:7px 0 6px}.rail{margin-bottom:7px}.ch{padding:6px 10px 9px}.ch .m{font-size:13.5px}.ch .d{font-size:10.5px}canvas.v{height:292px}#brain{height:304px}.cap{padding:9px 12px;font-size:14px}.hud{padding:6px 10px}.hr1{margin-bottom:5px}.low{margin-top:7px}}
+@media(min-width:881px) and (max-width:1100px) and (max-height:820px){.banner{display:none}.truth span,.rail .d{display:none}.truth>div{padding:6px 9px}.proofGrid{margin-top:4px}.ch{padding:6px 9px 8px}canvas.v{height:236px}#brain{height:248px}.cap{font-size:13px}.low{grid-template-columns:repeat(3,1fr)}.low .pad{padding:8px 9px}.logl{font-size:10.5px}.an{font-size:10.5px}.brow{grid-template-columns:62px 1fr 36px}}
+@media(max-width:640px){:root{--pageScale:1}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 
 /* ===== v6 FINAL refinements: expanded habitat + dotted human brain ===== */
@@ -1151,7 +1154,7 @@ function orbit(cv,cam,tg,r0){let rx=.22,ry=.55,r=r0,d=false,px=0,py=0;
  cv.addEventListener('pointermove',e=>{if(!d)return;ry-=(e.clientX-px)*.006;rx=Math.max(-1.2,Math.min(1.2,rx+(e.clientY-py)*.005));px=e.clientX;py=e.clientY;ap()});
  cv.addEventListener('wheel',e=>{e.preventDefault();r=Math.max(2.4,Math.min(11,r+e.deltaY*.004));ap()},{passive:false});
  ap();return{s(x){ry+=x;ap()},z(x){r=Math.max(2.4,Math.min(11,r+x));ap()}}}
-const bo=orbit(bc,bcam,new THREE.Vector3(0,-.55,0),4.38); // ~20% wider neural overview
+const bo=orbit(bc,bcam,new THREE.Vector3(0,-.55,0),4.56); // 25% wider neural overview
 function size(){[[wc,wr,wcam],[bc,brr,bcam]].forEach(([c,r,m])=>{const w=c.clientWidth,h=c.clientHeight;
  r.setPixelRatio(Math.min(devicePixelRatio,2));r.setSize(w,h,false);m.aspect=w/h;m.updateProjectionMatrix()});updateBrainLabels()}
 addEventListener('resize',size);
