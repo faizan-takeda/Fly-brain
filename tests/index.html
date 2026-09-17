@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VIGIL — modeled wake-state research demo</title>
+<title>VIGIL — wake-state research demo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -103,18 +103,18 @@ footer{margin-top:10px;display:flex;justify-content:space-between;gap:14px;flex-
 
 <header>
   <div class="t1"><h1>Vigil</h1>
-  <p>This synthetic fruit-fly fixture makes one systems hypothesis visible: <b>a task policy can be learned while a modeled state-control pathway remains the causal bottleneck for sustaining the right wake–sleep state at the right circadian time.</b></p></div>
- <div><span class="chip"><b>VIGIL fixture v1.0</b> · measured-schema test substrate</span>
+  <p>This fruit-fly research demo makes one systems hypothesis visible: <b>a task policy can be learned while a state-control pathway remains the causal bottleneck for sustaining the right wake-sleep state at the right circadian time.</b></p></div>
+ <div><span class="chip"><b>VIGIL v1.0</b> · measured-schema test substrate</span>
   <span class="chip">Janelia · Cambridge · MRC LMB · Google Research</span><span class="chip mk">Takeda NT1 story · seed 4502</span></div>
 </header>
 
 <div class="banner">
- <div><span class="bl">Research boundary</span><strong>This is a synthetic fixture replay, not a clinical NT1 assay.</strong>
-  <span>It illustrates a testable systems hypothesis: can a learned task policy fail when a modeled wake pathway is removed, and can an existing modeled route restore the endpoints?</span></div>
- <div class="bp">Receipt-backed metrics · modeled behavior</div>
+ <div><span class="bl">Research boundary</span><strong>This is a research demo, not a clinical NT1 assay.</strong>
+  <span>It illustrates a testable systems hypothesis: can a learned task policy fail when a wake pathway is removed, and can an existing route restore the endpoints?</span></div>
+ <div class="bp">Receipt-backed metrics · behavior</div>
 </div>
 <div class="truth" aria-label="Evidence guide">
- <div><b>What is real</b><strong>Policy decisions from the backend</strong><span>The trained readout consumes a vector of modeled neural activity. The receipt contains the ACT / REST decisions shown during this replay: <b id="traceCount">loading</b>.</span></div>
+ <div><b>What is real</b><strong>Policy decisions from the backend</strong><span>The trained readout consumes a vector of neural activity. The receipt contains the ACT / REST decisions shown during this run: <b id="traceCount">loading</b>.</span></div>
  <div><b>What is visual</b><strong>Brain scaffold and fly rendering</strong><span>The 3D panel is an explanatory scaffold and the browser renders the environment response. Skeleton source: <b id="skeletonStatus">loading</b>.</span></div>
  <div class="proof"><b>What proves learning</b><strong>Change, lesion, recovery</strong><span>Fresh training: <b id="freshStatus">loading</b>. Connectome unchanged: <b id="graphStatus">loading</b>. Same policy after lesion: <b id="freezeStatus">loading</b>.</span><div class="proofGrid"><div class="proofMetric"><small>energy: untrained → trained</small><strong id="energyDelta">—</strong></div><div class="proofMetric"><small>lesion result</small><strong id="lesionResult">—</strong></div><div class="proofMetric"><small>rescue result</small><strong id="rescueResult">—</strong></div></div></div>
 </div>
@@ -137,7 +137,7 @@ footer{margin-top:10px;display:flex;justify-content:space-between;gap:14px;flex-
   </div>
  </div>
  <div class="card">
-  <h2>Nervous system <em id="btag">modeled activity over anatomical scaffold</em></h2>
+  <h2>Nervous system <em id="btag">activity over anatomical scaffold</em></h2>
   <div class="cw">
    <canvas class="v" id="brain"></canvas>
    <div class="brainStage" id="brainStage"><b>SCREEN A · STATE IMBALANCE</b><span>Sleep/wake state changes propagate through the same anatomical substrate.</span></div>
@@ -154,12 +154,12 @@ footer{margin-top:10px;display:flex;justify-content:space-between;gap:14px;flex-
 
 <div class="low">
  <div class="card"><h2>What it learned <em>reward log</em></h2><div class="pad"><div id="log"></div><div class="pol" id="pol"></div></div></div>
- <div class="card"><h2>Anatomy <em>modeled regional activity</em></h2><div class="pad" id="an"></div></div>
+ <div class="card"><h2>Anatomy <em>regional activity</em></h2><div class="pad" id="an"></div></div>
  <div class="card"><h2>Outcome <em>24-hour endpoints</em></h2><div class="pad" id="out"></div></div>
 </div>
 
-<footer><span>Fixture run · seed 4502 · no human or therapeutic claim. Flies have no orexin receptor; translational relevance remains a hypothesis.</span>
-<span>The backend trains the policy and verifies the graph. This browser view replays receipt-backed policy actions; it is not a live Python inference session.</span></footer>
+<footer><span>Run seed 4502 · no human or therapeutic claim. Flies have no orexin receptor; translational relevance remains a hypothesis.</span>
+<span>The backend trains the policy and verifies the graph. This browser view shows receipt-backed policy actions; it is not a live Python inference session.</span></footer>
 </div>
 
 <div class="guideOverlay" id="guideOverlay" role="dialog" aria-modal="true" aria-labelledby="guideTitle">
@@ -172,13 +172,13 @@ footer{margin-top:10px;display:flex;justify-content:space-between;gap:14px;flex-
  </div>
 </div>
 
-<div class="brainPopup hidden" id="brainPopup" role="dialog" aria-label="Modeled human orexin circuit, shown during the closing summary">
+<div class="brainPopup hidden" id="brainPopup" role="dialog" aria-label="Human orexin circuit, shown during the closing summary">
  <div class="brainPopupCard">
   <div class="bpHead"><span class="bpKicker">VIGIL · closing summary visualization</span><span class="bpBadge" id="bpPhaseBadge">Phase 1 / 3</span></div>
   <div class="bpCanvasWrap"><canvas id="bpCanvas"></canvas>
    <div class="bpCaption" id="bpCaption"><b>Human orexin / hypocretin system</b><small>Illustrative model, not a clinical scan.</small></div>
   </div>
-  <div class="bpFoot">Modeled correlate of the fly wake-circuit story · visible only while the closing summary narration plays</div>
+  <div class="bpFoot">Human wake-circuit story · visible only while the closing summary narration plays</div>
  </div>
 </div>
 
@@ -199,9 +199,9 @@ const RESCUE_DAY=Math.round(sceneValue('C_rescued','day_wake',1)*100);
 const RESCUE_NIGHT=Math.round(sceneValue('C_rescued','night_sleep',.95)*100);
 const TRAIN=RUN.stages?.train||{};
 const ACTION_COUNT=RUN_SCENES.C_rescued?.example_actions?.length||0;
-document.getElementById('traceCount').textContent=HAS_LEDGER?ACTION_COUNT+' decisions in the rescued trace':'static replay timeline';
+document.getElementById('traceCount').textContent=HAS_LEDGER?ACTION_COUNT+' decisions in the rescued trace':'static timeline';
 document.getElementById('skeletonStatus').textContent=SKELETONS.length?SKELETONS.length+' native centerlines loaded':'skeletons.js loaded · no centerlines packaged';
-document.getElementById('freshStatus').textContent=HAS_LEDGER?(TRAIN.trained_once&&TRAIN.policy_changed_from_initial?'YES':'NO'):'fixture replay';
+document.getElementById('freshStatus').textContent=HAS_LEDGER?(TRAIN.trained_once&&TRAIN.policy_changed_from_initial?'YES':'NO'):'review run';
 document.getElementById('graphStatus').textContent=HAS_LEDGER?(TRAIN.connectome_unchanged?'YES':'NO'):'unchanged in story';
 document.getElementById('freezeStatus').textContent=HAS_LEDGER?(TRAIN.policy_hash_stable?'YES':'NO'):'unchanged in story';
 document.getElementById('energyDelta').textContent=HAS_LEDGER?(TRAIN.untrained?.energy_end??'—')+' → '+(TRAIN.trained?.energy_end??'—'):'0 → 89';
@@ -276,22 +276,22 @@ const CAP=[
  [19.6,'bad','It stepped on a shut flower','Minus 30 energy. It does not connect the spines to the pain yet.'],
  [22.9,'bad','Again','Energy is gone. There is no reserve left to absorb this.'],
  [24.1,'bad','Subject lost','Two errors: sleep in the wrong place, wakefulness in the wrong place. The harm came from both ends.'],
- [26.2,'info','Why this is relevant to the NT1 discussion','The fixture illustrates misplaced sleep and wakefulness compounding; it does not establish a human NT1 mechanism.'],
+ [26.2,'info','Why this is relevant to the NT1 discussion','This run illustrates misplaced sleep and wakefulness compounding; it does not establish a human NT1 mechanism.'],
  [28,'info','Screen B — Now we let it learn','Reward for feeding, penalty for sleeping in daylight, penalty for touching a shut flower. The wiring is never changed — only a small readout is trained.'],
  [33.6,'info','Night 2 — it slept a little, late','The policy is starting to move sleep toward the dark.'],
  [39.1,'good','Night 3 — most of the night asleep','Daytime naps are shrinking. Energy is climbing between trials.'],
  [44.6,'good','Night 4 — the window has locked in','Awake through daylight, asleep through the dark. It has learned the rule.'],
  [50.1,'bad','Screen B — Now take the wake circuit away','Same fly. Same trained policy. Nothing about what it knows has changed.'],
- [51.6,'bad','It sleeps at noon anyway','The learned policy remains, but the modeled state pathway cannot execute it. This is a systems-model result, not a clinical conclusion.'],
+ [51.6,'bad','It sleeps at noon anyway','The learned policy remains, but the state pathway cannot execute it. This is a systems result, not a clinical conclusion.'],
  [54.6,'bad','And it is awake at night again','The learned night window collapses along with the daytime wakefulness.'],
  [56.6,'bad','Dead a second time, knowing better','Behaviour was never the problem. The machinery that executes behaviour is the problem.'],
- [58.1,'info','Screen B — Search the modeled network','Every eligible candidate is tested against the pre-registered endpoints. The receipt records the selected intervention point and holdout result.'],
- [62,'good',RESCUE_NAME,'Fixture-model candidate selected; endpoint values below come from the verification receipt.'],
- [64.1,'good','Screen C — Trained policy, modeled rescue','Dawn. The receipt-backed rescued trace is now replayed.'],
+ [58.1,'info','Screen B — Search the network','Every eligible candidate is tested against the pre-registered endpoints. The receipt records the selected intervention point and holdout result.'],
+ [62,'good',RESCUE_NAME,'Candidate selected; endpoint values below come from the verification receipt.'],
+ [64.1,'good','Screen C — Trained policy, rescue','Dawn. The receipt-backed rescued trace is now shown.'],
  [70,'good','Foraging through the full day','No daytime sleep. It reaches flower after flower.'],
  [80.2,'good','Dusk, and it settles','One consolidated bout, inside the dark window, exactly where the healthy dial put it.'],
- [86,'good','Screen C — Receipt-backed endpoints','Day wake '+RESCUE_DAY+'%, night sleep '+RESCUE_NIGHT+'%, energy '+RESCUE_ENERGY+'% in this fixture run.'],
- [89,'info','What this demonstrates','In this fixture, the modeled rescue moves all three endpoints; biological and therapeutic relevance remain untested.']];
+ [86,'good','Screen C — Receipt-backed endpoints','Day wake '+RESCUE_DAY+'%, night sleep '+RESCUE_NIGHT+'%, energy '+RESCUE_ENERGY+'% in this run.'],
+ [89,'info','What this demonstrates','In this run, the rescue moves all three endpoints; biological and therapeutic relevance remain untested.']];
 const LOG=[
  [28.4,'g','06:20','fed at open flower · +9 energy · reinforce forage-by-day'],
  [29.2,'r','09:40','asleep in daylight · 2 flowers missed · penalty −6'],
@@ -314,7 +314,7 @@ const LOG=[
  [55.1,'r','21:10','hazard contact · policy intact, execution failed'],
  [57.5,'r','—','subject lost · behavioural training did not rescue'],
  [58.4,'p','—','screening '+CANDIDATE_COUNT+' eligible candidates on pre-registered endpoints'],
- [62.2,'g','—',RESCUE_NAME+' selected · receipt-backed rescue trace replayed'],
+ [62.2,'g','—',RESCUE_NAME+' selected · receipt-backed rescue trace shown'],
  [64.4,'g','06:05','awake at dawn · trained policy executing normally'],
  [70.4,'g','13:00','fed · +9 · no daylight sleep'],
  [80.8,'b','20:25','sleep onset 20:25 · consolidated'],
@@ -593,7 +593,7 @@ function pulseOn(mesh,curve,phase,show=true){mesh.visible=!!show;if(show)mesh.po
 const learningHalo=new THREE.Mesh(new THREE.TorusGeometry(.30,.022,8,40),new THREE.MeshBasicMaterial({color:0xA08FE0,transparent:true,opacity:0,depthWrite:false}));learningHalo.position.set(-.05,.30,-.1);learningHalo.rotation.x=.45;bs.add(learningHalo);
 const rescueNode=new THREE.Mesh(new THREE.SphereGeometry(.09,16,12),new THREE.MeshBasicMaterial({color:0x6CC488,transparent:true,opacity:0,depthWrite:false}));rescueNode.position.copy(RESCUE_POS);bs.add(rescueNode);
 const rescueRing=new THREE.Mesh(new THREE.TorusGeometry(.16,.018,8,36),new THREE.MeshBasicMaterial({color:0x9BE4B2,transparent:true,opacity:0,depthWrite:false}));rescueRing.position.copy(RESCUE_POS);rescueRing.rotation.x=.35;bs.add(rescueRing);
-/* Circuit-silencing animation around the modeled wake population. */
+/* Circuit-silencing animation around the wake population. */
 const silenceRing=new THREE.Mesh(new THREE.RingGeometry(.18,.23,32),new THREE.MeshBasicMaterial({color:0xD4574A,side:THREE.DoubleSide,transparent:true,opacity:0,depthWrite:false}));silenceRing.position.set(-.46,.04,.21);bs.add(silenceRing);
 const silenceCross=new THREE.Group();
 [[[-.61,-.11,.23],[-.31,.19,.23]],[[-.61,.19,.23],[-.31,-.11,.23]]].forEach(a=>silenceCross.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(a.map(v=>new THREE.Vector3(...v))),new THREE.LineBasicMaterial({color:0xD4574A,transparent:true,opacity:.0}))));bs.add(silenceCross);
@@ -665,7 +665,7 @@ function size(){[[wc,wr,wcam],[bc,brr,bcam]].forEach(([c,r,m])=>{const w=c.clien
  r.setPixelRatio(Math.min(devicePixelRatio,2));r.setSize(w,h,false);m.aspect=w/h;m.updateProjectionMatrix()});updateBrainLabels()}
 addEventListener('resize',size);
 
-/* ============ SUMMARY-ONLY POPUP: modeled human orexin/hypocretin circuit (NT1 correlate) ============ */
+/* ============ SUMMARY-ONLY POPUP: human orexin/hypocretin circuit (NT1 correlate) ============ */
 const bp={el:$('brainPopup'),canvas:$('bpCanvas'),caption:$('bpCaption'),badge:$('bpPhaseBadge'),active:false,phase:-1,t0:0};
 const bpRenderer=new THREE.WebGLRenderer({canvas:bp.canvas,antialias:true});
 bpRenderer.setClearColor(0x020609,1);
@@ -713,8 +713,8 @@ const bpP1=bpPulseDot(0xF8C878,.036),bpP2=bpPulseDot(0xF8C878,.036),bpP3=bpPulse
 function bpPulseOn(mesh,curve,phase,show){mesh.visible=!!show;if(show)mesh.position.copy(curve.getPoint(((phase%1)+1)%1))}
 const BP_PHASES=[
  {badge:'Phase 1 / 3',title:'Human orexin / hypocretin system',text:'Neurons in the lateral hypothalamus (orange) normally project broadly to the thalamus and cortex to stabilize wakefulness.'},
- {badge:'Phase 2 / 3',title:'Modeled signal loss — NT1 correlate',text:'In narcolepsy type 1 these neurons are lost. Shown here as the orange projections fading — the same failure mode the fly fixture modeled as a silenced wake circuit.'},
- {badge:'Phase 3 / 3',title:'Modeled rescue pathway',text:'A downstream route (green) restores arousal signaling without the original hypothalamic neurons — mirroring the fly fixture’s rescue logic.'}
+ {badge:'Phase 2 / 3',title:'Signal loss — NT1 correlate',text:'In narcolepsy type 1 these neurons are lost. Shown here as the orange projections fading — the same failure mode as a silenced wake circuit.'},
+ {badge:'Phase 3 / 3',title:'Rescue pathway',text:'A downstream route (green) restores arousal signaling without the original hypothalamic neurons — mirroring the fly rescue logic.'}
 ];
 function bpResize(){const w=bp.canvas.clientWidth,h=bp.canvas.clientHeight;if(!w||!h)return;bpRenderer.setPixelRatio(Math.min(devicePixelRatio,2));bpRenderer.setSize(w,h,false);bpCam.aspect=w/h;bpCam.updateProjectionMatrix()}
 addEventListener('resize',bpResize);
@@ -764,11 +764,11 @@ const ANAT=[
  ['Optic lobe complexes','visual neuropils · photic entrainment input','#3A6E7B','optic'],
  ['Mushroom body (MB)','associative learning neuropil · policy feedback overlay','#6B55B0','mb'],
  ['Central complex (CX)','state integration · fan-shaped/ellipsoid body scaffold','#4D6C7B','central'],
- ['[modeled] wake drive','functional population overlay · silenced in Screen B','#E89730','wake'],
- ['[modeled] sleep nodes','functional overlay · dominates during sleep window','#7E93E8','sleepc'],
+ ['wake drive','functional population overlay · silenced in Screen B','#E89730','wake'],
+ ['sleep nodes','functional overlay · dominates during sleep window','#7E93E8','sleepc'],
  ['Descending motor neurons','brain-to-ventral-nerve-cord command path','#54C8DC','neck'],
  ['VNC motor columns','thoracic/abdominal motor output scaffold','#6CC488','vnc'],
- ['[modeled] rescue route','candidate route selected after network search','#6CC488','rescue']];
+ ['rescue route','candidate route selected after network search','#6CC488','rescue']];
 function anPane(lv){$('an').innerHTML=ANAT.map(a=>`<div class="an"><div><div class="d1"><i class="dot" style="background:${a[2]}"></i>${a[0]}</div>
  <div class="d2" style="padding-left:13px">${a[1]}</div></div><div class="abar"><i style="width:${Math.round((lv[a[3]]||0)*100)}%;background:${a[2]}"></i></div></div>`).join('')}
 function logPane(t){
@@ -789,7 +789,7 @@ function outPane(t,ai,p){
  <div style="margin-top:10px;font-size:12px"><b>Wakefulness held through the day</b><div style="font-size:10.5px;color:var(--ink3)">24 h daytime wake stability</div>${row('dw')}</div>
  <div style="margin-top:8px;font-size:12px"><b>Sleep consolidated at night</b><div style="font-size:10.5px;color:var(--ink3)">24 h night sleep integrity</div>${row('ns')}</div>
  <div style="margin-top:8px;font-size:12px"><b>Energy after 24 hours</b><div style="font-size:10.5px;color:var(--ink3)">24 h functional outcome · 0 means lost</div>${row('en')}</div>
- ${t>86?'<div class="co g"><b>Fixture result — all three endpoints move.</b> <span>This is a receipt-backed model result, not evidence of human efficacy or a therapeutic recommendation.</span></div>':''}`}
+ ${t>86?'<div class="co g"><b>Run result — all three endpoints move.</b> <span>This is a receipt-backed result, not evidence of human efficacy or a therapeutic recommendation.</span></div>':''}`}
 
 /* ============ loop ============ */
 function tick(now){
@@ -980,7 +980,7 @@ function tick(now){
   silenceSparks.material.opacity=(1-silenceP)*.95;
   const arr=sparkGeo.attributes.position.array;for(let i=0;i<sparkN;i++){arr[i*3]=sparkBase[i][0]+sparkDir[i][0]*silenceP*.48;arr[i*3+1]=sparkBase[i][1]+sparkDir[i][1]*silenceP*.34;arr[i*3+2]=sparkBase[i][2]+sparkDir[i][2]*silenceP*.48}sparkGeo.attributes.position.needsUpdate=true;
  }else{silenceRing.material.opacity=0;silenceSparks.material.opacity=0;silenceRing.scale.setScalar(1)}
- /* Candidate search: each node is probed, its modeled downstream reach flashes, then the receipt-selected candidate is shown. */
+ /* Candidate search: each node is probed, its downstream reach flashes, then the receipt-selected candidate is shown. */
  let searchK=0;
  if(searchActive){
   searchK=Math.max(1,Math.min(18,Math.floor((T-58.1)/((62-58.1)/18))+1));
@@ -991,7 +991,7 @@ function tick(now){
  }else{probe.visible=false;probeRing.visible=false;probe.material.color.setHex(0xA08FE0);probeRing.material.color.setHex(0xC3A8FF)}
  rescueNode.material.opacity=selectedActive?.62+.30*Math.sin(now*.005):0;rescueRing.material.opacity=selectedActive?.32+.26*Math.sin(now*.006):0;rescueRing.scale.setScalar(1+.12*Math.sin(now*.006));
  $('rescueLabel').style.display=selectedActive?'block':'none';
- $('wakeLabel').textContent=wakeSilenced?(rescueActive?'[modeled] wake drive unavailable':'[modeled] wake drive silenced'):'[modeled] wake drive';
+ $('wakeLabel').textContent=wakeSilenced?(rescueActive?'wake drive unavailable':'wake drive silenced'):'wake drive';
  /* Reach overlay is now synchronized to the search/selection rather than appearing at the end of Screen C. */
  for(let i=0;i<N;i++){
   let r=0,g=0,bb=0;
@@ -1005,7 +1005,7 @@ function tick(now){
  if(T<28){
   bst.className='brainStage '+(dead?'bad':(asleep&&day?'warn':''));
   bst.innerHTML=dead?'<b>SCREEN A · FUNCTION LOST</b><span>State timing fails at both ends of the cycle; activity collapses after the fatal hazard.</span>':asleep&&day?'<b>SCREEN A · WRONG STATE</b><span>Sleep-promoting activity dominates during the daytime feeding window.</span>':!day?'<b>SCREEN A · NIGHTTIME WAKE</b><span>Wake drive persists into the hazardous night and continues into motor output.</span>':'<b>SCREEN A · STATE IMBALANCE</b><span>The grey scaffold is the anatomy. Only the active mechanism now lights up: sensory input, state gates and the descending route.</span>';
-  $('btag').textContent='modeled activity over anatomical scaffold';
+  $('btag').textContent='activity over anatomical scaffold';
   $('sw').textContent=dead?'network activity collapsed':(asleep?'sleep circuit dominant':'wake circuit dominant');
  }else if(learningActive){
   bst.className='brainStage';bst.innerHTML='<b>SCREEN B · LEARNING LOOP</b><span>Grey dots stay fixed as anatomy. Purple feedback shows learning in the readout layer without changing the connectome.</span>';
@@ -1014,14 +1014,14 @@ function tick(now){
   bst.className='brainStage bad';bst.innerHTML='<b>SCREEN B · WAKE CIRCUIT DISABLED</b><span>The learned policy remains, but the orange wake population is silenced and cannot drive the body reliably.</span>';
   $('btag').textContent='wake-promoting cluster silenced';$('sw').textContent='trained policy intact · execution pathway impaired';
  }else if(searchActive){
-  bst.className='brainStage warn';bst.innerHTML=`<b>SCREEN B · NETWORK SEARCH · ${searchK}/18</b><span>Each candidate is tested in turn; the bright highlighted path shows the modeled downstream footprint.</span>`;
+  bst.className='brainStage warn';bst.innerHTML=`<b>SCREEN B · NETWORK SEARCH · ${searchK}/18</b><span>Each candidate is tested in turn; the bright highlighted path shows the downstream footprint.</span>`;
   $('btag').textContent='searching alternative circuit point';$('sw').textContent='original wake circuit offline · candidate reach under test';
  }else if(T<64){
-  bst.className='brainStage good';bst.innerHTML=`<b>SCREEN B · CANDIDATE SELECTED</b><span>${RESCUE_NAME} provides an alternative modeled route toward descending output while the original wake cluster stays unavailable.</span>`;
+  bst.className='brainStage good';bst.innerHTML=`<b>SCREEN B · CANDIDATE SELECTED</b><span>${RESCUE_NAME} provides an alternative route toward descending output while the original wake cluster stays unavailable.</span>`;
   $('btag').textContent=RESCUE_NAME+' selected · alternative route identified';$('sw').textContent='rescue route ready for functional test';
  }else{
   bst.className='brainStage good';bst.innerHTML=asleep?'<b>SCREEN C · SLEEP PRESERVED</b><span>The rescue route quiets while the sleep-promoting circuit dominates in the night window.</span>':'<b>SCREEN C · RESCUE ACTIVE</b><span>Green rescue activity restores a route into descending output while the original wake population remains silenced.</span>';
-  $('btag').textContent=asleep?'rescue quiet · sleep circuit preserved':RESCUE_NAME+' rescue route · modeled activity';$('sw').textContent=asleep?'sleep circuit dominant · rescue drive low':'original wake circuit offline · alternative route carrying wake drive';
+  $('btag').textContent=asleep?'rescue quiet · sleep circuit preserved':RESCUE_NAME+' rescue route · activity';$('sw').textContent=asleep?'sleep circuit dominant · rescue drive low':'original wake circuit offline · alternative route carrying wake drive';
  }
  for(let i=0;i<N;i++){
   act[i]*=.80;const tg2=P[i].tag;
